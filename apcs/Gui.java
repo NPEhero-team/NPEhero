@@ -7,12 +7,7 @@
 package apcs;
 
 
-public class Driver
+public class Gui
 {
-
-    public static void main(String[] args)
-    {
-
-    }
 
 }
