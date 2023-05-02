@@ -4,7 +4,7 @@
  *Teacher:
  *Description:
  */
-package cs;
+package apcs;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

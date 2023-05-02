@@ -1,4 +1,4 @@
-package test;
+package apcs;
 //Java program to play audio files. imports file scanning and various 
 //methods from the java audio class in order to do so.
 import java.io.File;

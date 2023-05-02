@@ -4,7 +4,7 @@
  *Teacher:
  *Description:
  */
-package cs;
+package apcs;
 
 import java.awt.*;
 import java.awt.event.*;
