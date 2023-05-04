@@ -4,7 +4,7 @@
  *Teacher:
  *Description:
  */
-package apcs;
+package cs;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -16,16 +16,19 @@ public class SongPlayer
     public static final int HEIGHT = 650;
     public static final int LENGTH = 400;
     
+    
     private final int BLENGTH = LENGTH/6;
     private final int BHEIGHT = HEIGHT/20;
+    JFrame frame = new JFrame("Guitar Hero");      //creates the frame
+    
+    
+    JButton d = new JButton("D");       //creates the four button lanes
+    JButton f = new JButton("F");
+    JButton h = new JButton("H");
+    JButton j = new JButton("J");
+
     
     public void createAndShowGui() {
-        JFrame frame = new JFrame("Guitar Hero");      //creates the frame
-        
-        JButton d = new JButton("D");       //creates the four button lanes
-        JButton f = new JButton("F");
-        JButton h = new JButton("H");
-        JButton j = new JButton("J");
         
         d.setBounds(1*BLENGTH, (5*HEIGHT)/6, BLENGTH, BHEIGHT);      //makes the button bounds for each button
         f.setBounds(2*BLENGTH, (5*HEIGHT)/6, BLENGTH, BHEIGHT);     
@@ -64,9 +67,31 @@ public class SongPlayer
     }
     
     public void loop() {
+        JButton note = new JButton();
+        JButton test = new JButton();
+        test.setBounds(200, 200, 100, 100);
+        note.setBounds(BLENGTH, 0, BLENGTH, BHEIGHT);
+        frame.add(note);
+        frame.add(test);
+        
         NoteTest a = new NoteTest();
-        while (true) {
-            a.gameTick();
+        while (!a.getFailed()) {
+            if (!a.getFailed()) {
+                a.gameTick();
+                note.setBounds(BLENGTH, HEIGHT-a.getY(), BLENGTH, BHEIGHT); //moves the note down every frame
+                System.out.println(a.getFailed());
+                //the computer runs too fast normally, force it to run at a certain fps
+                try {
+                    Thread.sleep(2);
+                } catch (InterruptedException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            if (a.getFailed()) {
+                frame.remove(note); //removes the note once its off the screen
+            }
         }
     }
 }
