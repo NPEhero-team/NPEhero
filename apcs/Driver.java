@@ -12,7 +12,9 @@ public class Driver
 
     public static void main(String[] args)
     {
-        new Gui();
+        
+        SongPlayer s = new SongPlayer();
+        s.createAndShowGui();
     }
 
 }
