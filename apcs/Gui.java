@@ -5,8 +5,6 @@
  *Description:
  */
 package apcs;
-import java.awt.Graphics;
-import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JButton;  
 import javax.swing.JFrame;  
@@ -19,7 +17,7 @@ public class Gui {
         JFrame frame=new JFrame();  
                           
         // Creating Button          
-        JButton b=new TButton("Click Me..");
+        JButton b=new JButton("Click Me..");
         /* This method specifies the location and size
          * of button. In method setBounds(x, y, width, height)
          * x,y) are cordinates from the top left 
@@ -30,8 +28,6 @@ public class Gui {
              
         //Adding button onto the frame
         frame.add(b);  
-        
-        
                   
         // Setting Frame size. This is the window size
         frame.setSize(600,500);  
