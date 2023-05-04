@@ -23,11 +23,12 @@ public class block {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                try {
+                /*try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                     ex.printStackTrace();
                 }
+                */
 
                 JFrame frame = new JFrame("Testing");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,6 +36,7 @@ public class block {
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
+                
             }
         });
     }
@@ -52,6 +54,7 @@ public class block {
             return new Dimension(100, 100);
         }
 
+        
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -63,6 +66,7 @@ public class block {
             g2d.fill(rightEnd);
             g2d.dispose();
         }
+        
 
     }
 
