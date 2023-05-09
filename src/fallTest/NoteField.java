@@ -1,7 +1,7 @@
 /*Name:	Guitar Hero Project
  *Description: Contains the information for a single note on the field
  */
-package cs;
+package fallTest;
 
 public class NoteField
 {

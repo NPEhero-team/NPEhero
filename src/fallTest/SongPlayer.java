@@ -1,7 +1,7 @@
 /*Name:	Guitar Hero Project
  *Description: Contains the main game loop for gameplay
  */
-package cs;
+package fallTest;
 
 import java.awt.*;
 import java.awt.event.*;

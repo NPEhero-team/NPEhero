@@ -1,7 +1,7 @@
 /*Name:	Guitar Hero Project
  *Description: Contains the info for when to send a note
  */
-package cs;
+package fallTest;
 
 
 public class NoteInfo
