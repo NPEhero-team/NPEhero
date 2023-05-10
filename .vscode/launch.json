@@ -6,10 +6,32 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Driver",
+            "request": "launch",
+            "mainClass": "gui.Driver",
+            "projectName": "GuitarHero",
+            "vmArgs": "--module-path lib --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "Driver",
+            "request": "launch",
+            "mainClass": "fallTest.Driver",
+            "projectName": "GuitarHero"
+        },
+        {
+            "type": "java",
+            "name": "Driver",
+            "request": "launch",
+            "mainClass": "main.Driver",
+            "projectName": "GuitarHero"
+        },
+        {
+            "type": "java",
             "name": "Launch App",
             "request": "launch",
             "mainClass": "main.jfxTest",
-            "vmArgs": "--module-path lib --add-modules javafx.controls,javafx.fxml",
+            "vmArgs": "--module-path lib --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }
