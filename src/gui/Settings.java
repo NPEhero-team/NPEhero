@@ -18,7 +18,7 @@ public class Settings extends Scene
     public Settings(Stage primaryStage)
     {
         super(primaryPane, 800, 600);
-        primaryStage.setTitle("NPE Hero - Main menu");
+        primaryStage.setTitle("NPE Hero - Settings");
         Scene root = super.getRoot().getScene();
 
         Text t1 = new Text();
