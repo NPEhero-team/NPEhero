@@ -10,7 +10,7 @@
             "request": "launch",
             "mainClass": "gui.Driver",
             "projectName": "GuitarHero",
-            "vmArgs": "--module-path lib --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path lib/linux --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",
@@ -31,7 +31,7 @@
             "name": "Launch App",
             "request": "launch",
             "mainClass": "main.jfxTest",
-            "vmArgs": "--module-path lib --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path lib/linux --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }
