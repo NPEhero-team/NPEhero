@@ -14,7 +14,7 @@ public class Driver
     {
         // TODO Auto-generated method stub
         SongPlayer g = new SongPlayer();
-        g.queueTest();
+        g.loadSong();
         g.createAndShowGui();
     }
 

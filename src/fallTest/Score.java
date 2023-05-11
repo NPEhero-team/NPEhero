@@ -11,19 +11,19 @@ public class Score
     private int score=0;
     
     public void perfect() {
-        score += 5*comboMultiplier;
-        System.out.println("perfect");
+        score += 300*comboMultiplier;
+        System.out.println("Perfect!");
     }
     
     public void close() {
-        score += comboMultiplier;
-        System.out.println("close");
+        score += 100*comboMultiplier;
+        System.out.println("Good");
     }
     
     public void miss() {
         combo = 0;
         comboMultiplier = 1;
-        System.out.println("miss");
+        System.out.println("Miss");
     }
     public void combo() {
         combo++;
