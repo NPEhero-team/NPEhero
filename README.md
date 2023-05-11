@@ -2,4 +2,4 @@
 
 [Figma link](https://www.figma.com/file/dpeMlWStSWrVHfLd0Uohws/Untitled?node-id=0%3A1&t=PVQi61Ig3AWtWNMm-1)
 
-[JavaFX docs (with search)](https://openjfx.io/javadoc/15/javafx.graphics/javafx/scene/layout/Region.html)
+[JavaFX docs (with search)](https://openjfx.io/javadoc/15)
