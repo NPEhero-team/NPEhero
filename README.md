@@ -4,6 +4,9 @@
 
 [JavaFX docs (with search)](https://openjfx.io/javadoc/15)
 
+javafx guides (really helpful website):
+[edencoding.com](https://edencoding.com/javafx-layouts/)
+
 # Installation
 ### VM arguements
 

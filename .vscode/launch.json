@@ -6,6 +6,14 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Driver2",
+            "request": "launch",
+            "mainClass": "gui.Driver2",
+            "projectName": "GuitarHero",
+            "vmArgs": "--module-path lib/linux --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
             "name": "Driver",
             "request": "launch",
             "mainClass": "gui.Driver",

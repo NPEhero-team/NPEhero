@@ -23,6 +23,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
  
+// will eventually extend pane
 public class Level extends Application {
     public static void main(String[] args) {
         launch(args);

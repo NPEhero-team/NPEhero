@@ -3,66 +3,69 @@ package gui;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-public class MainMenu extends Scene
+public class MainMenu extends Pane
 {
-    private static Pane root = new Pane();
-    public MainMenu(Stage primaryStage)
+    public MainMenu()
     {
-        super(root,800,600);
-        primaryStage.setTitle("NPE Hero - Main menu");
 
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setRadius(50.0);
+        dropShadow.setColor(Color.WHITE);
+        dropShadow.setBlurType(BlurType.GAUSSIAN);
+        
         Text title = new Text();
         title.setText("NPE Hero");
-        title.setFont(new Font(48));
-        //set color
+        title.setFont(new Font(125));
+        title.setEffect(dropShadow);
+        title.setFill(Color.WHITE);
 
         Button play = new Button();
         play.setText("Play");
-        play.setOnAction(new EventHandler<ActionEvent>() 
-        {
-            @Override
-            public void handle(ActionEvent event) 
-            {
-                primaryStage.setScene(new LevelSelector(primaryStage));
-            }
-        });
+        play.setOnAction(e -> Driver.switchMenu("LevelSelector"));
 
         Button settings = new Button();
         settings.setText("Settings");
-        settings.setOnAction(new EventHandler<ActionEvent>() 
-        {
-            @Override
-            public void handle(ActionEvent event) 
-            {
-                primaryStage.setScene(new Settings(primaryStage));
-            }
-        });
+        settings.setOnAction(e -> Driver.switchMenu("Settings"));
 
         Button leaderboard = new Button();
         leaderboard.setText("Leaderboard");
-        leaderboard.setOnAction(new EventHandler<ActionEvent>() 
-        {
-            @Override
-            public void handle(ActionEvent event) 
-            {
-                primaryStage.setScene(new Leaderboard(primaryStage));
-            }
-        });
+        leaderboard.setOnAction(e -> Driver.switchMenu("Leaderboard"));
 
-        VBox centerMenu = new VBox();
-        centerMenu.getChildren().addAll(title, play, settings, leaderboard);
-        centerMenu.minWidthProperty().bind(primaryStage.widthProperty()); 
-        centerMenu.minHeightProperty().bind(primaryStage.heightProperty());
-        centerMenu.setAlignment(Pos.CENTER);
+        //Border border = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
 
-        root.getChildren().add(centerMenu);
+        VBox buttonBox = new VBox();
+        buttonBox.getChildren().addAll(play, settings, leaderboard);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setSpacing(10);
+        //buttonBox.setBorder(border);
+
+        VBox centerBox = new VBox();
+        centerBox.setAlignment(Pos.CENTER);
+        centerBox.getChildren().addAll(title, buttonBox);
+        centerBox.setSpacing(10);
+        //centerBox.setBorder(border);
+
+        VBox rootBox = new VBox();
+        rootBox.minWidthProperty().bind(super.widthProperty()); 
+        rootBox.minHeightProperty().bind(super.heightProperty());
+        rootBox.setAlignment(Pos.CENTER);
+        rootBox.getChildren().add(centerBox);
+        //rootBox.setBorder(border);
+        super.getChildren().add(rootBox);
+        
     }
 }

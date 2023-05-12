@@ -3,24 +3,16 @@ package gui;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-public class Settings extends Scene
+public class Settings extends Pane
 {
-    private static Pane primaryPane = new Pane();
-
-    public Settings(Stage primaryStage)
+    public Settings()
     {
-        super(primaryPane, 800, 600);
-        primaryStage.setTitle("NPE Hero - Settings");
-        Scene root = super.getRoot().getScene();
-
         Text t1 = new Text();
         t1.setText("Music Volume");
 
@@ -42,27 +34,20 @@ public class Settings extends Scene
             @Override
             public void handle(ActionEvent event) 
             {
-                System.out.println("not yet implimented");
+                Driver.setBackground("assets/trees.png");
             }
         });
 
         Button exit = new Button();
         exit.setText("Exit");
-        exit.setOnAction(new EventHandler<ActionEvent>() 
-        {
-            @Override
-            public void handle(ActionEvent event) 
-            {
-                primaryStage.setScene(root);
-            }
-        });
+        exit.setOnAction(e -> Driver.switchMenu("MainMenu"));
 
         VBox options = new VBox();
         options.setAlignment(Pos.CENTER);
         options.getChildren().addAll(t1,musicVol,t2,sfxVol,devMenu,exit);
-        options.minWidthProperty().bind(primaryStage.widthProperty()); 
-        options.minHeightProperty().bind(primaryStage.heightProperty());
-        primaryPane.getChildren().add(options);
+        options.minWidthProperty().bind(super.widthProperty()); 
+        options.minHeightProperty().bind(super.heightProperty());
+        super.getChildren().add(options);
     }
     
 }

@@ -1,0 +1,21 @@
+Button { 
+    -fx-background-color: rgba(0, 0, 0, 0.5); 
+    -fx-text-fill: white;
+    -fx-padding: .5em;
+    -fx-font-size: 25;
+    -fx-background-radius: 10;
+}
+
+Button:hover {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-text-fill: rgb(0, 0, 0);
+}
+
+Button:pressed {
+    -fx-background-color: rgb(231, 231, 231);
+    -fx-text-fill: rgb(0, 0, 0);
+}
+
+.pad {
+    -fx-padding: 1em;
+}
