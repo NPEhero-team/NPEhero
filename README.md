@@ -11,7 +11,7 @@ javafx guides (really helpful website):
 ### VM arguements
 
 #### Windows
-`--module-path lib/windows/lib --add-modules javafx.controls,javafx.fxml`
+`--module-path lib/windows/lib --add-modules javafx.controls,javafx.fxml,javafx.media`
 
 #### Linux
-`--module-path lib/linux --add-modules javafx.controls,javafx.fxml`
+`--module-path lib/linux --add-modules javafx.controls,javafx.fxml,javafx.media`
