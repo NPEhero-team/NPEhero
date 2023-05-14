@@ -82,6 +82,8 @@ Slider:focused .thumb{
     -fx-border-color: rgb(231, 231, 231);
 }
 
+/* text box */
+
 .textBox {
     -fx-background-radius: 5;    
     -fx-background-color: rgba(0, 0, 0, 0.5); 

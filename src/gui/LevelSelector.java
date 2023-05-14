@@ -33,39 +33,9 @@ public class LevelSelector extends Pane
         leftBox.setSpacing(10);
         leftBox.getChildren().addAll(levels,exit);
 
-        Text title = new Text();
-        title.setText("Test level 1");
-        title.setFill(Color.WHITE);
-        title.setFont(new Font(50));
-        title.wrappingWidthProperty().bind(super.widthProperty().multiply(0.37));
+        Pane rightBox = new Pane();
+        addDetails(rightBox, levels);
 
-        Text desc = new Text();
-        desc.setText("long description with lots of words. what we write does not actually need to be long i just wan t make sure it can word wrap");
-        desc.setFill(Color.WHITE);
-        desc.wrappingWidthProperty().bind(super.widthProperty().multiply(0.37));
-
-        ImageView previewView = new ImageView();
-        Image preview = new Image("assets/pico.png");
-        previewView.setImage(preview);
-        //previewView.setFitHeight(100);
-        previewView.fitWidthProperty().bind(super.widthProperty().multiply(0.25));
-        previewView.setPreserveRatio(true);
-
-        VBox details = new VBox();
-        details.minWidthProperty().bind(super.widthProperty().multiply(0.37)); 
-        details.minHeightProperty().bind(super.heightProperty().multiply(0.75));
-        details.maxWidthProperty().bind(super.widthProperty().multiply(0.37)); 
-        details.maxHeightProperty().bind(super.heightProperty().multiply(0.75));
-        details.getStyleClass().add("textBox");
-        details.getChildren().addAll(title,desc,previewView);
-
-        Button play = new Button();
-        play.setText("Play");
-
-        VBox rightBox = new VBox();
-        rightBox.setAlignment(Pos.CENTER_RIGHT);
-        rightBox.setSpacing(10);
-        rightBox.getChildren().addAll(details,play);
 
         HBox rootBox = new HBox();
         rootBox.minWidthProperty().bind(super.widthProperty()); 
@@ -74,7 +44,22 @@ public class LevelSelector extends Pane
         rootBox.setAlignment(Pos.CENTER);
         rootBox.setSpacing(10);
 
+        levels.setOnMouseClicked(e -> addDetails(rightBox, levels));
         super.getChildren().add(rootBox);
+    }
+
+    private void addDetails(Pane rightBox, ListView<String> levels)
+    {
+        VBox details = new LevelDetails(levels);
+        if (! rightBox.getChildren().isEmpty())
+        {
+            rightBox.getChildren().remove(0);
+        }
+        rightBox.getChildren().add(details);
+        details.minWidthProperty().bind(super.widthProperty().multiply(0.37)); 
+        details.minHeightProperty().bind(super.heightProperty());
+        details.maxWidthProperty().bind(super.widthProperty().multiply(0.37)); 
+        details.maxHeightProperty().bind(super.heightProperty());
     }
 
 }
