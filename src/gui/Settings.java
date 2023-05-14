@@ -1,12 +1,12 @@
 package gui;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class Settings extends Pane
@@ -15,6 +15,7 @@ public class Settings extends Pane
     {
         Text t1 = new Text();
         t1.setText("Music Volume");
+        t1.setFill(Color.WHITE);
 
         Slider musicVol = new Slider();
         musicVol.setMax(100);
@@ -22,6 +23,7 @@ public class Settings extends Pane
 
         Text t2 = new Text();
         t2.setText("Sound Effects Volume");
+        t2.setFill(Color.WHITE);
 
         Slider sfxVol = new Slider();
         sfxVol.setMax(100);
@@ -29,25 +31,26 @@ public class Settings extends Pane
 
         Button devMenu = new Button();
         devMenu.setText("Debug Menu");
-        devMenu.setOnAction(new EventHandler<ActionEvent>() 
-        {
-            @Override
-            public void handle(ActionEvent event) 
-            {
-                Driver.setBackground("assets/trees.png");
-            }
-        });
+        devMenu.setOnAction(e -> Driver.setBackground("assets/trees.png"));
 
         Button exit = new Button();
         exit.setText("Exit");
-        exit.setOnAction(e -> Driver.switchMenu("MainMenu"));
+        exit.setOnAction(e -> Driver.setMenu("MainMenu"));
 
         VBox options = new VBox();
+        options.setSpacing(10);
         options.setAlignment(Pos.CENTER);
         options.getChildren().addAll(t1,musicVol,t2,sfxVol,devMenu,exit);
-        options.minWidthProperty().bind(super.widthProperty()); 
+        options.minWidthProperty().bind(super.widthProperty().multiply(0.25)); 
         options.minHeightProperty().bind(super.heightProperty());
-        super.getChildren().add(options);
+        //options.getStyleClass().add("textBox");
+
+        HBox rootBox = new HBox();
+        rootBox.minWidthProperty().bind(super.widthProperty()); 
+        rootBox.minHeightProperty().bind(super.heightProperty());
+        rootBox.getChildren().add(options);
+        rootBox.setAlignment(Pos.CENTER);
+        super.getChildren().add(rootBox);
     }
     
 }

@@ -1,14 +1,20 @@
+/* button */
+
 Button { 
     -fx-background-color: rgba(0, 0, 0, 0.5); 
     -fx-text-fill: white;
     -fx-padding: .5em;
     -fx-font-size: 25;
-    -fx-background-radius: 10;
+    -fx-background-radius: 5;
 }
 
 Button:hover {
-    -fx-background-color: rgb(255, 255, 255);
-    -fx-text-fill: rgb(0, 0, 0);
+    -fx-background-color: rgb(50, 50, 50, 0.5);
+}
+
+Button:focused {
+    -fx-background-color: rgb(255, 255, 255);  
+    -fx-text-fill: rgb(0, 0, 0); 
 }
 
 Button:pressed {
@@ -16,6 +22,68 @@ Button:pressed {
     -fx-text-fill: rgb(0, 0, 0);
 }
 
-.pad {
+/* list */
+
+ListView {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-radius: 5;
+}
+
+.list-cell {
+    -fx-padding: .5em;
+    -fx-background-color: transparent;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+.list-cell:hover {
+    -fx-background-color: rgba(100, 100, 100, 0.5);
+    
+}
+
+.list-cell:selected {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-text-fill: rgb(0, 0, 0);
+}
+
+/* slider */
+
+Slider {
     -fx-padding: 1em;
+}
+
+.track {
+    
+    -fx-padding: 3;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-radius: 5;
+}
+
+.thumb {
+    -fx-pref-height: 30;
+    -fx-prefer-width: 30;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-size: 25;
+    -fx-border-radius: 5;
+    -fx-border-color: rgb(231, 231, 231);
+    -fx-border-width: 3;
+}
+
+.thumb:hover {
+    -fx-background-color: rgb(50, 50, 50, 0.5);
+}
+
+Slider:focused .thumb{
+    -fx-background-color: rgb(255,255,255);
+    -fx-border-color: white;
+}
+
+.thumb:pressed {
+    -fx-background-color: rgb(231, 231, 231);
+    -fx-border-color: rgb(231, 231, 231);
+}
+
+.textBox {
+    -fx-background-radius: 5;    
+    -fx-background-color: rgba(0, 0, 0, 0.5); 
+    -fx-text-fill: white;
 }

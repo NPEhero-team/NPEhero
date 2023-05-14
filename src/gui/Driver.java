@@ -38,25 +38,27 @@ public class Driver extends Application
             value.minHeightProperty().bind(primaryStage.heightProperty());
         }
 
-        primaryPane.getChildren().add(menus.get("MainMenu"));
-        primaryPane.minWidthProperty().bind(primaryStage.widthProperty()); 
-        primaryPane.minHeightProperty().bind(primaryStage.heightProperty());
-        setBackground("assets/water.png");
-
         Scene primaryScene = new Scene(primaryPane, 800, 600);
         primaryScene.getStylesheets().add("gui/style.css");
 
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("NPE Hero");
+
+        setMenu("MainMenu");
+        setBackground("assets/water.png");
+
         primaryStage.show();
-        primaryStage.setFullScreen(true);
     }
 
 
-    public static void switchMenu(String name)
+    public static void setMenu(String name)
     {
-        primaryPane.getChildren().remove(0);
+        if (! primaryPane.getChildren().isEmpty())
+        {
+            primaryPane.getChildren().remove(0);
+        }
         primaryPane.getChildren().add(menus.get(name));
+        primaryPane.requestFocus();
     }
 
     public static void setBackground(String url)
