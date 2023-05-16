@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -22,6 +23,7 @@ public class LevelDetails extends VBox
         details.maxWidthProperty().bind(super.widthProperty()); 
         details.maxHeightProperty().bind(super.heightProperty().multiply(0.75));
         details.getStyleClass().add("textBox");
+        details.setPadding(new Insets(10));
 
         Button play = new Button();
         play.setText("Play");
@@ -31,7 +33,7 @@ public class LevelDetails extends VBox
             Text desc = new Text();
             desc.setText("Select a level from the left pane");
             desc.setFill(Color.WHITE);
-            desc.wrappingWidthProperty().bind(super.widthProperty());
+            desc.wrappingWidthProperty().bind(super.widthProperty().subtract(10));
             desc.setTextAlignment(TextAlignment.CENTER);
             details.setAlignment(Pos.CENTER);
             details.getChildren().addAll(desc);
@@ -44,12 +46,12 @@ public class LevelDetails extends VBox
             title.setText("Test level 1");
             title.setFill(Color.WHITE);
             title.setFont(new Font(50));
-            title.wrappingWidthProperty().bind(super.widthProperty());
+            title.wrappingWidthProperty().bind(super.widthProperty().subtract(10));
 
             Text desc = new Text();
             desc.setText("long description with lots of words. what we write does not actually need to be long i just wan t make sure it can word wrap");
             desc.setFill(Color.WHITE);
-            desc.wrappingWidthProperty().bind(super.widthProperty());
+            desc.wrappingWidthProperty().bind(super.widthProperty().subtract(10));
 
             ImageView previewView = new ImageView();
             Image preview = new Image("assets/pico.png");
@@ -58,6 +60,7 @@ public class LevelDetails extends VBox
             previewView.fitWidthProperty().bind(super.widthProperty().multiply(0.5));
             previewView.setPreserveRatio(true);
             details.getChildren().addAll(title,desc,previewView);
+            play.setOnAction(e -> Driver.setCustomMenu(new LevelSurround()));
         }
 
         VBox rightBox = new VBox();
