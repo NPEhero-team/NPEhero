@@ -1,5 +1,10 @@
 package gui;
 
-public interface JsonReader {
+import java.io.Closeable;
 
+public interface JsonReader extends Closeable
+{
+	public void close();
+	public JsonStructure read();
+	
 }

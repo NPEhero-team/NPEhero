@@ -1,5 +1,6 @@
 package gui;
 
-public interface JsonWriter {
+public interface JsonWriter 
+{
 
 }

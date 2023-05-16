@@ -1,5 +1,8 @@
 package gui;
 
-public interface JsonStructure {
+
+
+public interface JsonStructure extends JsonValue
+{
 
 }
