@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 public class Driver extends Application 
 {
 
+    static Stage primaryStage;
     static HashMap<String,Pane> menus = new HashMap<String,Pane>();
     static Pane primaryPane = new Pane();
 
@@ -26,8 +27,9 @@ public class Driver extends Application
     }
     
     @Override
-    public void start(Stage primaryStage) 
+    public void start(Stage newPrimaryStage) 
     {
+        primaryStage = newPrimaryStage;
         menus.put("MainMenu", new MainMenu());
         menus.put("LevelSelector", new LevelSelector());
         menus.put("Settings", new Settings());
@@ -38,25 +40,39 @@ public class Driver extends Application
             value.minHeightProperty().bind(primaryStage.heightProperty());
         }
 
-        primaryPane.getChildren().add(menus.get("MainMenu"));
-        primaryPane.minWidthProperty().bind(primaryStage.widthProperty()); 
-        primaryPane.minHeightProperty().bind(primaryStage.heightProperty());
-        setBackground("assets/water.png");
-
         Scene primaryScene = new Scene(primaryPane, 800, 600);
         primaryScene.getStylesheets().add("gui/style.css");
 
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("NPE Hero");
+
+        setMenu("MainMenu");
+        setBackground("assets/water.png");
+
         primaryStage.show();
-        primaryStage.setFullScreen(true);
     }
 
 
-    public static void switchMenu(String name)
+    public static void setMenu(String name)
     {
-        primaryPane.getChildren().remove(0);
+        if (! primaryPane.getChildren().isEmpty())
+        {
+            primaryPane.getChildren().remove(0);
+        }
         primaryPane.getChildren().add(menus.get(name));
+        primaryPane.requestFocus();
+    }
+
+    public static void setCustomMenu(Pane pane)
+    {
+        if (! primaryPane.getChildren().isEmpty())
+        {
+            primaryPane.getChildren().remove(0);
+        }
+        pane.minWidthProperty().bind(primaryStage.widthProperty()); 
+        pane.minHeightProperty().bind(primaryStage.heightProperty());
+        primaryPane.getChildren().add(pane);
+        primaryPane.requestFocus();
     }
 
     public static void setBackground(String url)

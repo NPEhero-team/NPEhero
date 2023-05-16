@@ -6,6 +6,30 @@
     "configurations": [
         {
             "type": "java",
+            "name": "focusTest",
+            "request": "launch",
+            "mainClass": "main.focusTest",
+            "projectName": "GuitarHero",
+            "vmArgs": "--module-path lib/linux --add-modules javafx.base,javafx.media,javafx.graphics,javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "Level",
+            "request": "launch",
+            "mainClass": "gui.Level",
+            "projectName": "GuitarHero",
+            "vmArgs": "--module-path lib/linux --add-modules javafx.graphics,javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "JFXaudioPlayer",
+            "request": "launch",
+            "mainClass": "main.JFXaudioPlayer",
+            "projectName": "GuitarHero",
+            "vmArgs": "--module-path lib/linux --add-modules javafx.base,javafx.media,javafx.graphics,javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
             "name": "Driver2",
             "request": "launch",
             "mainClass": "gui.Driver2",
