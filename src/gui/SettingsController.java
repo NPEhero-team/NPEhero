@@ -1,7 +1,9 @@
 package gui;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.FileWriter;
 
 public class SettingsController 
 {
