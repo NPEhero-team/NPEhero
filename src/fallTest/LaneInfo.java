@@ -7,6 +7,7 @@ import java.util.Queue;
 import javax.swing.JButton;
 
 public class LaneInfo {
+	//test
     Queue<NoteInfo> sends = new LinkedList<NoteInfo>();         //Queue that dictates when to send the notes
     ArrayList<Block> nodes = new ArrayList<Block>();       //Array list containing all the notes currently on the field
     public void addSends(int t) {

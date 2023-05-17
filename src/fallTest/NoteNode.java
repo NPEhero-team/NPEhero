@@ -12,7 +12,7 @@ public class NoteNode {
 		vis=newVis;
 		info = newInfo;
 		anim.setNode(vis);
-		anim.setByY();
+		anim.setByY(height);
 		anim.setCycleCount(1);
 		anim.setAutoReverse(false);
 		anim.play();

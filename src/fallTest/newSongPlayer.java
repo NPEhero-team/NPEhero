@@ -32,7 +32,7 @@ public class newSongPlayer extends Pane
 {
     Timer time = new Timer();
     
-    private double dLaneX;
+    private double dLaneX = 0;
 
     
 	public void init() {
