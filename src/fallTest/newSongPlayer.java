@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.event.*;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -33,7 +34,7 @@ public class newSongPlayer extends Pane
     Timer time = new Timer();
     
     private double dLaneX = 0;
-
+	TButton dButton = new TButton(Color.RED, 50, 50, 5);
     
 	public void init() {
 	    Queue<NoteInfo> dSends = new LinkedList<NoteInfo>();         //Queue that dictates when to send the notes
@@ -42,7 +43,6 @@ public class newSongPlayer extends Pane
 		Rectangle field = new Rectangle(50, 50, new Color(0, 0, 0, 0.7));
 		field.heightProperty().bind(this.getScene().getWindow().heightProperty().multiply(0.95));
 		field.widthProperty().bind(this.getScene().getWindow().widthProperty().divide(2.7).add(50));
-		TButton dButton = new TButton(Color.RED, 50, 50, 5);
 		genButton(dButton);
 		/*dButton.setOnKeyPressed(e -> { 
 			if (e.getCode() == KeyCode.D) {
@@ -86,16 +86,17 @@ public class newSongPlayer extends Pane
 	    root.getChildren().addAll(polish, place);
 	    
         super.getChildren().add(root);
-        
-	    sendNote(dLane);
+	    sendNote(dLane, buttonBox.getLayoutX());
 	}
 	
-	public void sendNote(ArrayList<Block> lane) {
+	public void sendNote(ArrayList<Block> lane, double pos) {
 		lane.add(new Block(Color.PINK, 50, 50, 5));
 		lane.get(lane.size()-1).heightProperty().bind(this.getScene().getWindow().widthProperty().divide(16));
 		lane.get(lane.size()-1).widthProperty().bind(this.getScene().getWindow().widthProperty().divide(16));
 		lane.get(lane.size()-1).arcHeightProperty().bind(this.getScene().getWindow().widthProperty().divide(50));
 		lane.get(lane.size()-1).arcWidthProperty().bind(this.getScene().getWindow().widthProperty().divide(50));
+		lane.get(lane.size()-1).setX(pos);
+		System.out.println(pos);
 		super.getChildren().add(lane.get(lane.size()-1));
 	}
 	
