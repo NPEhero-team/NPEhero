@@ -21,10 +21,6 @@ public class SettingsController
 	
 	public void saveAndWrite(int newEffVol, int newMusVol, boolean isFull)
 	{
-		effectsVol = newEffVol;
-		musicVol = newMusVol;
-		fullscreen = isFull;
-		
 		
 	}
 	
@@ -36,8 +32,11 @@ public class SettingsController
 		{
 			Object obj = jsonParser.parse(reader); 
 			
-			settings = (JSONObject)(obj); //converts read object to a JSONObjec
-			effectsVol = settings.get("effectsVol");
+			settings = (JSONObject)(obj); //converts read object to a JSONObject
+			
+			effectsVol = (int) settings.get("effectsVol");
+			musicVol = (int) settings.get("musicVol");
+			fullscreen = (boolean) settings.get("fullscreen");
 		}
 		catch (FileNotFoundException e) 
 		{
