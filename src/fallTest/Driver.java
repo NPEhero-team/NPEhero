@@ -7,7 +7,14 @@
 package fallTest;
 
 import javafx.application.*;
+import javafx.geometry.Side;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -28,10 +35,20 @@ public class Driver extends Application
         primaryStage.setScene(primaryScene);
         newSongPlayer player = new newSongPlayer();
         primaryStage.setTitle("TEST");
-        primaryStage.show();
-        primaryPane.getChildren().add(player);
+        primaryPane.getChildren().add(player);     
+        setBackground("assets/water.png");   
         player.init();
-        
+        primaryStage.show();
 	}
-
+	
+	  public static void setBackground(String url)
+      {
+          primaryPane.setBackground(new Background(
+              new BackgroundImage(
+                      new Image(url),
+                      BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
+                      new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
+                      new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
+              )));
+      }
 }
