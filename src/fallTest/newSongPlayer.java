@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -42,41 +43,70 @@ public class newSongPlayer extends Pane
 		dButton.widthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(20));
 		dButton.arcHeightProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(100));
 		dButton.arcWidthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(100));
+		dButton.strokeWidthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(420));
+		dButton.setOnKeyPressed(e -> { 
+			if (e.getCode() == KeyCode.D) {
+				System.out.println("D");
+			}
+		});
 		
 		TButton fButton = new TButton(Color.BLUE, 50, 50, 5);
 		fButton.heightProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(20));
 		fButton.widthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(20));
 		fButton.arcHeightProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(100));
 		fButton.arcWidthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(100));
+		fButton.strokeWidthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(420));
+		fButton.setOnKeyPressed(e -> { 
+			if (e.getCode() == KeyCode.F) {
+				System.out.println("F");
+			}
+		});
 		
 		TButton sButton = new TButton(Color.GREEN, 50, 50, 5);
 		sButton.heightProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(20));
 		sButton.widthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(20));
 		sButton.arcHeightProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(100));
 		sButton.arcWidthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(100));
+		sButton.strokeWidthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(420));
+		sButton.setOnKeyPressed(e -> { 
+			if (e.getCode() == KeyCode.SPACE) {
+				System.out.println("SPC");
+			}
+		});
 		
 		TButton jButton = new TButton(Color.PURPLE, 50, 50, 5);
 		jButton.heightProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(20));
 		jButton.widthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(20));
 		jButton.arcHeightProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(100));
 		jButton.arcWidthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(100));
+		jButton.strokeWidthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(420));
+		jButton.setOnKeyPressed(e -> { 
+			if (e.getCode() == KeyCode.J) {
+				System.out.println("J");
+			}
+		});
 		
 		TButton kButton = new TButton(Color.YELLOW, 50, 50, 5);
 		kButton.heightProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(20));
 		kButton.widthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(20));
 		kButton.arcHeightProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(100));
 		kButton.arcWidthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(100));
-		
+		kButton.strokeWidthProperty().bind(this.getScene().getWindow().heightProperty().add(this.getScene().getWindow().widthProperty()).divide(420));
+		kButton.setOnKeyPressed(e -> { 
+			if (e.getCode() == KeyCode.K) {
+				System.out.println("K");
+			}
+		});
 		
 		
 		HBox buttonBox = new HBox();
+		buttonBox.setAlignment(Pos.CENTER_LEFT);
 	    buttonBox.getChildren().addAll(dButton, fButton, sButton, jButton, kButton);
-	    buttonBox.setAlignment(Pos.CENTER);
 	    buttonBox.setSpacing(10);
 	    
 	    VBox root = new VBox();
+	    root.setAlignment(Pos.CENTER);
 	    root.getChildren().addAll(buttonBox);
-	    root.setAlignment(Pos.BOTTOM_CENTER);
 	    root.setSpacing(10);
 	    
 	    
