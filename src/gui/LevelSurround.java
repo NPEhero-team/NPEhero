@@ -39,33 +39,56 @@ public class LevelSurround extends Pane
         diff.setText("Easy");
         diff.setFill(Color.WHITE);
 
-        VBox textBox = new VBox();
-        textBox.setAlignment(Pos.TOP_RIGHT);
-        textBox.getChildren().addAll(title,diff);
+        VBox titleTextBox = new VBox();
+        titleTextBox.setAlignment(Pos.TOP_RIGHT);
+        titleTextBox.getChildren().addAll(title,diff);
 
         BorderPane topBar = new BorderPane();
         topBar.setLeft(buttonBox);
-        topBar.setRight(textBox);
+        topBar.setRight(titleTextBox);
         topBar.setPadding(new Insets(10));
         
-        Text title = new Text();
-        title.setText("Test level 1");
-        title.setFill(Color.WHITE);
-        title.setFont(new Font(50));
 
-        Text diff = new Text();
-        diff.setText("Easy");
-        diff.setFill(Color.WHITE);
+        Text scoreLabel = new Text();
+        scoreLabel.setText("Score:");
+        scoreLabel.setFill(Color.WHITE);
 
-        VBox textBox = new VBox();
-        textBox.setAlignment(Pos.TOP_RIGHT);
-        textBox.getChildren().addAll(title,diff);
+        Text score = new Text();
+        score.setText("100000");
+        score.setFill(Color.WHITE);
+        score.setFont(new Font(50));
+
+        VBox scoreTextBox = new VBox();
+        scoreTextBox.setAlignment(Pos.BOTTOM_LEFT);
+        scoreTextBox.getChildren().addAll(scoreLabel,score);
+        scoreTextBox.setPadding(new Insets(10));
+
+
+        Text comboLabel = new Text();
+        comboLabel.setText("Combo:");
+        comboLabel.setFill(Color.WHITE);
+
+        Text combo = new Text();
+        combo.setText("100000");
+        combo.setFill(Color.WHITE);
+        combo.setFont(new Font(50));
+
+        VBox comboTextBox = new VBox();
+        comboTextBox.setAlignment(Pos.BOTTOM_RIGHT);
+        comboTextBox.getChildren().addAll(comboLabel,combo);
+        comboTextBox.setPadding(new Insets(10));
+
+        Pane game = new Pane();
+        game.minWidthProperty().bind(super.heightProperty().multiply(0.66));
+        game.minHeightProperty().bind(super.heightProperty());
+        game.getStyleClass().add("textBox");
 
         HBox centerBox = new HBox();
-        centerBox.getStyleClass().add("textBox");
+        centerBox.getChildren().addAll(comboTextBox,game, scoreTextBox);
+        centerBox.setAlignment(Pos.BOTTOM_CENTER);
 
         StackPane root = new StackPane();
-        root.getChildren().addAll(topBar,centerBox);
+        root.getChildren().addAll(centerBox, topBar);
 
         super.getChildren().add(root);
         root.minWidthProperty().bind(super.minWidthProperty());
