@@ -4,6 +4,7 @@ import javafx.animation.*;
 import javafx.util.Duration;
 
 public class NoteNode {
+	private final int TIME = 20;
 	private NoteField info;
 	private Block vis;
 	TranslateTransition anim = new TranslateTransition(Duration.millis(TIME));
