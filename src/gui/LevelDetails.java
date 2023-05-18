@@ -18,10 +18,10 @@ public class LevelDetails extends VBox
     public LevelDetails(ListView<String> list)
     {
         VBox details = new VBox();
-        details.minWidthProperty().bind(super.widthProperty()); 
-        details.minHeightProperty().bind(super.heightProperty().multiply(0.75));
-        details.maxWidthProperty().bind(super.widthProperty()); 
-        details.maxHeightProperty().bind(super.heightProperty().multiply(0.75));
+        details.prefWidthProperty().bind(super.prefWidthProperty()); 
+        details.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
+        details.maxWidthProperty().bind(super.prefWidthProperty()); 
+        details.maxHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
         details.getStyleClass().add("textBox");
         details.setPadding(new Insets(10));
 
@@ -33,7 +33,7 @@ public class LevelDetails extends VBox
             Text desc = new Text();
             desc.setText("Select a level from the left pane");
             desc.setFill(Color.WHITE);
-            desc.wrappingWidthProperty().bind(super.widthProperty().subtract(10));
+            desc.wrappingWidthProperty().bind(super.prefWidthProperty().subtract(10));
             desc.setTextAlignment(TextAlignment.CENTER);
             details.setAlignment(Pos.CENTER);
             details.getChildren().addAll(desc);
@@ -46,18 +46,18 @@ public class LevelDetails extends VBox
             title.setText("Test level 1");
             title.setFill(Color.WHITE);
             title.setFont(new Font(50));
-            title.wrappingWidthProperty().bind(super.widthProperty().subtract(10));
+            title.wrappingWidthProperty().bind(super.prefWidthProperty().subtract(10));
 
             Text desc = new Text();
             desc.setText("long description with lots of words. what we write does not actually need to be long i just wan t make sure it can word wrap");
             desc.setFill(Color.WHITE);
-            desc.wrappingWidthProperty().bind(super.widthProperty().subtract(10));
+            desc.wrappingWidthProperty().bind(super.prefWidthProperty().subtract(10));
 
             ImageView previewView = new ImageView();
             Image preview = new Image("assets/pico.png");
             previewView.setImage(preview);
             //previewView.setFitHeight(100);
-            previewView.fitWidthProperty().bind(super.widthProperty().multiply(0.5));
+            previewView.fitWidthProperty().bind(super.prefWidthProperty().multiply(0.5));
             previewView.setPreserveRatio(true);
             details.getChildren().addAll(title,desc,previewView);
             play.setOnAction(e -> Driver.setCustomMenu(new LevelSurround()));

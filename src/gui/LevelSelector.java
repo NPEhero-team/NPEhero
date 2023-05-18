@@ -21,8 +21,8 @@ public class LevelSelector extends Pane
         ListView<String> levels = new ListView<String>();
         ObservableList<String> levelList= FXCollections.observableArrayList ("Test Level 1", "Test Level 2", "Test Level 3", "Test Level 4");
         levels.setItems(levelList);
-        levels.minWidthProperty().bind(super.widthProperty().multiply(0.25)); 
-        levels.minHeightProperty().bind(super.heightProperty().multiply(0.75));
+        levels.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
+        levels.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
 
         Button exit = new Button();
         exit.setText("Exit");
@@ -38,8 +38,8 @@ public class LevelSelector extends Pane
 
 
         HBox rootBox = new HBox();
-        rootBox.minWidthProperty().bind(super.widthProperty()); 
-        rootBox.minHeightProperty().bind(super.heightProperty());
+        rootBox.prefWidthProperty().bind(super.prefWidthProperty()); 
+        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
         rootBox.getChildren().addAll(leftBox, rightBox);
         rootBox.setAlignment(Pos.CENTER);
         rootBox.setSpacing(10);
@@ -56,10 +56,10 @@ public class LevelSelector extends Pane
             rightBox.getChildren().remove(0);
         }
         rightBox.getChildren().add(details);
-        details.minWidthProperty().bind(super.widthProperty().multiply(0.37)); 
-        details.minHeightProperty().bind(super.heightProperty());
-        details.maxWidthProperty().bind(super.widthProperty().multiply(0.37)); 
-        details.maxHeightProperty().bind(super.heightProperty());
+        details.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.37)); 
+        details.prefHeightProperty().bind(super.prefHeightProperty());
+        details.maxWidthProperty().bind(super.prefWidthProperty().multiply(0.37)); 
+        details.maxHeightProperty().bind(super.prefHeightProperty());
     }
 
 }

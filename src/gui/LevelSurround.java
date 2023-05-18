@@ -79,8 +79,8 @@ public class LevelSurround extends Pane
         comboTextBox.setPadding(new Insets(10));
 
         Pane game = new Pane();
-        game.minWidthProperty().bind(super.heightProperty().multiply(0.66));
-        game.minHeightProperty().bind(super.heightProperty());
+        game.prefWidthProperty().bind(super.prefHeightProperty().multiply(0.66));
+        game.prefHeightProperty().bind(super.prefHeightProperty());
         game.getStyleClass().add("textBox");
 
         HBox centerBox = new HBox();
@@ -91,7 +91,7 @@ public class LevelSurround extends Pane
         root.getChildren().addAll(centerBox, topBar);
 
         super.getChildren().add(root);
-        root.minWidthProperty().bind(super.minWidthProperty());
-        root.minHeightProperty().bind(super.minHeightProperty());
+        root.prefWidthProperty().bind(super.prefWidthProperty());
+        root.prefHeightProperty().bind(super.prefHeightProperty());
     }
 }

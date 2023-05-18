@@ -41,16 +41,14 @@ public class Settings extends Pane
         options.setSpacing(10);
         options.setAlignment(Pos.CENTER);
         options.getChildren().addAll(t1,musicVol,t2,sfxVol,devMenu,exit);
-        options.minWidthProperty().bind(super.widthProperty().multiply(0.25)); 
-        options.minHeightProperty().bind(super.heightProperty());
-        //options.getStyleClass().add("textBox");
+        options.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
+        options.prefHeightProperty().bind(super.prefHeightProperty());
 
         HBox rootBox = new HBox();
-        rootBox.minWidthProperty().bind(super.widthProperty()); 
-        rootBox.minHeightProperty().bind(super.heightProperty());
+        rootBox.prefWidthProperty().bind(super.prefWidthProperty()); 
+        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
         rootBox.getChildren().add(options);
         rootBox.setAlignment(Pos.CENTER);
         super.getChildren().add(rootBox);
     }
-    
 }

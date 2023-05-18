@@ -36,10 +36,12 @@ public class Driver extends Application
         menus.put("Leaderboard", new Leaderboard());
 
         for (Pane value : menus.values()) {
-            value.minWidthProperty().bind(primaryStage.widthProperty()); 
-            value.minHeightProperty().bind(primaryStage.heightProperty());
+            System.out.println(primaryStage.heightProperty());
+            value.prefHeightProperty().bind(primaryPane.heightProperty());
+            value.prefWidthProperty().bind(primaryPane.widthProperty());
         }
 
+        
         Scene primaryScene = new Scene(primaryPane, 800, 600);
         primaryScene.getStylesheets().add("gui/style.css");
 
@@ -69,8 +71,8 @@ public class Driver extends Application
         {
             primaryPane.getChildren().remove(0);
         }
-        pane.minWidthProperty().bind(primaryStage.widthProperty()); 
-        pane.minHeightProperty().bind(primaryStage.heightProperty());
+        pane.prefWidthProperty().bind(primaryPane.widthProperty()); 
+        pane.prefHeightProperty().bind(primaryPane.heightProperty());
         primaryPane.getChildren().add(pane);
         primaryPane.requestFocus();
     }

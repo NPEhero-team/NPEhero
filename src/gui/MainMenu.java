@@ -48,8 +48,8 @@ public class MainMenu extends Pane
         centerBox.setSpacing(10);
 
         VBox rootBox = new VBox();
-        rootBox.minWidthProperty().bind(super.widthProperty()); 
-        rootBox.minHeightProperty().bind(super.heightProperty());
+        rootBox.prefWidthProperty().bind(super.prefWidthProperty()); 
+        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
         rootBox.setAlignment(Pos.CENTER);
         rootBox.getChildren().add(centerBox);
 
