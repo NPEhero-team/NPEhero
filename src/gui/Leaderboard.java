@@ -22,7 +22,7 @@ public class Leaderboard extends Pane
 
         Button exit = new Button();
         exit.setText("Exit");
-        exit.setOnAction(e -> Driver.setMenu("MainMenu"));
+        exit.setOnAction(e -> Driver.setMenu(new MainMenu()));
 
         VBox centerBox = new VBox();
         centerBox.setAlignment(Pos.CENTER);

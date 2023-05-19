@@ -13,12 +13,12 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import main.LevelController;
 
 public class Driver extends Application 
 {
 
     static Stage primaryStage;
-    static HashMap<String,Pane> menus = new HashMap<String,Pane>();
     static Pane primaryPane = new Pane();
 
     public static void main(String[] args) 
@@ -29,43 +29,22 @@ public class Driver extends Application
     @Override
     public void start(Stage newPrimaryStage) 
     {
+        new LevelController();
         primaryStage = newPrimaryStage;
-        menus.put("MainMenu", new MainMenu());
-        menus.put("LevelSelector", new LevelSelector());
-        menus.put("Settings", new Settings());
-        menus.put("Leaderboard", new Leaderboard());
 
-        for (Pane value : menus.values()) {
-            System.out.println(primaryStage.heightProperty());
-            value.prefHeightProperty().bind(primaryPane.heightProperty());
-            value.prefWidthProperty().bind(primaryPane.widthProperty());
-        }
-
-        
         Scene primaryScene = new Scene(primaryPane, 800, 600);
         primaryScene.getStylesheets().add("gui/style.css");
 
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("NPE Hero");
 
-        setMenu("MainMenu");
+        setMenu(new MainMenu());
         setBackground("assets/water.png");
 
         primaryStage.show();
     }
 
-
-    public static void setMenu(String name)
-    {
-        if (! primaryPane.getChildren().isEmpty())
-        {
-            primaryPane.getChildren().remove(0);
-        }
-        primaryPane.getChildren().add(menus.get(name));
-        primaryPane.requestFocus();
-    }
-
-    public static void setCustomMenu(Pane pane)
+    public static void setMenu(Pane pane)
     {
         if (! primaryPane.getChildren().isEmpty())
         {
@@ -75,6 +54,10 @@ public class Driver extends Application
         pane.prefHeightProperty().bind(primaryPane.heightProperty());
         primaryPane.getChildren().add(pane);
         primaryPane.requestFocus();
+    }
+
+    public static Pane getMenu(){
+        return (Pane) primaryPane.getChildren().get(0);
     }
 
     public static void setBackground(String url)

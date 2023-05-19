@@ -8,18 +8,22 @@ import javafx.scene.paint.Color;
 
 public class Level 
 {
-    private Color[] colors;
-    private Image background;
-    private Image preview;
-    private String text;
-    private String desc;
-    //private ArrayList<String>();
+    public Image preview;
+    public String title;
+    public String aritst;
+    public String desc;
+    public ArrayList<String> diffList = new ArrayList<String>();
 
-    //google "varargs" to see how this works
+    public Image background;
+    public Color[] colors;
+
     public void setColors(Color... newColors)
     {
         colors = newColors;
     }
 
-    //INCOMPLETE
+    public String toString()
+    {
+        return title+" - "+aritst;
+    }
 }

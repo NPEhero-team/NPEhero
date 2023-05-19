@@ -12,15 +12,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import main.Level;
 
 public class LevelSurround extends Pane
 {
     //will have param (Level l)
-    public LevelSurround()
+    public LevelSurround(Level level, String diff2, Pane prev)
     {
         Button exit = new Button();
         exit.setText("Exit");
-        exit.setOnAction(e -> Driver.setMenu("LevelSelector"));
+        exit.setOnAction(e -> Driver.setMenu(prev));
 
         Button pause = new Button();
         pause.setText("Pause");
@@ -31,12 +32,12 @@ public class LevelSurround extends Pane
         buttonBox.setSpacing(10);
 
         Text title = new Text();
-        title.setText("Test level 1");
+        title.setText(level.title);
         title.setFill(Color.WHITE);
         title.setFont(new Font(50));
 
         Text diff = new Text();
-        diff.setText("Easy");
+        diff.setText(diff2);
         diff.setFill(Color.WHITE);
 
         VBox titleTextBox = new VBox();

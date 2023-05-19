@@ -35,7 +35,7 @@ public class Settings extends Pane
 
         Button exit = new Button();
         exit.setText("Exit");
-        exit.setOnAction(e -> Driver.setMenu("MainMenu"));
+        exit.setOnAction(e -> Driver.setMenu(new MainMenu()));
 
         VBox options = new VBox();
         options.setSpacing(10);

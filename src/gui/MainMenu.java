@@ -27,15 +27,15 @@ public class MainMenu extends Pane
 
         Button play = new Button();
         play.setText("Play");
-        play.setOnAction(e -> Driver.setMenu("LevelSelector"));
+        play.setOnAction(e -> Driver.setMenu(new LevelSelector()));
 
         Button settings = new Button();
         settings.setText("Settings");
-        settings.setOnAction(e -> Driver.setMenu("Settings"));
+        settings.setOnAction(e -> Driver.setMenu(new Settings()));
 
         Button leaderboard = new Button();
         leaderboard.setText("Leaderboard");
-        leaderboard.setOnAction(e -> Driver.setMenu("Leaderboard"));
+        leaderboard.setOnAction(e -> Driver.setMenu(new Leaderboard()));
 
         VBox buttonBox = new VBox();
         buttonBox.getChildren().addAll(play, settings, leaderboard);

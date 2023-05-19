@@ -1,5 +1,6 @@
-package gui;
+package test;
 
+import gui.Block;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

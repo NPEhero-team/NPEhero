@@ -3,7 +3,10 @@
 Button { 
     -fx-background-color: rgba(0, 0, 0, 0.5); 
     -fx-text-fill: white;
-    -fx-padding: .5em;
+    /* -fx-padding: .5em; */
+    -fx-border-color: transparent;
+    -fx-border-width: 3;
+    -fx-border-radius: 5;
     -fx-font-size: 25;
     -fx-background-radius: 5;
 }
@@ -13,12 +16,15 @@ Button:hover {
 }
 
 Button:focused {
-    -fx-background-color: rgb(255, 255, 255);  
-    -fx-text-fill: rgb(0, 0, 0); 
+    /* -fx-background-color: rgb(255, 255, 255);   */
+    -fx-background-color: rgb(50, 50, 50, 0.5);
+    -fx-border-color: rgb(255, 255, 255);
+    /* -fx-text-fill: rgb(0, 0, 0);  */
 }
 
 Button:pressed {
     -fx-background-color: rgb(231, 231, 231);
+    -fx-border-color: transparent;
     -fx-text-fill: rgb(0, 0, 0);
 }
 
@@ -27,17 +33,28 @@ Button:pressed {
 ListView {
     -fx-background-color: rgba(0, 0, 0, 0.5);
     -fx-background-radius: 5;
+    -fx-padding: 5;
+    -fx-effect: none;
 }
 
 .list-cell {
     -fx-padding: .5em;
     -fx-background-color: transparent;
+    -fx-background-radius: 5;
     -fx-text-fill: rgb(255, 255, 255);
+    -fx-border-width: 3;
+    -fx-border-radius: 5;
+    -fx-border-color: transparent;
 }
 
 .list-cell:hover {
     -fx-background-color: rgba(100, 100, 100, 0.5);
     
+}
+
+.list-cell:focused {
+    -fx-background-color: rgb(50, 50, 50, 0.5);
+    -fx-border-color: rgb(255, 255, 255);
 }
 
 .list-cell:selected {
@@ -96,4 +113,37 @@ Slider:focused .thumb{
     -fx-border-color: red;
     -fx-text-fill: white;
     -fx-border-width: 20;
+}
+
+/* toggle button */
+
+ToggleButton { 
+    -fx-background-color: rgba(0, 0, 0, 0.5); 
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-border-width: 3;
+    -fx-border-radius: 5;
+    -fx-font-size: 25;
+    -fx-background-radius: 5;
+}
+
+ToggleButton:hover {
+    -fx-background-color: rgb(50, 50, 50, 0.5);
+}
+
+ToggleButton:focused {
+    -fx-background-color: rgb(50, 50, 50, 0.5);
+    -fx-border-color: rgb(255, 255, 255);
+}
+
+ToggleButton:selected {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-text-fill: rgb(0, 0, 0);
+
+}
+
+ToggleButton:pressed {
+    -fx-background-color: rgb(231, 231, 231);
+    -fx-border-color: transparent;
+    -fx-text-fill: rgb(0, 0, 0);
 }

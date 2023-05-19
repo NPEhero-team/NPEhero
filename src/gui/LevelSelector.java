@@ -13,20 +13,21 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import main.LevelController;
+import main.Level;
 
 public class LevelSelector extends Pane
 {   
     public LevelSelector()
     {
-        ListView<String> levels = new ListView<String>();
-        ObservableList<String> levelList= FXCollections.observableArrayList ("Test Level 1", "Test Level 2", "Test Level 3", "Test Level 4");
-        levels.setItems(levelList);
+        ListView<Level> levels = new ListView<Level>();
+        levels.setItems(main.LevelController.levelList);
         levels.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
         levels.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
 
         Button exit = new Button();
         exit.setText("Exit");
-        exit.setOnAction(e -> Driver.setMenu("MainMenu"));
+        exit.setOnAction(e -> Driver.setMenu(new MainMenu()));
 
         VBox leftBox = new VBox();
         leftBox.setAlignment(Pos.CENTER_LEFT);
@@ -48,9 +49,9 @@ public class LevelSelector extends Pane
         super.getChildren().add(rootBox);
     }
 
-    private void addDetails(Pane rightBox, ListView<String> levels)
+    private void addDetails(Pane rightBox, ListView<Level> levels)
     {
-        VBox details = new LevelDetails(levels);
+        VBox details = new LevelDetails(levels.getSelectionModel().getSelectedItem());
         if (! rightBox.getChildren().isEmpty())
         {
             rightBox.getChildren().remove(0);
