@@ -1,15 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+
 /* global */
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
 .root{
-    /* -fx-font-size: 16pt; */
     -fx-font-family: "space mono";
-    -fx-text-fill: white;
 }
 
 /* button */
 
-Button { 
+.button { 
     -fx-background-color: rgba(0, 0, 0, 0.5); 
     -fx-text-fill: white;
     -fx-border-color: transparent;
@@ -19,16 +18,22 @@ Button {
     -fx-background-radius: 5;
 }
 
-Button:hover {
+.button:hover {
     -fx-background-color: rgb(50, 50, 50, 0.5);
 }
 
-Button:focused {
+.button:focused {
     -fx-background-color: rgb(50, 50, 50, 0.5);
     -fx-border-color: rgb(255, 255, 255);
 }
 
-Button:pressed {
+.button:selected {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-text-fill: rgb(0, 0, 0);
+
+}
+
+.button:pressed{
     -fx-background-color: rgb(231, 231, 231);
     -fx-border-color: transparent;
     -fx-text-fill: rgb(0, 0, 0);
@@ -40,10 +45,6 @@ ListView {
     -fx-background-color: rgba(0, 0, 0, 0.5);
     -fx-background-radius: 5;
     -fx-padding: 5;
-    /* -fx-font-size: 15; */
-    /* -fx-border-width: 3;
-    -fx-border-radius: 5;
-    -fx-border-color: transparent; */
 }
 
 .list-cell {
@@ -125,39 +126,6 @@ Slider:focused .thumb{
     -fx-border-color: rgb(231, 231, 231);
 }
 
-/* toggle button */
-
-.custom-radio-button { 
-    -fx-background-color: rgba(0, 0, 0, 0.5); 
-    -fx-text-fill: white;
-    -fx-border-color: transparent;
-    -fx-border-width: 3;
-    -fx-border-radius: 5;
-    -fx-font-size: 25;
-    -fx-background-radius: 5;
-}
-
-.custom-radio-button:hover {
-    -fx-background-color: rgb(50, 50, 50, 0.5);
-}
-
-.custom-radio-button:focused {
-    -fx-background-color: rgb(50, 50, 50, 0.5);
-    -fx-border-color: rgb(255, 255, 255);
-}
-
-.custom-radio-button:selected {
-    -fx-background-color: rgb(255, 255, 255);
-    -fx-text-fill: rgb(0, 0, 0);
-
-}
-
-.custom-radio-button:pressed {
-    -fx-background-color: rgb(231, 231, 231);
-    -fx-border-color: transparent;
-    -fx-text-fill: rgb(0, 0, 0);
-}
-
 /* scroll bars */
  
 .scroll-bar:horizontal ,
@@ -174,26 +142,11 @@ Slider:focused .thumb{
 	-fx-border-color:transparent;
 }
 
-/* .increment-button:hover , .decrement-button:hover {
-    -fx-background-color:derive(gray,100%);
-	-fx-border-color:derive(gray,80%);
-}*/
-
 .scroll-bar:horizontal .track ,
 .scroll-bar:vertical .track{
      -fx-background-color: rgba(0, 0, 0, 0.5);
 	 -fx-background-radius: 5em;
 }
-
-/* .scroll-bar:horizontal:hover .track ,
-.scroll-bar:horizontal:pressed .track ,
-.scroll-bar:vertical:hover .track,
-.scroll-bar:vertical:pressed .track{
-     -fx-background-color: derive(#434343,20%);
- 
-	 -fx-opacity: 0.2;
-	 -fx-background-radius: 0em;
-} */
 
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
@@ -207,9 +160,30 @@ Slider:focused .thumb{
     -fx-background-color: rgb(231, 231, 231);
 }
 
+/* text */
+
+.t0 {
+    -fx-font-size: 125;
+    -fx-fill: white;
+}
+
+.t1 {
+    -fx-font-size: 50;
+    -fx-fill: white;
+}
+
+.t2 {
+    -fx-font-size: 30;
+    -fx-fill: white;
+}
+
+.t3 {
+    -fx-fill: white;
+}
+
 /* text box */
 
-.textBox {
+.box {
     -fx-background-radius: 5;    
     -fx-background-color: rgba(0, 0, 0, 0.5); 
     -fx-text-fill: white;

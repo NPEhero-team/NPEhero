@@ -9,20 +9,25 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+
 public class MainMenu extends Pane
 {
+    /*
+     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
+     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
+     * style classes are defined in the style.css file.
+     */
     public MainMenu()
     {
         DropShadow dropShadow = new DropShadow();
         dropShadow.setRadius(50.0);
         dropShadow.setColor(Color.WHITE);
         dropShadow.setBlurType(BlurType.GAUSSIAN);
-        
+
         Text title = new Text();
         title.setText("NPE Hero");
-        title.setStyle("-fx-font-size: 125;");
+        title.getStyleClass().add("t0");
         title.setEffect(dropShadow);
-        title.setFill(Color.WHITE);
 
         Button play = new Button();
         play.setText("Play");

@@ -12,6 +12,11 @@ import javafx.scene.layout.VBox;
 
 public class Leaderboard extends Pane
 {
+    /*
+     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
+     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
+     * style classes are defined in the style.css file.
+     */
     public Leaderboard()
     {
         ListView<String> scores = new ListView<String>();
@@ -23,7 +28,7 @@ public class Leaderboard extends Pane
         scores.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
 
         Button exit = new Button();
-        exit.setText("Exit");
+        exit.setText("Back");
         exit.setOnAction(e -> Driver.setMenu(new MainMenu()));
 
         VBox centerBox = new VBox();

@@ -10,62 +10,63 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import main.Level;
 
 public class GameOver extends Pane
 {
-    public GameOver(int score2, Pane lastMenu, Level level, String diff)
+    /*
+     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
+     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
+     * style classes are defined in the style.css file.
+     */
+    public GameOver(Level level, String diff, Pane lastMenu, int score2)
     {
         Text topText = new Text();
         topText.setText("Level Complete");
-        topText.setFill(Color.WHITE);
-        topText.setStyle("-fx-font-size: 50;");
-
+        topText.getStyleClass().add("t1");
 
         Text levelName = new Text();
         levelName.setText(level.title);
-        levelName.setFill(Color.WHITE);
-        levelName.setStyle("-fx-font-size: 30;");
+        levelName.getStyleClass().add("t2");
 
         Text levelArtist = new Text();
         levelArtist.setText(level.aritst+" - "+diff);
-        levelArtist.setFill(Color.WHITE);
+        levelArtist.getStyleClass().add("t3");
 
         VBox levelDetailsBox = new VBox();
         levelDetailsBox.getChildren().addAll(levelName,levelArtist);
-        levelDetailsBox.getStyleClass().add("textBox");
+        levelDetailsBox.getStyleClass().add("box");
         levelDetailsBox.setPadding(new Insets(5));
 
 
         Text scoreLabel = new Text();
         scoreLabel.setText("Final score");
-        scoreLabel.setFill(Color.WHITE);
+        scoreLabel.getStyleClass().add("t3");
 
         Text score = new Text();
         score.setText(score2+"");
-        score.setFill(Color.WHITE);
+        score.getStyleClass().add("t2");
         score.setStyle("-fx-font-size: 30;");
 
         VBox scoreBox = new VBox();
-        scoreBox.getStyleClass().add("textBox");
+        scoreBox.getStyleClass().add("box");
         scoreBox.getChildren().addAll(scoreLabel,score);
         scoreBox.setPadding(new Insets(5));
 
 
         Text nameLabel = new Text();
         nameLabel.setText("Leaderboard entry");
-        nameLabel.setFill(Color.WHITE);
+        nameLabel.getStyleClass().add("t3");
 
         TextField name = new TextField();
         name.getStyleClass().remove("text-feild");
-        name.getStyleClass().add("custom-radio-button");
+        name.getStyleClass().add("button");
         name.setText("name");
 
         Button save = new Button();
         save.setText("Add");
-        save.setOnAction(new EventHandler<ActionEvent>() {
+        save.setOnAction(new EventHandler<ActionEvent>() { //this is the same as the "e ->" thing but it allows more than one line to be added 
             @Override
             public void handle(ActionEvent event) {
                 save.setDisable(true);
@@ -79,13 +80,13 @@ public class GameOver extends Pane
 
         VBox nameBox = new VBox();
         nameBox.getChildren().addAll(nameLabel,b);
-        nameBox.getStyleClass().add("textBox");
+        nameBox.getStyleClass().add("box");
         nameBox.setSpacing(5);
         nameBox.setPadding(new Insets(5));
 
 
         Button exit = new Button();
-        exit.setText("Exit");
+        exit.setText("Back");
         exit.setOnAction(e -> Driver.setMenu(lastMenu));
 
         Button replay = new Button();

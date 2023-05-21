@@ -9,6 +9,13 @@ import main.Level;
 public class DebugMenu 
 {
     public Stage primaryStage = new Stage();
+
+    /*
+     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
+     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
+     * style classes are defined in the style.css file.
+     */
+    VBox primaryPane = new VBox();
     public DebugMenu()
     {
         Button wallpaperTest = new Button();
@@ -25,17 +32,26 @@ public class DebugMenu
 
         Button testfinish = new Button();
         testfinish.setText("launch game end");
+        //create a sample level for testing
         Level temp = new Level();
         temp.title = "Title";
         temp.aritst = "artist";
-        testfinish.setOnAction(e -> Driver.setMenu(new GameOver(300, new Settings(), temp, "Easy")));
+        testfinish.setOnAction(e -> Driver.setMenu(new GameOver(temp, "Easy", new Settings(), 300)));
 
-        VBox primaryPane = new VBox();
         primaryPane.getChildren().addAll(wallpaperTest,wallpaperTest2,wallpaperTest3,testfinish);
         
         Scene primaryScene = new Scene(primaryPane);
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("debug");
+    }
+
+    public void show()
+    {
         primaryStage.show();
+    }
+
+    public void addButton(Button b)
+    {
+        primaryPane.getChildren().add(b);
     }
 }

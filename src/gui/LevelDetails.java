@@ -11,30 +11,38 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import main.Level;
+import main.ScoreController;
 
 public class LevelDetails extends VBox
 {
+    /**
+     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
+     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
+     * style classes are defined in the style.css file.
+     * 
+     * @param level: the selected level on the right side
+     */
     public LevelDetails(Level level)
     {
         VBox rightBox = new VBox();
         rightBox.prefWidthProperty().bind(super.prefWidthProperty());
         rightBox.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
-        rightBox.getStyleClass().add("textBox");
+        rightBox.setMinWidth(275);
+        rightBox.getStyleClass().add("box");
 
         Button play = new Button();
         play.setDisable(true);
         play.setText("Play");
 
-        if (level == null)
+        if (level == null) //if no level is selected from the list on the left
         {
             Text desc = new Text();
             desc.setText("Select a level from the left pane");
-            desc.setFill(Color.WHITE);
+            desc.getStyleClass().add("t3");
             desc.wrappingWidthProperty().bind(super.prefWidthProperty().subtract(10));
             desc.setTextAlignment(TextAlignment.CENTER);
 
@@ -53,17 +61,15 @@ public class LevelDetails extends VBox
 
             Text title = new Text();
             title.setText(level.title);
-            title.setFill(Color.WHITE);
-            title.setStyle("-fx-font-size: 50;");
+            title.getStyleClass().add("t1");
 
             Text artist = new Text();
             artist.setText(level.aritst);
-            artist.setFill(Color.WHITE);
-            artist.setStyle("-fx-font-size: 30;");
+            artist.getStyleClass().add("t2");
 
             Text desc = new Text();
             desc.setText(level.desc);
-            desc.setFill(Color.WHITE);
+            desc.getStyleClass().add("t3");
 
             ImageView previewView = new ImageView();
             Image preview = level.preview;
@@ -73,19 +79,18 @@ public class LevelDetails extends VBox
 
             FlowPane diffSelector = new FlowPane();
             diffSelector.setAlignment(Pos.CENTER);
-            ToggleGroup diffToggleGroup = new ToggleGroup();
-            for (String diff : level.diffList)
+            ToggleGroup diffToggleGroup = new ToggleGroup(); //allows only one to be selected at a time
+            for (String diff : level.diffList) //adds a button for each diff
             {
                 RadioButton temp = new RadioButton();
-                temp.getStyleClass().remove("radio-button");
+                temp.getStyleClass().remove("radio-button"); //makes the buttons not look like a radio button and instead a normal button
                 temp.getStyleClass().add("button");
-                temp.getStyleClass().add("custom-radio-button");
                 temp.setText(diff);
-                temp.setUserData(diff);
+                temp.setUserData(diff); //allows the data and text to be seperate
                 diffToggleGroup.getToggles().add(temp);
                 diffSelector.getChildren().add(temp);
             }
-            play.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull());
+            play.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull()); //disables play button when no difficulty is selected
             play.setOnAction(e -> Driver.setMenu(new LevelSurround(level, (String)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu())));
             HBox diffBox = new HBox();
             diffSelector.prefWidthProperty().bind(diffBox.widthProperty());

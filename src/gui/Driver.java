@@ -11,6 +11,9 @@ import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -25,15 +28,23 @@ public class Driver extends Application
 
     static Stage primaryStage;
     static Pane primaryPane = new Pane();
+    public static DebugMenu debug = new DebugMenu();
 
+    /*
+     * starts javafx
+     */
     public static void main(String[] args) 
     {
         launch(args);
     }
     
+    /*
+     * sets up game windows and starts controllers
+     * (automatically called by javafx on start)
+     */
     @Override
-    public void start(Stage newPrimaryStage) 
-    {
+    public void start(Stage newPrimaryStage)
+    {   
         new LevelController();
         primaryStage = newPrimaryStage;
 
@@ -46,26 +57,44 @@ public class Driver extends Application
         setMenu(new MainMenu());
         setBackground("assets/water.png");
 
+        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> { //full screen stuff
+            if (KeyCode.F11.equals(event.getCode())) {
+                primaryStage.setFullScreen(!primaryStage.isFullScreen());
+            }
+        });
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        primaryStage.setFullScreenExitHint("");
         primaryStage.show();
     }
 
+    /**
+     * Replaces/adds a new pane to the primaryPane
+     * @param pane  the new pane
+     */
     public static void setMenu(Pane pane)
     {
         if (! primaryPane.getChildren().isEmpty())
         {
             primaryPane.getChildren().remove(0);
         }
-        pane.prefWidthProperty().bind(primaryPane.widthProperty()); 
-        pane.prefHeightProperty().bind(primaryPane.heightProperty());
         primaryPane.getChildren().add(pane);
-        primaryPane.requestFocus();
+        pane.prefWidthProperty().bind(primaryPane.widthProperty()); //makes pane fill the window
+        pane.prefHeightProperty().bind(primaryPane.heightProperty());
+        primaryPane.requestFocus(); //make the pane itself focused by the keyboard naviagtion so no button is highlighted by default
     }
 
+    /**
+     * @return the current pane in primaryPane
+     */
     public static Pane getMenu(){
         return (Pane) primaryPane.getChildren().get(0);
     }
 
-    public static void setBackground(String url)
+    /**
+     * replaces the background image with a new one
+     * @param url   the url of the image to set
+     */
+    public static void setBackground(String url) //replaces background with a new one
     {
         // Image image1;
         // Image image2;
@@ -86,13 +115,11 @@ public class Driver extends Application
             )));
     }
 
+    /**
+     * quits the application
+     */
     public static void quit()
     {
-        try {
-            Platform.exit();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        Platform.exit();
     }
 }

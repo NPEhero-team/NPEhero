@@ -12,6 +12,11 @@ import main.Level;
 
 public class LevelSelector extends Pane
 {   
+    /*
+     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
+     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
+     * style classes are defined in the style.css file.
+     */
     public LevelSelector()
     {
         ListView<Level> levels = new ListView<Level>();
@@ -21,7 +26,7 @@ public class LevelSelector extends Pane
         levels.setMinWidth(275);
 
         Button exit = new Button();
-        exit.setText("Exit");
+        exit.setText("Back");
         exit.setOnAction(e -> Driver.setMenu(new MainMenu()));
 
         VBox leftBox = new VBox();
@@ -41,7 +46,7 @@ public class LevelSelector extends Pane
         rootBox.setSpacing(10);
 
         levels.getStyleClass().remove("list-view");
-        levels.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Level>() {
+        levels.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Level>() { //listens for change in selected item of the list
 
 			@Override
 			public void changed(ObservableValue<? extends Level> arg0, Level arg1, Level arg2) {
@@ -51,6 +56,11 @@ public class LevelSelector extends Pane
         super.getChildren().add(rootBox);
     }
 
+    /**
+     * adds corresponding level details pane to the right side
+     * @param rightBox
+     * @param levels
+     */
     private void addDetails(Pane rightBox, ListView<Level> levels)
     {
         VBox details = new LevelDetails(levels.getSelectionModel().getSelectedItem());

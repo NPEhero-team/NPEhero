@@ -13,11 +13,16 @@ import javafx.scene.text.Text;
 
 public class Settings extends Pane
 {
+    /*
+     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
+     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
+     * style classes are defined in the style.css file.
+     */
     public Settings()
     {
         Text t1 = new Text();
         t1.setText("Music Volume");
-        t1.setFill(Color.WHITE);
+        t1.getStyleClass().add("t3");
 
         Slider musicVol = new Slider();
         musicVol.setMax(100);
@@ -25,7 +30,7 @@ public class Settings extends Pane
 
         Text t2 = new Text();
         t2.setText("Sound Effects Volume");
-        t2.setFill(Color.WHITE);
+        t2.getStyleClass().add("t3");
 
         Slider sfxVol = new Slider();
         sfxVol.setMax(100);
@@ -35,15 +40,14 @@ public class Settings extends Pane
         fullscreen.setText("Toggle Fullscreen (F11)");
         fullscreen.getStyleClass().remove("toggle-button");
         fullscreen.getStyleClass().add("button");
-        fullscreen.getStyleClass().add("custom-radio-button");
         fullscreen.setOnAction(e -> Driver.primaryStage.setFullScreen(!Driver.primaryStage.isFullScreen()));
 
         Button devMenu = new Button();
         devMenu.setText("Debug Menu");
-        devMenu.setOnAction(e -> new DebugMenu());
+        devMenu.setOnAction(e -> Driver.debug.show());
 
         Button exit = new Button();
-        exit.setText("Exit");
+        exit.setText("Back");
         exit.setOnAction(e -> Driver.setMenu(new MainMenu()));
 
         VBox options = new VBox();

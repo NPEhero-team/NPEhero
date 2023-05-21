@@ -8,17 +8,23 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import main.Level;
+import main.ScoreController;
 
 public class LevelSurround extends Pane
 {
-    //will have param (Level l)
-    public LevelSurround(Level level, String diff2, Pane prev)
+    /*
+     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
+     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
+     * style classes are defined in the style.css file.
+     */
+    public LevelSurround(Level level, String difficulty, Pane prev)
     {
+        ScoreController sc = new ScoreController();
+
         Button exit = new Button();
-        exit.setText("Exit");
+        exit.setText("Back");
         exit.setOnAction(e -> Driver.setMenu(prev));
 
         Button pause = new Button();
@@ -31,12 +37,11 @@ public class LevelSurround extends Pane
 
         Text title = new Text();
         title.setText(level.title);
-        title.setFill(Color.WHITE);
-        title.setStyle("-fx-font-size: 30;");
+        title.getStyleClass().add("t2");
 
         Text artist = new Text();
-        artist.setText(level.aritst+" - "+diff2);
-        artist.setFill(Color.WHITE);
+        artist.setText(level.aritst+" - "+difficulty);
+        artist.getStyleClass().add("t3");
 
         VBox titleTextBox = new VBox();
         titleTextBox.setAlignment(Pos.TOP_RIGHT);
@@ -50,37 +55,39 @@ public class LevelSurround extends Pane
 
         Text scoreLabel = new Text();
         scoreLabel.setText("Score:");
-        scoreLabel.setFill(Color.WHITE);
+        scoreLabel.getStyleClass().add("t3");
 
-        Text score = new Text();
-        score.setText("100000");
-        score.setFill(Color.WHITE);
-        score.setStyle("-fx-font-size: 50;");
+        Text scoreDisplay = new Text();
+        scoreDisplay.textProperty().bind(sc.scoreProperty);
+        scoreDisplay.getStyleClass().add("t1");
 
         VBox scoreTextBox = new VBox();
         scoreTextBox.setAlignment(Pos.BOTTOM_LEFT);
-        scoreTextBox.getChildren().addAll(scoreLabel,score);
+        scoreTextBox.getChildren().addAll(scoreLabel,scoreDisplay);
         scoreTextBox.setPadding(new Insets(10));
 
 
         Text comboLabel = new Text();
         comboLabel.setText("Combo:");
-        comboLabel.setFill(Color.WHITE);
+        comboLabel.getStyleClass().add("t3");
 
-        Text combo = new Text();
-        combo.setText("100000");
-        combo.setFill(Color.WHITE);
-        combo.setStyle("-fx-font-size: 50;");
+        Text comboDisplay = new Text();
+        comboDisplay.textProperty().bind(sc.comboProperty);
+        comboDisplay.getStyleClass().add("t1");
 
         VBox comboTextBox = new VBox();
         comboTextBox.setAlignment(Pos.BOTTOM_RIGHT);
-        comboTextBox.getChildren().addAll(comboLabel,combo);
+        comboTextBox.getChildren().addAll(comboLabel,comboDisplay);
         comboTextBox.setPadding(new Insets(10));
 
         Pane game = new Pane();
         game.minWidthProperty().bind(super.prefHeightProperty().multiply(0.66));
         game.minHeightProperty().bind(super.prefHeightProperty());
-        game.getStyleClass().add("textBox");
+        game.getStyleClass().add("box");
+
+        comboTextBox.minWidthProperty().bind(super.prefWidthProperty().subtract(game.minWidthProperty()).divide(2));
+        scoreTextBox.minWidthProperty().bind(super.prefWidthProperty().subtract(game.minWidthProperty()).divide(2));
+        //new Game(level, difficulty, prev, sc)
 
         HBox centerBox = new HBox();
         centerBox.getChildren().addAll(comboTextBox,game, scoreTextBox);
@@ -92,5 +99,21 @@ public class LevelSurround extends Pane
         super.getChildren().add(root);
         root.prefWidthProperty().bind(super.prefWidthProperty());
         root.prefHeightProperty().bind(super.prefHeightProperty());
+
+        //for debug menu
+        Button addScore = new Button();
+        addScore.setText(level.title + " addscore");
+        addScore.setOnAction(e -> sc.setScore(sc.getScore()+1));
+        Driver.debug.addButton(addScore);
+
+        Button addCombo = new Button();
+        addCombo.setText(level.title + " addcombo");
+        addCombo.setOnAction(e -> sc.setCombo(sc.getCombo()+1));
+        Driver.debug.addButton(addCombo);
+
+        Button printD = new Button();
+        printD.setText(level.title + " print debug");
+        printD.setOnAction(e -> sc.print());
+        Driver.debug.addButton(printD);
     }
 }
