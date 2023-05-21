@@ -1,6 +1,5 @@
 package gui;
 
-import fallTest.Hbox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,7 +9,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import main.Level;
 
@@ -34,15 +32,15 @@ public class LevelSurround extends Pane
         Text title = new Text();
         title.setText(level.title);
         title.setFill(Color.WHITE);
-        title.setFont(new Font(50));
+        title.setStyle("-fx-font-size: 30;");
 
-        Text diff = new Text();
-        diff.setText(diff2);
-        diff.setFill(Color.WHITE);
+        Text artist = new Text();
+        artist.setText(level.aritst+" - "+diff2);
+        artist.setFill(Color.WHITE);
 
         VBox titleTextBox = new VBox();
         titleTextBox.setAlignment(Pos.TOP_RIGHT);
-        titleTextBox.getChildren().addAll(title,diff);
+        titleTextBox.getChildren().addAll(title, artist);
 
         BorderPane topBar = new BorderPane();
         topBar.setLeft(buttonBox);
@@ -57,7 +55,7 @@ public class LevelSurround extends Pane
         Text score = new Text();
         score.setText("100000");
         score.setFill(Color.WHITE);
-        score.setFont(new Font(50));
+        score.setStyle("-fx-font-size: 50;");
 
         VBox scoreTextBox = new VBox();
         scoreTextBox.setAlignment(Pos.BOTTOM_LEFT);
@@ -72,7 +70,7 @@ public class LevelSurround extends Pane
         Text combo = new Text();
         combo.setText("100000");
         combo.setFill(Color.WHITE);
-        combo.setFont(new Font(50));
+        combo.setStyle("-fx-font-size: 50;");
 
         VBox comboTextBox = new VBox();
         comboTextBox.setAlignment(Pos.BOTTOM_RIGHT);
@@ -80,8 +78,8 @@ public class LevelSurround extends Pane
         comboTextBox.setPadding(new Insets(10));
 
         Pane game = new Pane();
-        game.prefWidthProperty().bind(super.prefHeightProperty().multiply(0.66));
-        game.prefHeightProperty().bind(super.prefHeightProperty());
+        game.minWidthProperty().bind(super.prefHeightProperty().multiply(0.66));
+        game.minHeightProperty().bind(super.prefHeightProperty());
         game.getStyleClass().add("textBox");
 
         HBox centerBox = new HBox();

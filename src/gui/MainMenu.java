@@ -7,7 +7,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class MainMenu extends Pane
@@ -21,7 +20,7 @@ public class MainMenu extends Pane
         
         Text title = new Text();
         title.setText("NPE Hero");
-        title.setFont(new Font(125));
+        title.setStyle("-fx-font-size: 125;");
         title.setEffect(dropShadow);
         title.setFill(Color.WHITE);
 
@@ -37,8 +36,12 @@ public class MainMenu extends Pane
         leaderboard.setText("Leaderboard");
         leaderboard.setOnAction(e -> Driver.setMenu(new Leaderboard()));
 
+        Button exit = new Button();
+        exit.setText("Quit");
+        exit.setOnAction(e -> Driver.quit());
+
         VBox buttonBox = new VBox();
-        buttonBox.getChildren().addAll(play, settings, leaderboard);
+        buttonBox.getChildren().addAll(play, settings, leaderboard, exit);
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setSpacing(10);
 

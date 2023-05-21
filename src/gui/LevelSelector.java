@@ -1,19 +1,13 @@
 package gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import main.LevelController;
 import main.Level;
 
 public class LevelSelector extends Pane
@@ -24,6 +18,7 @@ public class LevelSelector extends Pane
         levels.setItems(main.LevelController.levelList);
         levels.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
         levels.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
+        levels.setMinWidth(275);
 
         Button exit = new Button();
         exit.setText("Exit");
@@ -45,7 +40,14 @@ public class LevelSelector extends Pane
         rootBox.setAlignment(Pos.CENTER);
         rootBox.setSpacing(10);
 
-        levels.setOnMouseClicked(e -> addDetails(rightBox, levels));
+        levels.getStyleClass().remove("list-view");
+        levels.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Level>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Level> arg0, Level arg1, Level arg2) {
+				addDetails(rightBox, levels);
+			}	
+		});
         super.getChildren().add(rootBox);
     }
 

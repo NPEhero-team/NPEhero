@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class LevelController
@@ -31,6 +32,7 @@ public class LevelController
         testLevel2.diffList.add("Easy");
         testLevel2.diffList.add("Med");
         testLevel2.diffList.add("insane+++");
+        testLevel2.preview = new Image("assets/pico.png");
         levelList.add(testLevel2);
         
     }

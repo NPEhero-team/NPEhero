@@ -1,9 +1,17 @@
+/* global */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+.root{
+    /* -fx-font-size: 16pt; */
+    -fx-font-family: "space mono";
+    -fx-text-fill: white;
+}
+
 /* button */
 
 Button { 
     -fx-background-color: rgba(0, 0, 0, 0.5); 
     -fx-text-fill: white;
-    /* -fx-padding: .5em; */
     -fx-border-color: transparent;
     -fx-border-width: 3;
     -fx-border-radius: 5;
@@ -16,10 +24,8 @@ Button:hover {
 }
 
 Button:focused {
-    /* -fx-background-color: rgb(255, 255, 255);   */
     -fx-background-color: rgb(50, 50, 50, 0.5);
     -fx-border-color: rgb(255, 255, 255);
-    /* -fx-text-fill: rgb(0, 0, 0);  */
 }
 
 Button:pressed {
@@ -34,13 +40,16 @@ ListView {
     -fx-background-color: rgba(0, 0, 0, 0.5);
     -fx-background-radius: 5;
     -fx-padding: 5;
-    -fx-effect: none;
+    /* -fx-font-size: 15; */
+    /* -fx-border-width: 3;
+    -fx-border-radius: 5;
+    -fx-border-color: transparent; */
 }
 
 .list-cell {
     -fx-padding: .5em;
     -fx-background-color: transparent;
-    -fx-background-radius: 5;
+    -fx-background-radius: 3;
     -fx-text-fill: rgb(255, 255, 255);
     -fx-border-width: 3;
     -fx-border-radius: 5;
@@ -52,7 +61,7 @@ ListView {
     
 }
 
-.list-cell:focused {
+ListView:focused .list-cell:focused {
     -fx-background-color: rgb(50, 50, 50, 0.5);
     -fx-border-color: rgb(255, 255, 255);
 }
@@ -60,6 +69,23 @@ ListView {
 .list-cell:selected {
     -fx-background-color: rgb(255, 255, 255);
     -fx-text-fill: rgb(0, 0, 0);
+}
+
+.list-cell:pressed {
+    -fx-background-color: rgb(231, 231, 231);
+    -fx-border-color: transparent;
+}
+
+.list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+}
+
+.unselectable .list-cell{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
 }
 
 /* slider */
@@ -99,25 +125,9 @@ Slider:focused .thumb{
     -fx-border-color: rgb(231, 231, 231);
 }
 
-/* text box */
-
-.textBox {
-    -fx-background-radius: 5;    
-    -fx-background-color: rgba(0, 0, 0, 0.5); 
-    -fx-text-fill: white;
-}
-
-.debug {
-    -fx-background-radius: 5;    
-    -fx-background-color: rgba(255, 0, 0, 0.281); 
-    -fx-border-color: red;
-    -fx-text-fill: white;
-    -fx-border-width: 20;
-}
-
 /* toggle button */
 
-ToggleButton { 
+.custom-radio-button { 
     -fx-background-color: rgba(0, 0, 0, 0.5); 
     -fx-text-fill: white;
     -fx-border-color: transparent;
@@ -127,23 +137,92 @@ ToggleButton {
     -fx-background-radius: 5;
 }
 
-ToggleButton:hover {
+.custom-radio-button:hover {
     -fx-background-color: rgb(50, 50, 50, 0.5);
 }
 
-ToggleButton:focused {
+.custom-radio-button:focused {
     -fx-background-color: rgb(50, 50, 50, 0.5);
     -fx-border-color: rgb(255, 255, 255);
 }
 
-ToggleButton:selected {
+.custom-radio-button:selected {
     -fx-background-color: rgb(255, 255, 255);
     -fx-text-fill: rgb(0, 0, 0);
 
 }
 
-ToggleButton:pressed {
+.custom-radio-button:pressed {
     -fx-background-color: rgb(231, 231, 231);
     -fx-border-color: transparent;
     -fx-text-fill: rgb(0, 0, 0);
 }
+
+/* scroll bars */
+ 
+.scroll-bar:horizontal ,
+.scroll-bar:vertical{
+    -fx-font-size: 5px;
+    -fx-background-color :transparent;
+    -fx-border-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-border-radius :2.0em;
+}
+
+.increment-button ,.decrement-button {
+    -fx-background-color:transparent;
+	-fx-border-color:transparent;
+}
+
+/* .increment-button:hover , .decrement-button:hover {
+    -fx-background-color:derive(gray,100%);
+	-fx-border-color:derive(gray,80%);
+}*/
+
+.scroll-bar:horizontal .track ,
+.scroll-bar:vertical .track{
+     -fx-background-color: rgba(0, 0, 0, 0.5);
+	 -fx-background-radius: 5em;
+}
+
+/* .scroll-bar:horizontal:hover .track ,
+.scroll-bar:horizontal:pressed .track ,
+.scroll-bar:vertical:hover .track,
+.scroll-bar:vertical:pressed .track{
+     -fx-background-color: derive(#434343,20%);
+ 
+	 -fx-opacity: 0.2;
+	 -fx-background-radius: 0em;
+} */
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color:white;
+	-fx-background-radius: 5em;
+    -fx-border-width: 0;
+ 
+}
+
+.scroll-bar .thumb:pressed {
+    -fx-background-color: rgb(231, 231, 231);
+}
+
+/* text box */
+
+.textBox {
+    -fx-background-radius: 5;    
+    -fx-background-color: rgba(0, 0, 0, 0.5); 
+    -fx-text-fill: white;
+}
+
+/* debug */
+
+.debug {
+    -fx-background-radius: 5;    
+    -fx-background-color: rgba(255, 0, 0, 0.281); 
+    -fx-border-color: red;
+    -fx-text-fill: white;
+    -fx-border-width: 20;
+}
+
+

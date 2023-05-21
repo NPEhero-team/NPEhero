@@ -16,6 +16,8 @@ public class Leaderboard extends Pane
     {
         ListView<String> scores = new ListView<String>();
         ObservableList<String> scoreList= FXCollections.observableArrayList ("Test Score 1", "Test Score 2", "Test Score 3", "Test Score 4");
+        scores.getStyleClass().remove("list-view");
+        scores.getStyleClass().add("unselectable");
         scores.setItems(scoreList);
         scores.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
         scores.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
@@ -28,6 +30,7 @@ public class Leaderboard extends Pane
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setSpacing(10);
         centerBox.getChildren().addAll(scores,exit);
+        centerBox.setMinWidth(400);
 
         HBox rootBox = new HBox();
         rootBox.prefWidthProperty().bind(super.prefWidthProperty()); 
