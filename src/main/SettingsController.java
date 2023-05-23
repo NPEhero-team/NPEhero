@@ -24,6 +24,19 @@ public class SettingsController
 	public void saveAndWrite(int newEffVol, int newMusVol, boolean isFull)
 	{
 		
+		settings.put("musicVol", newMusVol);
+		settings.put("effectsVol", newEffVol);
+		settings.put("fullscreen", isFull);
+
+		try (FileWriter file = new FileWriter("settings.json")) 
+		{
+            //write the settings JSONObject instance to the file
+            file.write(settings.toJSONString()); 
+            file.flush();
+ 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	
 	public void readFile() throws ParseException
@@ -42,12 +55,10 @@ public class SettingsController
 		}
 		catch (FileNotFoundException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		catch (IOException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 				
