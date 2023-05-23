@@ -22,12 +22,16 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.LevelController;
+import main.SettingsController;
 
 public class Driver extends Application 
 {
 
     static Stage primaryStage;
     static Pane primaryPane = new Pane();
+
+    public static SettingsController settingsController = new SettingsController();
+    public static LevelController levelController = new LevelController();
     public static DebugMenu debug = new DebugMenu();
 
     /*
@@ -45,7 +49,6 @@ public class Driver extends Application
     @Override
     public void start(Stage newPrimaryStage)
     {   
-        new LevelController();
         primaryStage = newPrimaryStage;
 
         Scene primaryScene = new Scene(primaryPane, 800, 600);

@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import main.Difficulty;
 import main.Level;
 
 public class DebugMenu 
@@ -33,12 +34,16 @@ public class DebugMenu
         Button testfinish = new Button();
         testfinish.setText("launch game end");
         //create a sample level for testing
-        Level temp = new Level();
-        temp.title = "Title";
-        temp.aritst = "artist";
-        testfinish.setOnAction(e -> Driver.setMenu(new GameOver(temp, "Easy", new Settings(), 300)));
+        Level temp = new Level("Title", "artist");
+        Difficulty temp2 = new Difficulty();
+        temp2.title = "Easy";
+        testfinish.setOnAction(e -> Driver.setMenu(new GameOver(temp, temp2, new Settings(), 300)));
 
-        primaryPane.getChildren().addAll(wallpaperTest,wallpaperTest2,wallpaperTest3,testfinish);
+        Button testVol = new Button();
+        testVol.setText("print volumes");
+        testVol.setOnAction(e -> System.out.println("sfx:"+Driver.settingsController.effectsVol+" msc:"+Driver.settingsController.musicVol));
+
+        primaryPane.getChildren().addAll(wallpaperTest,wallpaperTest2,wallpaperTest3,testfinish,testVol);
         
         Scene primaryScene = new Scene(primaryPane);
         primaryStage.setScene(primaryScene);

@@ -14,8 +14,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
+import main.Difficulty;
 import main.Level;
-import main.ScoreController;
 
 public class LevelDetails extends VBox
 {
@@ -31,12 +31,16 @@ public class LevelDetails extends VBox
         VBox rightBox = new VBox();
         rightBox.prefWidthProperty().bind(super.prefWidthProperty());
         rightBox.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
-        rightBox.setMinWidth(275);
+        rightBox.setMinWidth(350);
         rightBox.getStyleClass().add("box");
 
         Button play = new Button();
         play.setDisable(true);
         play.setText("Play");
+
+        Button leaderboard = new Button();
+        leaderboard.setDisable(true);
+        leaderboard.setText("Leaderboard");
 
         if (level == null) //if no level is selected from the list on the left
         {
@@ -60,11 +64,11 @@ public class LevelDetails extends VBox
             detailsScroll.getStyleClass().remove("scroll-pane");
 
             Text title = new Text();
-            title.setText(level.title);
+            title.setText(level.getTitle());
             title.getStyleClass().add("t1");
 
             Text artist = new Text();
-            artist.setText(level.aritst);
+            artist.setText(level.getArtist());
             artist.getStyleClass().add("t2");
 
             Text desc = new Text();
@@ -80,18 +84,23 @@ public class LevelDetails extends VBox
             FlowPane diffSelector = new FlowPane();
             diffSelector.setAlignment(Pos.CENTER);
             ToggleGroup diffToggleGroup = new ToggleGroup(); //allows only one to be selected at a time
-            for (String diff : level.diffList) //adds a button for each diff
+            for (Difficulty diff : level.diffList) //adds a button for each diff
             {
                 RadioButton temp = new RadioButton();
                 temp.getStyleClass().remove("radio-button"); //makes the buttons not look like a radio button and instead a normal button
                 temp.getStyleClass().add("button");
-                temp.setText(diff);
+                temp.setText(diff.title);
                 temp.setUserData(diff); //allows the data and text to be seperate
                 diffToggleGroup.getToggles().add(temp);
                 diffSelector.getChildren().add(temp);
             }
             play.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull()); //disables play button when no difficulty is selected
-            play.setOnAction(e -> Driver.setMenu(new LevelSurround(level, (String)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu())));
+            play.setOnAction(e -> Driver.setMenu(new LevelSurround(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu())));
+
+            leaderboard.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull());
+            leaderboard.setOnAction(e -> Driver.setMenu(new Leaderboard(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu())));
+
+
             HBox diffBox = new HBox();
             diffSelector.prefWidthProperty().bind(diffBox.widthProperty());
             diffBox.getChildren().add(diffSelector);
@@ -107,7 +116,13 @@ public class LevelDetails extends VBox
         VBox rightSide = new VBox();
         rightSide.setAlignment(Pos.CENTER_RIGHT);
         rightSide.setSpacing(10);
-        rightSide.getChildren().addAll(rightBox,play);
+
+        HBox buttonBox = new HBox();
+        buttonBox.getChildren().addAll(leaderboard,play);
+        buttonBox.setSpacing(5);
+        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+
+        rightSide.getChildren().addAll(rightBox,buttonBox);
 
         super.setAlignment(Pos.CENTER_RIGHT);
         super.getChildren().add(rightSide);

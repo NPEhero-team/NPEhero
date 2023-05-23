@@ -6,9 +6,15 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import main.Difficulty;
+import main.LeaderboardEntry;
+import main.Level;
 
 public class Leaderboard extends Pane
 {
@@ -17,19 +23,32 @@ public class Leaderboard extends Pane
      * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
      * style classes are defined in the style.css file.
      */
-    public Leaderboard()
+    public Leaderboard(Level level, Difficulty diff, Pane prev)
     {
-        ListView<String> scores = new ListView<String>();
-        ObservableList<String> scoreList= FXCollections.observableArrayList ("Test Score 1", "Test Score 2", "Test Score 3", "Test Score 4");
-        scores.getStyleClass().remove("list-view");
+        //sets up table view: requires special getters, setters and constructors to work
+        TableView<LeaderboardEntry> scores = new TableView<LeaderboardEntry>();
+
+        TableColumn<LeaderboardEntry, String> nameCol = new TableColumn<LeaderboardEntry, String>("Name");
+        TableColumn<LeaderboardEntry, String> scoreCol = new TableColumn<LeaderboardEntry, String>("Score");
+        //scoreCol.minWidthProperty().bind(scores.widthProperty().subtract(nameCol.widthProperty()));
+
+        scores.getColumns().add(nameCol);
+        scores.getColumns().add(scoreCol);
+
+        nameCol.setCellValueFactory(new PropertyValueFactory<LeaderboardEntry, String>("name"));
+        scoreCol.setCellValueFactory(new PropertyValueFactory<LeaderboardEntry, String>("score"));
+
+        scores.setItems(diff.leaderboard);
+
         scores.getStyleClass().add("unselectable");
-        scores.setItems(scoreList);
+
         scores.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
         scores.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
 
+
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> Driver.setMenu(new MainMenu()));
+        exit.setOnAction(e -> Driver.setMenu(prev));
 
         VBox centerBox = new VBox();
         centerBox.setAlignment(Pos.CENTER);

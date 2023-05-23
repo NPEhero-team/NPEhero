@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import main.Difficulty;
 import main.Level;
 
 public class GameOver extends Pane
@@ -20,18 +21,18 @@ public class GameOver extends Pane
      * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
      * style classes are defined in the style.css file.
      */
-    public GameOver(Level level, String diff, Pane lastMenu, int score2)
+    public GameOver(Level level, Difficulty diff, Pane lastMenu, int score2)
     {
         Text topText = new Text();
         topText.setText("Level Complete");
         topText.getStyleClass().add("t1");
 
         Text levelName = new Text();
-        levelName.setText(level.title);
+        levelName.setText(level.getTitle());
         levelName.getStyleClass().add("t2");
 
         Text levelArtist = new Text();
-        levelArtist.setText(level.aritst+" - "+diff);
+        levelArtist.setText(level.getArtist()+" - "+diff);
         levelArtist.getStyleClass().add("t3");
 
         VBox levelDetailsBox = new VBox();

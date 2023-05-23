@@ -5,10 +5,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import main.Difficulty;
 import main.Level;
+import main.LevelController;
 
 public class LevelSelector extends Pane
 {   
@@ -19,11 +24,24 @@ public class LevelSelector extends Pane
      */
     public LevelSelector()
     {
-        ListView<Level> levels = new ListView<Level>();
-        levels.setItems(main.LevelController.levelList);
+        //sets up table view: requires special getters, setters and constructors to work
+        TableView<Level> levels = new TableView<Level>();
+        
+        TableColumn<Level,String> titleCol = new TableColumn<Level,String>("Title");
+        TableColumn<Level,String> artistCol = new TableColumn<Level,String>("Artist");
+
+        levels.getColumns().add(titleCol);
+        levels.getColumns().add(artistCol);
+
+        titleCol.setCellValueFactory(new PropertyValueFactory<Level, String>("title"));
+        artistCol.setCellValueFactory(new PropertyValueFactory<Level, String>("artist"));
+
+        levels.setItems(Driver.levelController.levelList);
+
         levels.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
         levels.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
-        levels.setMinWidth(275);
+        levels.setMinWidth(300);
+
 
         Button exit = new Button();
         exit.setText("Back");
@@ -61,7 +79,7 @@ public class LevelSelector extends Pane
      * @param rightBox
      * @param levels
      */
-    private void addDetails(Pane rightBox, ListView<Level> levels)
+    private void addDetails(Pane rightBox, TableView<Level> levels)
     {
         VBox details = new LevelDetails(levels.getSelectionModel().getSelectedItem());
         if (! rightBox.getChildren().isEmpty())

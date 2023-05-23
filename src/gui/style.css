@@ -39,55 +39,98 @@
     -fx-text-fill: rgb(0, 0, 0);
 }
 
-/* list */
 
-ListView {
+
+
+
+
+
+/* table */
+
+TableView {
     -fx-background-color: rgba(0, 0, 0, 0.5);
     -fx-background-radius: 5;
     -fx-padding: 5;
 }
 
-.list-cell {
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-border-color: transparent;
+    /* -fx-padding: 2 0 2 10px; */
+}
+
+.table-view .column-header-background{
+    -fx-background-color: transparent;
+    /* -fx-background-radius: 7px 7px 0px 0px;
+    -fx-background-insets: 0 11px 0 0;
+    -fx-padding: 0 0 5px 0; */
+}
+
+.table-cell {
     -fx-padding: .5em;
+}
+
+.table-view .column-header {
+    -fx-text-background-color: rgb(168, 168, 168);
+    -fx-background-color: transparent;
+    /* -fx-background-radius: 5;    
+    -fx-background-color: rgba(0, 0, 0, 0.5);  */
+}
+
+.table-row-cell {
+    /* -fx-padding: .5em; */
     -fx-background-color: transparent;
     -fx-background-radius: 3;
-    -fx-text-fill: rgb(255, 255, 255);
+    -fx-text-background-color: rgb(255, 255, 255);
     -fx-border-width: 3;
     -fx-border-radius: 5;
     -fx-border-color: transparent;
 }
 
-.list-cell:hover {
+.table-row-cell:hover {
     -fx-background-color: rgba(100, 100, 100, 0.5);
     
 }
 
-ListView:focused .list-cell:focused {
+TableView:focused {
+    -fx-effect: null;
+}
+
+TableView:focused .list-cell:focused {
     -fx-background-color: rgb(50, 50, 50, 0.5);
     -fx-border-color: rgb(255, 255, 255);
 }
 
-.list-cell:selected {
+.table-row-cell:selected {
     -fx-background-color: rgb(255, 255, 255);
-    -fx-text-fill: rgb(0, 0, 0);
+    -fx-text-background-color: rgb(0, 0, 0);
 }
 
-.list-cell:pressed {
+.table-row-cell:pressed {
     -fx-background-color: rgb(231, 231, 231);
     -fx-border-color: transparent;
 }
 
-.list-cell:empty {
+.table-row-cell:empty {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-text-fill: white;
+    -fx-text-background-color: white;
 }
 
-.unselectable .list-cell{
+.unselectable .table-row-cell{
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-text-fill: white;
+    -fx-text-background-color: white;
 }
+
+
+
+
+
+
 
 /* slider */
 

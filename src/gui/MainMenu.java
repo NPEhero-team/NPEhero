@@ -37,16 +37,12 @@ public class MainMenu extends Pane
         settings.setText("Settings");
         settings.setOnAction(e -> Driver.setMenu(new Settings()));
 
-        Button leaderboard = new Button();
-        leaderboard.setText("Leaderboard");
-        leaderboard.setOnAction(e -> Driver.setMenu(new Leaderboard()));
-
         Button exit = new Button();
         exit.setText("Quit");
         exit.setOnAction(e -> Driver.quit());
 
         VBox buttonBox = new VBox();
-        buttonBox.getChildren().addAll(play, settings, leaderboard, exit);
+        buttonBox.getChildren().addAll(play, settings, exit);
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setSpacing(10);
 
@@ -62,6 +58,5 @@ public class MainMenu extends Pane
         rootBox.getChildren().add(centerBox);
 
         super.getChildren().add(rootBox);
-        
     }
 }

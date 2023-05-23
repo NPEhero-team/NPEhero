@@ -12,10 +12,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class SettingsController 
 {
-	private int effectsVol;
-	private int musicVol;
+	public SimpleIntegerProperty effectsVol = new SimpleIntegerProperty(0);
+	public SimpleIntegerProperty musicVol = new SimpleIntegerProperty(0);
 	private boolean fullscreen;
 	private JSONObject settings;
 	
@@ -34,8 +36,8 @@ public class SettingsController
 			
 			settings = (JSONObject)(obj); //converts read object to a JSONObject
 			
-			effectsVol = (int) settings.get("effectsVol");
-			musicVol = (int) settings.get("musicVol");
+			effectsVol.set((int) settings.get("effectsVol"));
+			musicVol.set((int) settings.get("musicVol"));
 			fullscreen = (boolean) settings.get("fullscreen");
 		}
 		catch (FileNotFoundException e) 

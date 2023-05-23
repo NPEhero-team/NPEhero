@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import main.Difficulty;
 import main.Level;
 import main.ScoreController;
 
@@ -19,7 +20,7 @@ public class LevelSurround extends Pane
      * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
      * style classes are defined in the style.css file.
      */
-    public LevelSurround(Level level, String difficulty, Pane prev)
+    public LevelSurround(Level level, Difficulty difficulty, Pane prev)
     {
         ScoreController sc = new ScoreController();
 
@@ -36,11 +37,11 @@ public class LevelSurround extends Pane
         buttonBox.setSpacing(10);
 
         Text title = new Text();
-        title.setText(level.title);
+        title.setText(level.getTitle());
         title.getStyleClass().add("t2");
 
         Text artist = new Text();
-        artist.setText(level.aritst+" - "+difficulty);
+        artist.setText(level.getArtist()+" - "+difficulty);
         artist.getStyleClass().add("t3");
 
         VBox titleTextBox = new VBox();
@@ -102,17 +103,17 @@ public class LevelSurround extends Pane
 
         //for debug menu
         Button addScore = new Button();
-        addScore.setText(level.title + " addscore");
+        addScore.setText(level.getTitle() + " addscore");
         addScore.setOnAction(e -> sc.setScore(sc.getScore()+1));
         Driver.debug.addButton(addScore);
 
         Button addCombo = new Button();
-        addCombo.setText(level.title + " addcombo");
+        addCombo.setText(level.getTitle() + " addcombo");
         addCombo.setOnAction(e -> sc.setCombo(sc.getCombo()+1));
         Driver.debug.addButton(addCombo);
 
         Button printD = new Button();
-        printD.setText(level.title + " print debug");
+        printD.setText(level.getTitle() + " print debug");
         printD.setOnAction(e -> sc.print());
         Driver.debug.addButton(printD);
     }
