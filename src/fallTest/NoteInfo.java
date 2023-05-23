@@ -3,11 +3,13 @@
  */
 package fallTest;
 
+import javafx.scene.paint.Color;
 
 public class NoteInfo
 {
     private int sendTime;
-    
+    private Color col;
+
     public NoteInfo(int t) {
         sendTime = t;
     }
@@ -16,6 +18,10 @@ public class NoteInfo
         return sendTime;
     }
     
+    public Color getColor() {
+        return col;
+    }
+
     public int compareTo(NoteInfo other) {
         return sendTime - other.sendTime;
     }

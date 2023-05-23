@@ -37,20 +37,23 @@ public class newSongPlayer extends Pane
 	Timer timer = new Timer();
     final int TIME = 2000;		//delay for notes falling down the screen
 
-	TranslateTransition anim = new TranslateTransition(Duration.millis(TIME));
-
+	TButton dButton = new TButton(Color.RED, 50, 50, 5);
 	Queue<NoteInfo> dSends = new LinkedList<NoteInfo>();         //Queue that dictates when to send the notes
 	ArrayList<Block> dLane = new ArrayList<Block>();     //Array list containing all the notes currently on the field
 
+	TButton fButton = new TButton(Color.BLUE, 50, 50, 5);
 	Queue<NoteInfo> fSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> fLane = new ArrayList<Block>();
 
+	TButton sButton = new TButton(Color.GREEN, 50, 50, 5);
 	Queue<NoteInfo> spaceSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> spaceLane = new ArrayList<Block>();
 
+	TButton jButton = new TButton(Color.PURPLE, 50, 50, 5);
 	Queue<NoteInfo> jSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> jLane = new ArrayList<Block>();
 
+	TButton kButton = new TButton(Color.YELLOW, 50, 50, 5);
 	Queue<NoteInfo> kSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> kLane = new ArrayList<Block>();
 
@@ -95,23 +98,16 @@ public class newSongPlayer extends Pane
     }
     
 	public void init() {	    
+		loadSong();
+
 		Rectangle field = new Rectangle(50, 50, new Color(0, 0, 0, 0.7));
 		field.heightProperty().bind(this.getScene().getWindow().heightProperty().multiply(0.95));
 		field.widthProperty().bind(this.getScene().getWindow().widthProperty().divide(2.7).add(50));
 
-		TButton dButton = new TButton(Color.RED, 50, 50, 5);
 		genButton(dButton);
-		
-		TButton fButton = new TButton(Color.BLUE, 50, 50, 5);
 		genButton(fButton);
-		
-		TButton sButton = new TButton(Color.GREEN, 50, 50, 5);
 		genButton(sButton);
-		
-		TButton jButton = new TButton(Color.PURPLE, 50, 50, 5);
 		genButton(jButton);
-		
-		TButton kButton = new TButton(Color.YELLOW, 50, 50, 5);
 		genButton(kButton);
 		
 		this.getScene().setOnKeyPressed(e -> { 
@@ -155,23 +151,34 @@ public class newSongPlayer extends Pane
 	    root.getChildren().addAll(polish, place);
 	    
         super.getChildren().add(root);
-	    sendNote(dLane, buttonBox.getLayoutX());
+
+		gameLoop.start();
 	}
 	
-	public void sendNote(ArrayList<Block> lane, double pos) {
-		lane.add(new Block(Color.PINK, 50, 50, 5));
-		lane.get(lane.size()-1).heightProperty().bind(this.getScene().getWindow().widthProperty().divide(16));
-		lane.get(lane.size()-1).widthProperty().bind(this.getScene().getWindow().widthProperty().divide(16));
-		lane.get(lane.size()-1).arcHeightProperty().bind(this.getScene().getWindow().widthProperty().divide(50));
-		lane.get(lane.size()-1).arcWidthProperty().bind(this.getScene().getWindow().widthProperty().divide(50));
-		lane.get(lane.size()-1).setX(pos);
-		anim.setByY(this.getScene().getHeight());
-		anim.setCycleCount(1);
-		anim.setAutoReverse(false);
-		anim.setNode(lane.get(lane.size()-1));
-		anim.play();
-		System.out.println(pos);
-		super.getChildren().add(lane.get(lane.size()-1));
+	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, double pos, Color c) {
+		if (sends.peek() != null && timer.time() > sends.peek().getTime()) {
+			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME));
+
+			lane.add(new Block(c, 50, 50, 5));
+			int index = lane.size()-1;
+			sends.remove();
+			lane.get(lane.size()-1).heightProperty().bind(this.getScene().getWindow().widthProperty().divide(16));
+			lane.get(lane.size()-1).widthProperty().bind(this.getScene().getWindow().widthProperty().divide(16));
+			lane.get(lane.size()-1).arcHeightProperty().bind(this.getScene().getWindow().widthProperty().divide(50));
+			lane.get(lane.size()-1).arcWidthProperty().bind(this.getScene().getWindow().widthProperty().divide(50));
+			lane.get(lane.size()-1).setX(pos);
+			lane.get(index).setY(-lane.get(index).getHeight());
+			anim.setByY(this.getScene().getHeight() + lane.get(index).getHeight());
+			anim.setCycleCount(1);
+			anim.setAutoReverse(false);
+			anim.setNode(lane.get(lane.size()-1));
+			anim.play();
+			anim.setOnFinished(e -> {
+				super.getChildren().removeAll(anim.getNode());
+			});
+			System.out.println(pos);
+			super.getChildren().add(lane.get(lane.size()-1));
+		}
 	}
 	
 
@@ -187,9 +194,11 @@ public class newSongPlayer extends Pane
 
 		@Override
 		public void handle(long arg0) {
-			if (dSends.peek().getTime() > timer.time()) {
-				
-			}
+			sendNote(dSends, dLane, dButton.getLayoutX(), Color.RED);
+			sendNote(fSends, fLane, fButton.getLayoutX(), Color.BLUE);
+			sendNote(spaceSends, spaceLane, sButton.getLayoutX(), Color.GREEN);
+			sendNote(jSends, jLane, jButton.getLayoutX(), Color.PURPLE);
+			sendNote(kSends, kLane, kButton.getLayoutX(), Color.YELLOW);
 		}
 	};
 
