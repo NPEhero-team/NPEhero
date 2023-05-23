@@ -28,27 +28,79 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.animation.*;
+import javafx.animation.KeyFrame;
+import javafx.util.*;
 
 public class newSongPlayer extends Pane
 {
-    Timer time = new Timer();
+	Timer timer = new Timer();
+    final int TIME = 2000;		//delay for notes falling down the screen
+
+	TranslateTransition anim = new TranslateTransition(Duration.millis(TIME));
+
+	Queue<NoteInfo> dSends = new LinkedList<NoteInfo>();         //Queue that dictates when to send the notes
+	ArrayList<Block> dLane = new ArrayList<Block>();     //Array list containing all the notes currently on the field
+
+	Queue<NoteInfo> fSends = new LinkedList<NoteInfo>();
+	ArrayList<Block> fLane = new ArrayList<Block>();
+
+	Queue<NoteInfo> spaceSends = new LinkedList<NoteInfo>();
+	ArrayList<Block> spaceLane = new ArrayList<Block>();
+
+	Queue<NoteInfo> jSends = new LinkedList<NoteInfo>();
+	ArrayList<Block> jLane = new ArrayList<Block>();
+
+	Queue<NoteInfo> kSends = new LinkedList<NoteInfo>();
+	ArrayList<Block> kLane = new ArrayList<Block>();
+
+	/**
+     * Establishes what the chart for the song is going to look like
+     */
+    public void loadSong() {
+        dSends.add(new NoteInfo(4000));
+        dSends.add(new NoteInfo(4333));
+        dSends.add(new NoteInfo(4666));
+        fSends.add(new NoteInfo(5000));
+        kSends.add(new NoteInfo(5500)); 
+        spaceSends.add(new NoteInfo(6000));
+        jSends.add(new NoteInfo(6000));
+        jSends.add(new NoteInfo(6250));
+        dSends.add(new NoteInfo(6500));
+        jSends.add(new NoteInfo(6750));
+        spaceSends.add(new NoteInfo(7000));
+        fSends.add(new NoteInfo(7500));
+        jSends.add(new NoteInfo(7750));
+        spaceSends.add(new NoteInfo(8000));
+        fSends.add(new NoteInfo(8500));
+        jSends.add(new NoteInfo(8500));
+        dSends.add(new NoteInfo(9000));
+        spaceSends.add(new NoteInfo(9000));
+        kSends.add(new NoteInfo(9000));
+        spaceSends.add(new NoteInfo(9500));
+        
+        kSends.add(new NoteInfo(10000));
+        dSends.add(new NoteInfo(10000));
+        kSends.add(new NoteInfo(10333));
+        fSends.add(new NoteInfo(10333));
+        kSends.add(new NoteInfo(10666));
+        spaceSends.add(new NoteInfo(10666));
+        dSends.add(new NoteInfo(11000));
+        spaceSends.add(new NoteInfo(11000));
+        dSends.add(new NoteInfo(11333));
+        jSends.add(new NoteInfo(11333));
+        dSends.add(new NoteInfo(11666));
+        kSends.add(new NoteInfo(11666));
+        spaceSends.add(new NoteInfo(12000));
+    }
     
-    private double dLaneX = 0;
-	TButton dButton = new TButton(Color.RED, 50, 50, 5);
-    
-	public void init() {
-	    Queue<NoteInfo> dSends = new LinkedList<NoteInfo>();         //Queue that dictates when to send the notes
-	    ArrayList<Block> dLane = new ArrayList<Block>();     //Array list containing all the notes currently on the field
-	    
+	public void init() {	    
 		Rectangle field = new Rectangle(50, 50, new Color(0, 0, 0, 0.7));
 		field.heightProperty().bind(this.getScene().getWindow().heightProperty().multiply(0.95));
 		field.widthProperty().bind(this.getScene().getWindow().widthProperty().divide(2.7).add(50));
+
+		TButton dButton = new TButton(Color.RED, 50, 50, 5);
 		genButton(dButton);
-		/*dButton.setOnKeyPressed(e -> { 
-			if (e.getCode() == KeyCode.D) {
-				System.out.println("D");
-			}
-		});*/
 		
 		TButton fButton = new TButton(Color.BLUE, 50, 50, 5);
 		genButton(fButton);
@@ -62,6 +114,23 @@ public class newSongPlayer extends Pane
 		TButton kButton = new TButton(Color.YELLOW, 50, 50, 5);
 		genButton(kButton);
 		
+		this.getScene().setOnKeyPressed(e -> { 
+			if (e.getCode() == KeyCode.D) {
+				System.out.println("D");
+			}
+			if (e.getCode() == KeyCode.F) {
+				System.out.println("F");
+			}
+			if (e.getCode() == KeyCode.SPACE) {
+				System.out.println("SPC");
+			}
+			if (e.getCode() == KeyCode.J) {
+				System.out.println("J");
+			}
+			if (e.getCode() == KeyCode.K) {
+				System.out.println("K");
+			}
+		});
 
 		HBox buttonBox = new HBox();
 		buttonBox.setStyle("-fx-padding: 0;" + "-fx-border-style: solid inside;"
@@ -96,10 +165,16 @@ public class newSongPlayer extends Pane
 		lane.get(lane.size()-1).arcHeightProperty().bind(this.getScene().getWindow().widthProperty().divide(50));
 		lane.get(lane.size()-1).arcWidthProperty().bind(this.getScene().getWindow().widthProperty().divide(50));
 		lane.get(lane.size()-1).setX(pos);
+		anim.setByY(this.getScene().getHeight());
+		anim.setCycleCount(1);
+		anim.setAutoReverse(false);
+		anim.setNode(lane.get(lane.size()-1));
+		anim.play();
 		System.out.println(pos);
 		super.getChildren().add(lane.get(lane.size()-1));
 	}
 	
+
 	public void genButton(TButton button) {
 		button.heightProperty().bind(this.getScene().getWindow().widthProperty().divide(16));
 		button.widthProperty().bind(this.getScene().getWindow().widthProperty().divide(16));
@@ -107,4 +182,15 @@ public class newSongPlayer extends Pane
 		button.arcWidthProperty().bind(this.getScene().getWindow().widthProperty().divide(50));
 		button.strokeWidthProperty().bind(this.getScene().getWindow().widthProperty().divide(210));
 	}
+
+	AnimationTimer gameLoop = new AnimationTimer() {
+
+		@Override
+		public void handle(long arg0) {
+			if (dSends.peek().getTime() > timer.time()) {
+				
+			}
+		}
+	};
+
 }

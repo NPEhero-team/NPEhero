@@ -10,7 +10,7 @@
             "request": "launch",
             "mainClass": "test.Table",
             "projectName": "GuitarHero",
-            "vmArgs": "--module-path lib/linux --add-modules javafx.base,javafx.media,javafx.graphics,javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path lib/windows/lib --add-modules javafx.base,javafx.media,javafx.graphics,javafx.controls,javafx.fxml"
         },
         {
             "type": "java",
@@ -74,7 +74,7 @@
             "request": "launch",
             "mainClass": "fallTest.Driver",
             "projectName": "GuitarHero",
-            "vmArgs": "--module-path lib/linux --add-modules javafx.base,javafx.media,javafx.graphics,javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path lib/windows/lib --add-modules javafx.base,javafx.media,javafx.graphics,javafx.controls,javafx.fxml"
         },
         {
             "type": "java",
