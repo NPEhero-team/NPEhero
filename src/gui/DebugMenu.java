@@ -31,19 +31,11 @@ public class DebugMenu
         wallpaperTest3.setText("wallpaper pico");
         wallpaperTest3.setOnAction(e -> Driver.setBackground("assets/pico.png"));
 
-        Button testfinish = new Button();
-        testfinish.setText("launch game end");
-        //create a sample level for testing
-        Level temp = new Level("Title", "artist");
-        Difficulty temp2 = new Difficulty();
-        temp2.title = "Easy";
-        testfinish.setOnAction(e -> Driver.setMenu(new GameOver(temp, temp2, new Settings(), 300)));
-
         Button testVol = new Button();
         testVol.setText("print volumes");
         testVol.setOnAction(e -> System.out.println("sfx:"+Driver.settingsController.effectsVol+" msc:"+Driver.settingsController.musicVol));
 
-        primaryPane.getChildren().addAll(wallpaperTest,wallpaperTest2,wallpaperTest3,testfinish,testVol);
+        primaryPane.getChildren().addAll(wallpaperTest,wallpaperTest2,wallpaperTest3,testVol);
         
         Scene primaryScene = new Scene(primaryPane);
         primaryStage.setScene(primaryScene);

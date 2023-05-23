@@ -116,5 +116,10 @@ public class LevelSurround extends Pane
         printD.setText(level.getTitle() + " print debug");
         printD.setOnAction(e -> sc.print());
         Driver.debug.addButton(printD);
+
+        Button testfinish = new Button();
+        testfinish.setText(level.getTitle() + "launch game end");
+        testfinish.setOnAction(e -> Driver.setMenu(new GameOver(level, difficulty, prev, sc.getScore())));
+        Driver.debug.addButton(testfinish);
     }
 }
