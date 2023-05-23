@@ -13,7 +13,7 @@ public class LevelController
     {
         Difficulty d1 = new Difficulty();
         d1.title = "Easy";
-        LeaderboardEntry lb = new LeaderboardEntry("t-bone", 1000);
+        LeaderboardEntry lb = new LeaderboardEntry("t-bone", 1000, "DATE");
         //lb.setName("t-bone");
         //lb.setScore(1000);
         d1.leaderboard.add(lb);

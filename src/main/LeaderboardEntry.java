@@ -7,12 +7,14 @@ public class LeaderboardEntry
 {
     private SimpleIntegerProperty score;
     private SimpleStringProperty name;
+    private SimpleStringProperty date;
 
     //all below is required for table view
-    public LeaderboardEntry(String name, int score)
+    public LeaderboardEntry(String name, int score, String date)
     {
         this.name = new SimpleStringProperty(name);
         this.score = new SimpleIntegerProperty(score);
+        this.date = new SimpleStringProperty(date);
     }
 
     public int getScore() {
@@ -29,5 +31,15 @@ public class LeaderboardEntry
 
     public void setName(String name) {
         this.name.set(name);
+    }
+
+    public String getDate()
+    {
+        return date.get();
+    }
+
+    public void setDate(String date)
+    {
+        this.date = new SimpleStringProperty(date);
     }
 }

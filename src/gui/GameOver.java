@@ -15,6 +15,9 @@ import main.Difficulty;
 import main.LeaderboardEntry;
 import main.Level;
 
+import java.sql.Time;
+import java.time.LocalDate;
+
 public class GameOver extends Pane
 {
     /*
@@ -73,7 +76,7 @@ public class GameOver extends Pane
             public void handle(ActionEvent event) {
                 save.setDisable(true);
                 name.setDisable(true);
-                diff.leaderboard.add(new LeaderboardEntry(name.getText(), score2));
+                diff.leaderboard.add(new LeaderboardEntry(name.getText(), score2, ""+LocalDate.now()));
             }
         });
 

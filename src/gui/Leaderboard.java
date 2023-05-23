@@ -30,13 +30,16 @@ public class Leaderboard extends Pane
 
         TableColumn<LeaderboardEntry, String> nameCol = new TableColumn<LeaderboardEntry, String>("Name");
         TableColumn<LeaderboardEntry, String> scoreCol = new TableColumn<LeaderboardEntry, String>("Score");
+        TableColumn<LeaderboardEntry, String> dateCol = new TableColumn<LeaderboardEntry, String>("Date");
         //scoreCol.minWidthProperty().bind(scores.widthProperty().subtract(nameCol.widthProperty()));
 
         scores.getColumns().add(nameCol);
         scores.getColumns().add(scoreCol);
+        scores.getColumns().add(dateCol);
 
         nameCol.setCellValueFactory(new PropertyValueFactory<LeaderboardEntry, String>("name"));
         scoreCol.setCellValueFactory(new PropertyValueFactory<LeaderboardEntry, String>("score"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<LeaderboardEntry, String>("date"));
 
         scores.setItems(diff.leaderboard);
 
