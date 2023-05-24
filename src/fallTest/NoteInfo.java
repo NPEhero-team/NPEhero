@@ -7,14 +7,14 @@ import javafx.scene.paint.Color;
 
 public class NoteInfo
 {
-    private int sendTime;
+    private double sendTime;
     private Color col;
 
-    public NoteInfo(int t) {
+    public NoteInfo(double t) {
         sendTime = t;
     }
     
-    public int getTime() {
+    public double getTime() {
         return sendTime;
     }
     
@@ -22,7 +22,7 @@ public class NoteInfo
         return col;
     }
 
-    public int compareTo(NoteInfo other) {
+    public double compareTo(NoteInfo other) {
         return sendTime - other.sendTime;
     }
 }

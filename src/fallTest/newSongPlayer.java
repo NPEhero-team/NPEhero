@@ -18,7 +18,9 @@ import main.Difficulty;
 import main.ScoreController;
 
 public class newSongPlayer extends Pane {
-	Timer timer = new Timer();
+	final int BPM = 80; //TEMPORARY BPM, this will be eventually read in from the metadata of the song
+
+	Timer timer = new Timer(BPM);
 	final int TIME = 1500; // delay for notes falling down the screen
 
 	Score scoreCounter = new Score();
@@ -52,41 +54,41 @@ public class newSongPlayer extends Pane {
 	 * Establishes what the chart for the song is going to look like
 	 */
 	public void loadSong() {
-		dSends.add(new NoteInfo(4000));
-		dSends.add(new NoteInfo(4333));
-		dSends.add(new NoteInfo(4666));
-		fSends.add(new NoteInfo(5000));
-		kSends.add(new NoteInfo(5500));
-		spaceSends.add(new NoteInfo(6000));
-		jSends.add(new NoteInfo(6000));
-		jSends.add(new NoteInfo(6250));
-		dSends.add(new NoteInfo(6500));
-		jSends.add(new NoteInfo(6750));
-		spaceSends.add(new NoteInfo(7000));
-		fSends.add(new NoteInfo(7500));
-		jSends.add(new NoteInfo(7750));
-		spaceSends.add(new NoteInfo(8000));
-		fSends.add(new NoteInfo(8500));
-		jSends.add(new NoteInfo(8500));
-		dSends.add(new NoteInfo(9000));
-		spaceSends.add(new NoteInfo(9000));
-		kSends.add(new NoteInfo(9000));
-		spaceSends.add(new NoteInfo(9500));
+		dSends.add(new NoteInfo(4.000));
+		dSends.add(new NoteInfo(4.333));
+		dSends.add(new NoteInfo(4.666));
+		fSends.add(new NoteInfo(5.000));
+		kSends.add(new NoteInfo(5.500));
+		spaceSends.add(new NoteInfo(6.000));
+		jSends.add(new NoteInfo(6.000));
+		jSends.add(new NoteInfo(6.250));
+		dSends.add(new NoteInfo(6.500));
+		jSends.add(new NoteInfo(6.750));
+		spaceSends.add(new NoteInfo(7.000));
+		fSends.add(new NoteInfo(7.500));
+		jSends.add(new NoteInfo(7.750));
+		spaceSends.add(new NoteInfo(8.000));
+		fSends.add(new NoteInfo(8.500));
+		jSends.add(new NoteInfo(8.500));
+		dSends.add(new NoteInfo(9.000));
+		spaceSends.add(new NoteInfo(9.000));
+		kSends.add(new NoteInfo(9.000));
+		spaceSends.add(new NoteInfo(9.500));
 
-		kSends.add(new NoteInfo(10000));
-		dSends.add(new NoteInfo(10000));
-		kSends.add(new NoteInfo(10333));
-		fSends.add(new NoteInfo(10333));
-		kSends.add(new NoteInfo(10666));
-		spaceSends.add(new NoteInfo(10666));
-		dSends.add(new NoteInfo(11000));
-		spaceSends.add(new NoteInfo(11000));
-		dSends.add(new NoteInfo(11333));
+		kSends.add(new NoteInfo(10.000));
+		dSends.add(new NoteInfo(10.000));
+		kSends.add(new NoteInfo(10.333));
+		fSends.add(new NoteInfo(10.333));
+		kSends.add(new NoteInfo(10.666));
+		spaceSends.add(new NoteInfo(10.666));
+		dSends.add(new NoteInfo(11.000));
+		spaceSends.add(new NoteInfo(11.000));
+		dSends.add(new NoteInfo(11.333));
 
-		jSends.add(new NoteInfo(11333));
-		dSends.add(new NoteInfo(11666));
-		kSends.add(new NoteInfo(11666));
-		spaceSends.add(new NoteInfo(12000));
+		jSends.add(new NoteInfo(11.333));
+		dSends.add(new NoteInfo(11.666));
+		kSends.add(new NoteInfo(11.666));
+		spaceSends.add(new NoteInfo(12.000));
 	}
 
 	public newSongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
@@ -186,6 +188,7 @@ public class newSongPlayer extends Pane {
 			anim.setOnFinished(e -> {
 				if (super.getChildren().removeAll(anim.getNode())){
 					scoreCounter.miss();
+					System.out.println();
 				}
 			});
 			super.getChildren().add(lane.get(lane.size() - 1));
@@ -262,14 +265,14 @@ public class newSongPlayer extends Pane {
 
 			super.getChildren().removeAll(lane.get(getClosestNote(lane)));
 			lane.remove(lane.get(getClosestNote(lane)));
-			if (distance < this.getScene().getHeight() / 16) {
+			if (distance < this.getScene().getHeight() / 18) {
 				ft.setFromValue(Color.WHITE);
 				ft.play();
 				scoreCounter.combo();
 				scoreCounter.perfect();
 				return 2;
 			}
-			if (distance < this.getScene().getHeight() / 5) {
+			if (distance < this.getScene().getHeight() / 6) {
 				ft.setFromValue(Color.CYAN);
 				ft.play();
 				scoreCounter.combo();

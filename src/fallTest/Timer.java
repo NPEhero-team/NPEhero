@@ -8,8 +8,13 @@ package fallTest;
 public class Timer
 {
     private long timeStart = System.currentTimeMillis();
-    
-    public int time() {
-        return (int)(System.currentTimeMillis()-timeStart);
+    private int bpm;
+
+    public Timer(int newBpm) {
+        bpm = newBpm;
+    }
+
+    public double time() {
+        return ((double)(System.currentTimeMillis()-timeStart))*(bpm/60000.0);
     }
 }
