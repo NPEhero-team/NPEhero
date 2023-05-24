@@ -1,14 +1,11 @@
 package main;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.io.FileWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -21,13 +18,11 @@ public class SettingsController
 	private boolean fullscreen;
 	private JSONObject settings;
 	
-	public void saveAndWrite(int newEffVol, int newMusVol, boolean isFull)
+	public void saveAndWrite(int newEffVol, int newMusVol)
 	{
 		
 		settings.put("musicVol", newMusVol);
 		settings.put("effectsVol", newEffVol);
-		settings.put("fullscreen", isFull);
-
 		try (FileWriter file = new FileWriter("settings.json")) 
 		{
             //write the settings JSONObject instance to the file
@@ -51,7 +46,6 @@ public class SettingsController
 			
 			effectsVol.set((int) settings.get("effectsVol"));
 			musicVol.set((int) settings.get("musicVol"));
-			fullscreen = (boolean) settings.get("fullscreen");
 		}
 		catch (FileNotFoundException e) 
 		{
