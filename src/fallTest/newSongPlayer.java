@@ -184,8 +184,9 @@ public class newSongPlayer extends Pane {
 			anim.play();
 
 			anim.setOnFinished(e -> {
-				super.getChildren().removeAll(anim.getNode());
-				
+				if (super.getChildren().removeAll(anim.getNode())){
+					scoreCounter.miss();
+				}
 			});
 			super.getChildren().add(lane.get(lane.size() - 1));
 		}
@@ -269,7 +270,7 @@ public class newSongPlayer extends Pane {
 				return 2;
 			}
 			if (distance < this.getScene().getHeight() / 5) {
-				ft.setFromValue(Color.PINK);
+				ft.setFromValue(Color.CYAN);
 				ft.play();
 				scoreCounter.combo();
 				scoreCounter.good();
