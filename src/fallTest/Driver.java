@@ -35,8 +35,8 @@ public class Driver extends Application
         primaryStage.setScene(primaryScene);
         newSongPlayer player = new newSongPlayer();
         primaryStage.setTitle("TEST");
-        primaryPane.getChildren().add(player);     
-        setBackground("assets/water.png");   
+        primaryPane.getChildren().add(player);
+        setBackground("assets/water.png");  
         primaryStage.show();
         player.init();
 	}

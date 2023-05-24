@@ -235,11 +235,11 @@ Slider:focused .thumb{
 /* debug */
 
 .debug {
-    -fx-background-radius: 5;    
-    -fx-background-color: rgba(255, 0, 0, 0.281); 
-    -fx-border-color: red;
-    -fx-text-fill: white;
-    -fx-border-width: 20;
+    /* -fx-background-radius: 5;     */
+    -fx-background-color: rgb(255, 0, 0); 
+    /* -fx-border-color: red; */
+    /* -fx-text-fill: white; */
+    /* -fx-border-width: 20; */
 }
 
 
