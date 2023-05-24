@@ -51,7 +51,7 @@ public class AudioFilePlayer
     {
         try 
         {
-            filePath = "GH3Intro.wav";
+            filePath = "src/assets/BookBetrayal.wav3";
             AudioFilePlayer audioPlayer = new AudioFilePlayer();
               
             audioPlayer.play();
@@ -81,7 +81,7 @@ public class AudioFilePlayer
     }
       
     // Work as the user enters his choice
-      
+
     private void gotoChoice(int c)throws IOException, LineUnavailableException, UnsupportedAudioFileException 
     {
         //reads the users input and chooses what to do based on said input
