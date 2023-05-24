@@ -37,7 +37,6 @@ public class Driver extends Application
         primaryStage.setTitle("TEST");
         primaryPane.getChildren().add(player);     
         setBackground("assets/water.png");   
-        player.init();
         primaryStage.show();
 	}
 	

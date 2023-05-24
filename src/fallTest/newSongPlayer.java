@@ -31,6 +31,8 @@ import javafx.scene.text.Text;
 import javafx.animation.*;
 import javafx.animation.KeyFrame;
 import javafx.util.*;
+import main.Difficulty;
+import main.ScoreController;
 
 public class newSongPlayer extends Pane
 {
@@ -61,6 +63,8 @@ public class newSongPlayer extends Pane
 	TButton kButton = new TButton(Color.YELLOW, 50, 50, 5);
 	Queue<NoteInfo> kSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> kLane = new ArrayList<Block>();
+
+
 
 	/**
      * Establishes what the chart for the song is going to look like
@@ -102,6 +106,10 @@ public class newSongPlayer extends Pane
         spaceSends.add(new NoteInfo(12000));
     }
     
+	public newSongPlayer(Level lvl, Difficulty d, Pane p, ScoreController cntrl){
+		
+	}
+
 	public void init() {	    
 		loadSong();
 		
