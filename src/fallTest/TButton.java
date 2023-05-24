@@ -15,7 +15,7 @@ public class TButton extends Rectangle
     {
         super();
         
-        Color newCol = new Color(c.darker().getRed(), c.darker().getGreen(), c.darker().getBlue(), 0.25);
+        Color newCol = new Color(c.darker().getRed(), c.darker().getGreen(), c.darker().getBlue(), 0.45);
         super.setFill(newCol);
         super.setWidth(a);
         super.setHeight(b);

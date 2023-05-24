@@ -35,7 +35,12 @@ import javafx.util.*;
 public class newSongPlayer extends Pane
 {
 	Timer timer = new Timer();
-    final int TIME = 2000;		//delay for notes falling down the screen
+    final int TIME = 1500;		//delay for notes falling down the screen
+
+	Rectangle goalPerfect = new Rectangle();
+	HBox buttonBox = new HBox();
+	VBox polish = new VBox();
+	VBox place = new VBox();
 
 	TButton dButton = new TButton(Color.RED, 50, 50, 5);
 	Queue<NoteInfo> dSends = new LinkedList<NoteInfo>();         //Queue that dictates when to send the notes
@@ -99,10 +104,13 @@ public class newSongPlayer extends Pane
     
 	public void init() {	    
 		loadSong();
-
+		
 		Rectangle field = new Rectangle(50, 50, new Color(0, 0, 0, 0.7));
-		field.heightProperty().bind(this.getScene().getWindow().heightProperty().multiply(0.95));
+		field.heightProperty().bind(this.getScene().getWindow().heightProperty());
 		field.widthProperty().bind(this.getScene().getWindow().widthProperty().divide(2.7).add(50));
+
+		goalPerfect.heightProperty().bind(this.getScene().getWindow().heightProperty().divide(32));
+		goalPerfect.heightProperty().bind(this.getScene().getWindow().widthProperty());
 
 		genButton(dButton);
 		genButton(fButton);
@@ -113,22 +121,46 @@ public class newSongPlayer extends Pane
 		this.getScene().setOnKeyPressed(e -> { 
 			if (e.getCode() == KeyCode.D) {
 				System.out.println("D");
+				if (dLane.size() > 0 && distanceToGoal(dLane.get(getClosestNote(dLane))) < ()) {
+					super.getChildren().removeAll(dLane.get(getClosestNote(dLane)));
+					dLane.remove(dLane.get(getClosestNote(dLane)));
+					System.out.println("Hit");
+				}
 			}
 			if (e.getCode() == KeyCode.F) {
 				System.out.println("F");
+				if (fLane.size() > 0 && fLane.get(getClosestNote(fLane)).intersects(buttonBox.getBoundsInLocal())) {
+					super.getChildren().removeAll(fLane.get(getClosestNote(fLane)));
+					fLane.remove(fLane.get(getClosestNote(fLane)));
+					System.out.println("Hit");
+				}
 			}
 			if (e.getCode() == KeyCode.SPACE) {
 				System.out.println("SPC");
+				if (spaceLane.size() > 0 && spaceLane.get(getClosestNote(spaceLane)).intersects(buttonBox.getBoundsInLocal())) {
+					super.getChildren().removeAll(spaceLane.get(getClosestNote(spaceLane)));
+					spaceLane.remove(spaceLane.get(getClosestNote(spaceLane)));
+					System.out.println("Hit");
+				}
 			}
 			if (e.getCode() == KeyCode.J) {
 				System.out.println("J");
+				if (jLane.size() > 0 && jLane.get(getClosestNote(jLane)).intersects(buttonBox.getBoundsInLocal())) {
+					super.getChildren().removeAll(jLane.get(getClosestNote(jLane)));
+					jLane.remove(jLane.get(getClosestNote(jLane)));
+					System.out.println("Hit");
+				}
 			}
 			if (e.getCode() == KeyCode.K) {
 				System.out.println("K");
+				if (kLane.size() > 0 && kLane.get(getClosestNote(kLane)).intersects(buttonBox.getBoundsInLocal())) {
+					super.getChildren().removeAll(kLane.get(getClosestNote(kLane)));
+					kLane.remove(kLane.get(getClosestNote(kLane)));
+					System.out.println("Hit");
+				}
 			}
 		});
 
-		HBox buttonBox = new HBox();
 		buttonBox.setStyle("-fx-padding: 0;" + "-fx-border-style: solid inside;"
 		        + "-fx-border-width: 0;" + "-fx-border-insets: 20;"
 		        + "-fx-background-color: black;" + "-fx-opacity: 0.67;");
@@ -136,21 +168,20 @@ public class newSongPlayer extends Pane
 	    buttonBox.getChildren().addAll(dButton, fButton, sButton, jButton, kButton);
 	    buttonBox.setSpacing(10);
 	    
-	    VBox polish = new VBox();
 	    polish.getChildren().addAll(field);
-	    polish.setAlignment(Pos.TOP_CENTER);
+	    polish.setAlignment(Pos.BASELINE_CENTER);
 	    
-	    VBox place = new VBox();
 		place.prefWidthProperty().bind(this.getScene().widthProperty());
 		place.prefHeightProperty().bind(this.getScene().heightProperty());
-	    place.setAlignment(Pos.BOTTOM_CENTER);
 	    place.getChildren().addAll(buttonBox);
+		place.setAlignment(Pos.BOTTOM_CENTER);
 	    place.setSpacing(10);
 	    
 	    StackPane root = new StackPane();
 	    root.getChildren().addAll(polish, place);
-	    
-        super.getChildren().add(root);
+
+		goalPerfect.setY(dButton.getY());
+        super.getChildren().addAll(root, goalPerfect);
 
 		gameLoop.start();
 	}
@@ -173,10 +204,10 @@ public class newSongPlayer extends Pane
 			anim.setAutoReverse(false);
 			anim.setNode(lane.get(lane.size()-1));
 			anim.play();
+
 			anim.setOnFinished(e -> {
 				super.getChildren().removeAll(anim.getNode());
 			});
-			System.out.println(pos);
 			super.getChildren().add(lane.get(lane.size()-1));
 		}
 	}
@@ -202,4 +233,26 @@ public class newSongPlayer extends Pane
 		}
 	};
 
+	private int getClosestNote(ArrayList<Block> searchLane) {
+        int pos = 0;
+        
+        for (int i=0; i<searchLane.size(); i++) {
+            if (distanceToGoal(searchLane.get(i)) < distanceToGoal(searchLane.get(pos))) {
+                pos = i;
+            }
+        }
+        return pos;
+    }
+
+	private double distanceToGoal(Block note) {
+		return Math.abs(note.getY()-dButton.getY());
+	}
+
+	private void checkForNote(ArrayList<Block> lane) {
+		if (lane.size() > 0 && distanceToGoal(lane.get(getClosestNote(lane))) < 50) {
+			super.getChildren().removeAll(lane.get(getClosestNote(lane)));
+			lane.remove(lane.get(getClosestNote(lane)));
+			System.out.println("Hit");
+		}
+	}
 }
