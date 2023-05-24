@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "JFXaudioPlayer",
+            "request": "launch",
+            "mainClass": "test.JFXaudioPlayer",
+            "projectName": "GuitarHero"
+        },
+        {
+            "type": "java",
             "name": "Table",
             "request": "launch",
             "mainClass": "test.Table",
@@ -66,7 +73,7 @@
             "request": "launch",
             "mainClass": "gui.Driver",
             "projectName": "GuitarHero",
-            "vmArgs": "--module-path lib/linux --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path lib/windows/lib --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",
