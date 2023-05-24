@@ -3,32 +3,23 @@
  */
 package fallTest;
 
+import javafx.animation.TranslateTransition;
+
 public class NoteField
 {
-    private boolean failed = false;
-    private final int NOTESPEED = 5;
-    private int yPos = SongPlayer.HEIGHT;
-    
-    public void gameTick() {
-        if (!failed) {
-            if (yPos > 0) {
-                yPos -= NOTESPEED;
-            }            
-            else {
-                failed = true;
-            }
-        }    
+    private Block note;
+    private TranslateTransition anim;
+
+    public NoteField(Block newNote, TranslateTransition newAnim) {
+        note = newNote;
+        anim = newAnim;
     }
-    
-    public int goalDistance() {
-        return (yPos-((SongPlayer.HEIGHT)/6));
+
+    public Block getNote() {
+        return note;
     }
-    
-    public boolean getFailed() {
-        return failed;
-    }
-    
-    public int getY() {
-        return yPos;
+
+    public TranslateTransition getAnim() {
+        return anim;
     }
 }

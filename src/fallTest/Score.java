@@ -15,7 +15,7 @@ public class Score
         System.out.println("Perfect!");
     }
     
-    public void close() {
+    public void good() {
         score += 100*comboMultiplier;
         System.out.println("Good");
     }
