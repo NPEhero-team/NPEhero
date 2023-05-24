@@ -33,9 +33,9 @@ public class Driver extends Application
 		Scene primaryScene = new Scene(primaryPane, 800, 600);
         primaryScene.getStylesheets().add("gui/style.css");
         primaryStage.setScene(primaryScene);
-        newSongPlayer player = new newSongPlayer();
+        //newSongPlayer player = new newSongPlayer();
         primaryStage.setTitle("TEST");
-        primaryPane.getChildren().add(player);     
+        //primaryPane.getChildren().add(player);     
         setBackground("assets/water.png");   
         primaryStage.show();
 	}

@@ -106,7 +106,7 @@ public class newSongPlayer extends Pane
         spaceSends.add(new NoteInfo(12000));
     }
     
-	public newSongPlayer(Level lvl, Difficulty d, Pane p, ScoreController cntrl){
+	public newSongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl){
 		
 	}
 
@@ -129,7 +129,7 @@ public class newSongPlayer extends Pane
 		this.getScene().setOnKeyPressed(e -> { 
 			if (e.getCode() == KeyCode.D) {
 				System.out.println("D");
-				if (dLane.size() > 0 && distanceToGoal(dLane.get(getClosestNote(dLane))) < ()) {
+				if (dLane.size() > 0 && distanceToGoal(dLane.get(getClosestNote(dLane))) < 20) {
 					super.getChildren().removeAll(dLane.get(getClosestNote(dLane)));
 					dLane.remove(dLane.get(getClosestNote(dLane)));
 					System.out.println("Hit");
