@@ -1,7 +1,7 @@
 /*Name:	Guitar Hero Project
  *Description: Handles all the scoring for playing songs
  */
-package GamePlay;
+package gameplay;
 
 
 public class Score

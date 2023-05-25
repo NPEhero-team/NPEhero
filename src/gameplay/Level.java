@@ -1,4 +1,4 @@
-package GamePlay;
+package gameplay;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
