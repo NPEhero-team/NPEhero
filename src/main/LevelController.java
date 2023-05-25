@@ -1,5 +1,7 @@
 package main;
 
+import org.json.simple.parser.ParseException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
@@ -28,16 +30,16 @@ public class LevelController
         Difficulty d5 = new Difficulty();
         d5.title = "Impossible";
 
-        Level testLevel = new Level("test level class","testArtist");
+        Level testLevel = new Level();
         //testLevel.setTitle("test level class");
         testLevel.desc = "this level is being used to test the LevelController class";
-        //testLevel.setAritst("testArtist");
+        //testLevel.setArtist("testArtist");
         testLevel.setColors(Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.PURPLE);
         testLevel.diffList.add(d1);
         testLevel.diffList.add(d2);
         levelList.add(testLevel);
 
-        Level testLevel2 = new Level("another one", "testArtist2");
+        Level testLevel2 = new Level();
         //testLevel2.setTitle("another one");
         testLevel2.desc = "it can say something else too";
         //testLevel2.setAritst("testArtist2");

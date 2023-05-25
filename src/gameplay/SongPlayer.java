@@ -18,7 +18,8 @@ import main.Difficulty;
 import main.ScoreController;
 
 public class SongPlayer extends Pane {
-	Timer timer = new Timer(60);
+	private int bpm = 83;
+	Timer timer = new Timer(bpm);
 	final int TIME = 1500; // delay for notes falling down the screen
 
 	Score scoreCounter = new Score();
@@ -159,7 +160,7 @@ public class SongPlayer extends Pane {
 	 * @param c     the color of the sent note
 	 */
 	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, double pos, Color c) {
-		if (sends.peek() != null && timer.time() > sends.peek().getTime()) {
+		if (sends.peek() != null && timer.time() > sends.peek().getTime()-(TIME*bpm/60000)) {
 			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME));
 
 			lane.add(new Block(c, 50, 50, 5));
@@ -191,7 +192,7 @@ public class SongPlayer extends Pane {
 	 * 
 	 * @param button
 	 */
-	public void genButton(TButton button) {
+	private void genButton(TButton button) {
 		button.heightProperty().bind(super.widthProperty().divide(8));
 		button.widthProperty().bind(super.widthProperty().divide(8));
 		button.arcHeightProperty().bind(super.widthProperty().divide(25));

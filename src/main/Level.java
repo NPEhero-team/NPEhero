@@ -35,11 +35,11 @@ public class Level
     }
 
     //all below is required for table view
-    public Level() throws ParseException
+    public Level()
     {
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
-		try(FileReader reader = new FileReader(".json"))
+		try(FileReader reader = new FileReader("metadata.json"))
 		{
 			Object obj = jsonParser.parse(reader); 
 			
@@ -61,7 +61,10 @@ public class Level
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-		}
+		} catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public String getTitle() {
