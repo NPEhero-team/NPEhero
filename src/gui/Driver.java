@@ -26,8 +26,7 @@ import main.SettingsController;
 
 public class Driver extends Application 
 {
-
-    static Stage primaryStage;
+    public static Stage primaryStage;
     static Pane primaryPane = new Pane();
 
     public static SettingsController settingsController = new SettingsController();
