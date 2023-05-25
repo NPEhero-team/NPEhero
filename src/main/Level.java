@@ -3,6 +3,7 @@ package main;
 import java.io.File;
 import java.util.ArrayList;
 
+import javafx.beans.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -19,8 +20,8 @@ import org.json.simple.parser.ParseException;
 public class Level 
 {
     public Image preview; //optional
-    private SimpleStringProperty title;
-    private SimpleStringProperty artist;
+    private String title;
+    private String artist;
     public String desc;
     public ArrayList<Difficulty> diffList = new ArrayList<Difficulty>();
 
@@ -39,15 +40,15 @@ public class Level
     {
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
-		try(FileReader reader = new FileReader("metadata.json"))
+		try(FileReader reader = new FileReader("src/assets/levels/test level/metadata.json"))
 		{
 			Object obj = jsonParser.parse(reader); 
 			
 			levelStuff = (JSONObject)(obj); //converts read object to a JSONObject
 
-            title = (SimpleStringProperty)(levelStuff.get("title"));
-            artist = (SimpleStringProperty)(levelStuff.get("title"));
-            desc = (String)(levelStuff.get("title"));
+            title = (String)(levelStuff.get("title"));
+            artist = (String)(levelStuff.get("artist"));
+            desc = (String)(levelStuff.get("desc"));
 
             if(( levelStuff).containsKey("color1"))
             {
@@ -68,18 +69,18 @@ public class Level
     }
 
     public String getTitle() {
-        return title.get();
+        return title;
     }
 
     public String getArtist() {
-        return artist.get();
+        return artist;
     }
 
-    public void setTitle(String title) {
-        this.title.set(title);
-    }
+    // public void setTitle(String title) {
+    //     this.title.set(title);
+    // }
 
-    public void setArtist(String artist) {
-        this.artist.set(artist);
-    }
+    // public void setArtist(String artist) {
+    //     this.artist.set(artist);
+    // }
 }
