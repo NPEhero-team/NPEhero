@@ -7,6 +7,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
+import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 public class Level 
 {
     public Image preview; //optional
@@ -16,7 +25,9 @@ public class Level
     public ArrayList<Difficulty> diffList = new ArrayList<Difficulty>();
 
     public Image background; //optional
-    public Color[] colors; //optional, have default colors
+    public Color[] colors = new Color[5];//optional, have default colors
+
+    private JSONObject levelStuff;
 
     public void setColors(Color... newColors) 
     {
@@ -24,10 +35,33 @@ public class Level
     }
 
     //all below is required for table view
-    public Level(String title, String artist)
+    public Level() throws ParseException
     {
-        this.title = new SimpleStringProperty(title);
-        this.artist = new SimpleStringProperty(artist);
+        JSONParser jsonParser = new JSONParser(); //parser to read the file
+		
+		try(FileReader reader = new FileReader(".json"))
+		{
+			Object obj = jsonParser.parse(reader); 
+			
+			levelStuff = (JSONObject)(obj); //converts read object to a JSONObject
+
+            title = (SimpleStringProperty)(levelStuff.get("title"));
+            artist = (SimpleStringProperty)(levelStuff.get("title"));
+            desc = (String)(levelStuff.get("title"));
+
+            if(( levelStuff).containsKey("color1"))
+            {
+                
+            }
+		}
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
     }
 
     public String getTitle() {

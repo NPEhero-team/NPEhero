@@ -2,7 +2,7 @@
  *Description: Contains the method used to determine how long the user has been playing, 
  *             used to determine when to send notes
  */
-package GamePlay;
+package gameplay;
 
 
 public class Timer

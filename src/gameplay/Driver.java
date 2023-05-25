@@ -4,7 +4,7 @@
  *Teacher:
  *Description:
  */
-package GamePlay;
+package gameplay;
 
 import javafx.application.*;
 import javafx.geometry.Side;
