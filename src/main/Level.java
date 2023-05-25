@@ -49,7 +49,7 @@ public class Level
             artist = (SimpleStringProperty)(levelStuff.get("title"));
             desc = (String)(levelStuff.get("title"));
 
-            if(levelStuff.has("color1"))
+            if(( levelStuff).containsKey("color1"))
             {
                 
             }
