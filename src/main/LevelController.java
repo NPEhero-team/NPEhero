@@ -30,7 +30,7 @@ public class LevelController
         Difficulty d5 = new Difficulty();
         d5.title = "Impossible";
 
-        Level testLevel = new Level();
+        Level testLevel = new Level("test level");
         //testLevel.setTitle("test level class");
         testLevel.desc = "this level is being used to test the LevelController class";
         //testLevel.setArtist("testArtist");
@@ -39,7 +39,7 @@ public class LevelController
         testLevel.diffList.add(d2);
         levelList.add(testLevel);
 
-        Level testLevel2 = new Level();
+        Level testLevel2 = new Level("test level2");
         //testLevel2.setTitle("another one");
         testLevel2.desc = "it can say something else too";
         //testLevel2.setAritst("testArtist2");

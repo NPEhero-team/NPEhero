@@ -3,6 +3,7 @@
  */
 package gameplay;
 
+import javafx.beans.property.IntegerProperty;
 
 public class Score
 {

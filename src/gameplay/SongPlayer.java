@@ -13,6 +13,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.animation.*;
+import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableStringValue;
 import javafx.util.*;
 import main.Difficulty;
 import main.ScoreController;
@@ -23,6 +28,7 @@ public class SongPlayer extends Pane {
 	final int TIME = 1500; // delay for notes falling down the screen
 
 	Score scoreCounter = new Score();
+	StringProperty scoreString = new SimpleStringProperty();
 
 	Rectangle goalPerfect = new Rectangle();
 	HBox buttonBox = new HBox();
@@ -92,6 +98,7 @@ public class SongPlayer extends Pane {
 
 	public SongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
 		loadSong();
+		
 
 		Rectangle field = new Rectangle(50, 50, new Color(0, 0, 0, 0.7));
 		field.heightProperty().bind(super.heightProperty());
@@ -277,5 +284,13 @@ public class SongPlayer extends Pane {
 			return 0;
 		}
 		return -1;
+	}
+
+	// public ObservableStringValue getScoreString() {
+	// 	return
+	// }
+
+	public int getCombo() {
+		return scoreCounter.getCombo();
 	}
 }

@@ -20,6 +20,7 @@ import org.json.simple.parser.ParseException;
 public class Level 
 {
     public Image preview; //optional
+    private String levelFolderName;
     private String title;
     private String artist;
     public String desc;
@@ -36,11 +37,12 @@ public class Level
     }
 
     //all below is required for table view
-    public Level()
+    public Level(String path)
     {
+        levelFolderName = path;
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
-		try(FileReader reader = new FileReader("src/assets/levels/test level/metadata.json"))
+		try(FileReader reader = new FileReader("src/assets/levels/" + levelFolderName+ "/metadata.json"))
 		{
 			Object obj = jsonParser.parse(reader); 
 			
