@@ -1,7 +1,6 @@
 package gui;
 
-import GamePlay.newSongPlayer;
-import GamePlay.SongPlayer;
+import gameplay.SongPlayer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
