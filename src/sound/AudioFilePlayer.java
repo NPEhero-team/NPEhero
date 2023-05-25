@@ -28,61 +28,84 @@ public class AudioFilePlayer
     String status;
       
     AudioInputStream audioInputStream;
-    static String filePath;
+    private String filePath;
   
+    File audioFile;
     // constructor to initialize streams and clip
-    public AudioFilePlayer() throws UnsupportedAudioFileException,
-    IOException, LineUnavailableException 
+    public AudioFilePlayer(String newFilePath)
     {
+        filePath = newFilePath;
+        audioFile = new File(filePath);
         // create AudioInputStream object
-        audioInputStream = 
-                AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+        try {
+            audioInputStream = 
+                    AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+        } catch (UnsupportedAudioFileException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
           
         // create clip reference
-        clip = AudioSystem.getClip();
+        try {
+            clip = AudioSystem.getClip();
+        } catch (LineUnavailableException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
           
         // open audioInputStream to the clip
-        clip.open(audioInputStream);
-          
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        try {
+            clip.open(audioInputStream);
+        } catch (LineUnavailableException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        
     }
   
-    public static void main(String[] args) 
-    {
-        try 
-        {
-            filePath = "src/assets/BookBetrayal.wav3";
-            AudioFilePlayer audioPlayer = new AudioFilePlayer();
+    // public static void main(String[] args) 
+    // {
+    //     try 
+    //     {
+    //         filePath = "src/assets/BookBetrayal.wav3";
+    //         AudioFilePlayer audioPlayer = new AudioFilePlayer();
               
-            audioPlayer.play();
-            Scanner sc = new Scanner(System.in);
+    //         audioPlayer.play();
+    //         Scanner sc = new Scanner(System.in);
               
-            while (true) //until the thread closes, ask the user what they want to do with the audio file
-            {
-                System.out.println("1. pause");
-                System.out.println("2. resume");
-                System.out.println("3. restart");
-                System.out.println("4. stop");
-                System.out.println("5. Jump to specific time");
-                int c = sc.nextInt();
-                audioPlayer.gotoChoice(c);
-                if (c == 4)
-                break;
-            }
-            sc.close();
-        } 
+    //         while (true) //until the thread closes, ask the user what they want to do with the audio file
+    //         {
+    //             System.out.println("1. pause");
+    //             System.out.println("2. resume");
+    //             System.out.println("3. restart");
+    //             System.out.println("4. stop");
+    //             System.out.println("5. Jump to specific time");
+    //             int c = sc.nextInt();
+    //             audioPlayer.gotoChoice(c);
+    //             if (c == 4)
+    //             break;
+    //         }
+    //         sc.close();
+    //     } 
           
-        catch (Exception ex) 
-        {
-            System.out.println("Error with playing sound.");
-            ex.printStackTrace();
+    //     catch (Exception ex) 
+    //     {
+    //         System.out.println("Error with playing sound.");
+    //         ex.printStackTrace();
           
-          }
-    }
+    //       }
+    // }
       
     // Work as the user enters his choice
 
-    private void gotoChoice(int c)throws IOException, LineUnavailableException, UnsupportedAudioFileException 
+    public void gotoChoice(int c)throws IOException, LineUnavailableException, UnsupportedAudioFileException 
     {
         //reads the users input and chooses what to do based on said input
         switch (c) 
