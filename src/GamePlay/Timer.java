@@ -2,7 +2,7 @@
  *Description: Contains the method used to determine how long the user has been playing, 
  *             used to determine when to send notes
  */
-package fallTest;
+package GamePlay;
 
 
 public class Timer
@@ -12,6 +12,10 @@ public class Timer
 
     public Timer(int newBpm) {
         bpm = newBpm;
+    }
+
+    public Timer() {
+        bpm = 60000;
     }
 
     public double time() {

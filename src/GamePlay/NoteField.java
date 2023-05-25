@@ -1,7 +1,7 @@
 /*Name:	Guitar Hero Project
  *Description: Contains the information for a single note on the field
  */
-package fallTest;
+package GamePlay;
 
 import javafx.animation.TranslateTransition;
 

@@ -1,7 +1,7 @@
 /*Name:	Guitar Hero Project
  *Description: Contains the info for when to send a note
  */
-package fallTest;
+package GamePlay;
 
 import javafx.scene.paint.Color;
 

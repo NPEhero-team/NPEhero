@@ -4,7 +4,7 @@
  *Teacher:
  *Description:
  */
-package fallTest;
+package GamePlay;
 
 import javafx.application.*;
 import javafx.geometry.Side;

@@ -1,6 +1,6 @@
 //glowing block of color c (jfx node)
 
-package fallTest;
+package GamePlay;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

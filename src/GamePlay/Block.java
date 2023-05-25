@@ -1,6 +1,6 @@
 //glowing block of color c (jfx node)
 
-package fallTest;
+package GamePlay;
 
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;

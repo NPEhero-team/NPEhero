@@ -1,7 +1,7 @@
 package gui;
 
-import fallTest.newSongPlayer;
-import fallTest.testSongPlayer;
+import GamePlay.newSongPlayer;
+import GamePlay.SongPlayer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -83,7 +83,7 @@ public class LevelSurround extends Pane
         comboTextBox.getChildren().addAll(comboLabel,comboDisplay);
         comboTextBox.setPadding(new Insets(10));
 
-        testSongPlayer game = new testSongPlayer(level, difficulty, prev, sc);
+        SongPlayer game = new SongPlayer(level, difficulty, prev, sc);
         game.minWidthProperty().bind(super.prefHeightProperty().multiply(0.66));
         game.minHeightProperty().bind(super.prefHeightProperty());
         game.getStyleClass().add("box");
