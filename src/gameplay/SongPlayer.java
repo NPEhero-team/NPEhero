@@ -105,8 +105,7 @@ public class SongPlayer extends Pane {
 		genButton(jButton);
 		genButton(kButton);
 		
-		super.requestFocus();
-		super.setOnKeyPressed(e -> {
+		gui.Driver.primaryStage.getScene().setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.D) {
 				checkNote(dLane, dButton);
 			}
