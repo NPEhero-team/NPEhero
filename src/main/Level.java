@@ -25,7 +25,7 @@ public class Level
     public ArrayList<Difficulty> diffList = new ArrayList<Difficulty>();
 
     public Image background; //optional
-    public Color[] colors; //optional, have default colors
+    public Color[] colors = new Color[5];//optional, have default colors
 
     private JSONObject levelStuff;
 
@@ -49,11 +49,10 @@ public class Level
             artist = (SimpleStringProperty)(levelStuff.get("title"));
             desc = (String)(levelStuff.get("title"));
 
-            
-
-
-			
-			
+            if(levelStuff.has("color1"))
+            {
+                
+            }
 		}
 		catch (FileNotFoundException e) 
 		{
