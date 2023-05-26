@@ -24,6 +24,7 @@ public class LevelSurround extends Pane
     public LevelSurround(Level level, Difficulty difficulty, Pane prev)
     {
         ScoreController sc = new ScoreController();
+        SongPlayer game = new SongPlayer(level, difficulty, prev, sc);
 
         Button exit = new Button();
         exit.setText("Back");
@@ -82,7 +83,6 @@ public class LevelSurround extends Pane
         comboTextBox.getChildren().addAll(comboLabel,comboDisplay);
         comboTextBox.setPadding(new Insets(10));
 
-        SongPlayer game = new SongPlayer(level, difficulty, prev, sc);
         game.minWidthProperty().bind(super.prefHeightProperty().multiply(0.66));
         game.minHeightProperty().bind(super.prefHeightProperty());
         game.getStyleClass().add("box");
