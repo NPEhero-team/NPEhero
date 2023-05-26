@@ -9,6 +9,8 @@ javafx guides (really helpful website):
 
 # Installation
 ### VM arguements
+Right click on project > Propereties > Run/Debug Settings > Driver > Edit > Arguements
+Pase the following into VM arguements:
 
 #### Windows
 `--module-path lib/windows/lib --add-modules javafx.controls,javafx.fxml,javafx.media`
