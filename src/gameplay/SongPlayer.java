@@ -2,6 +2,7 @@ package gameplay;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -73,71 +74,36 @@ public class SongPlayer extends Pane {
 	 * @throws FileNotFoundException
 	 */
 	public void loadSong(File notes) throws FileNotFoundException {
-		System.out.println("TEST 2");
-		try (Scanner scan = new Scanner(notes)) {
+		Scanner scan = new Scanner(new File(notes.getPath()));
+		System.out.println(notes.getPath());
+		try{
 			while (scan.hasNext()) {
-				if (scan.next().charAt(0) == 'd') {
-					dSends.add(new NoteInfo(Double.parseDouble(scan.next().substring(1))));
+				String input = scan.next();
+				if (input.charAt(0) == 'd') {
+					dSends.add(new NoteInfo(Double.parseDouble(input.substring(1))));
 				}
-				if (scan.next().charAt(0) == 'f') {
-					fSends.add(new NoteInfo(Double.parseDouble(scan.next().substring(1))));
+				else if (input.charAt(0) == 'f') {
+					fSends.add(new NoteInfo(Double.parseDouble(input.substring(1))));
 				}
-				if (scan.next().charAt(0) == 's') {
-					spaceSends.add(new NoteInfo(Double.parseDouble(scan.next().substring(1))));
+				else if (input.charAt(0) == 's') {
+					spaceSends.add(new NoteInfo(Double.parseDouble(input.substring(1))));
 				}
-				if (scan.next().charAt(0) == 'j') {
-					jSends.add(new NoteInfo(Double.parseDouble(scan.next().substring(1))));
+				else if (input.charAt(0) == 'j') {
+					jSends.add(new NoteInfo(Double.parseDouble(input.substring(1))));
 				}
-				if (scan.next().charAt(0) == 'k') {
-					kSends.add(new NoteInfo(Double.parseDouble(scan.next().substring(1))));
+				else if (input.charAt(0) == 'k') {
+					kSends.add(new NoteInfo(Double.parseDouble(input.substring(1))));
 				}
 			}
-			// dSends.add(new NoteInfo(4.000));
-			// dSends.add(new NoteInfo(4.333));
-			// dSends.add(new NoteInfo(4.666));
-			// fSends.add(new NoteInfo(5.000));
-			// kSends.add(new NoteInfo(5.500));
-			// spaceSends.add(new NoteInfo(6.000));
-			// jSends.add(new NoteInfo(6.000));
-			// jSends.add(new NoteInfo(6.250));
-			// dSends.add(new NoteInfo(6.500));
-			// jSends.add(new NoteInfo(6.750));
-			// spaceSends.add(new NoteInfo(7.000));
-			// fSends.add(new NoteInfo(7.500));
-			// jSends.add(new NoteInfo(7.750));
-			// spaceSends.add(new NoteInfo(8.000));
-			// fSends.add(new NoteInfo(8.500));
-			// jSends.add(new NoteInfo(8.500));
-			// dSends.add(new NoteInfo(9.000));
-			// spaceSends.add(new NoteInfo(9.000));
-			// kSends.add(new NoteInfo(9.000));
-			// spaceSends.add(new NoteInfo(9.500));
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// kSends.add(new NoteInfo(10.000));
-		// dSends.add(new NoteInfo(10.000));
-		// kSends.add(new NoteInfo(10.333));
-		// fSends.add(new NoteInfo(10.333));
-		// kSends.add(new NoteInfo(10.666));
-		// spaceSends.add(new NoteInfo(10.666));
-		// dSends.add(new NoteInfo(11.000));
-		// spaceSends.add(new NoteInfo(11.000));
-		// dSends.add(new NoteInfo(11.333));
-
-		// jSends.add(new NoteInfo(11.333));
-		// dSends.add(new NoteInfo(11.666));
-		// kSends.add(new NoteInfo(11.666));
-		// spaceSends.add(new NoteInfo(12.000));
 	}
 
 	public SongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
 		bpm = d.bpm;
-		timer = new Timer(bpm);
+		timer = new Timer(60);
 
-		System.out.println("test");
 
 		try {
 			loadSong(d.notes);
@@ -145,7 +111,6 @@ public class SongPlayer extends Pane {
 			e.printStackTrace();
 		}
 		
-
 		Rectangle field = new Rectangle(50, 50, new Color(0, 0, 0, 0.7));
 		field.heightProperty().bind(super.heightProperty());
 		field.widthProperty().bind(super.widthProperty());
@@ -153,11 +118,11 @@ public class SongPlayer extends Pane {
 		goalPerfect.heightProperty().bind(super.heightProperty().divide(32));
 		goalPerfect.heightProperty().bind(super.widthProperty());
 
-		dButton.setFill(lvl.colors[0]);
-		fButton.setFill(lvl.colors[1]);
-		sButton.setFill(lvl.colors[2]);
-		jButton.setFill(lvl.colors[3]);
-		kButton.setFill(lvl.colors[4]);
+		dButton.setColor(lvl.colors[0]);
+		fButton.setColor(lvl.colors[1]);
+		sButton.setColor(lvl.colors[2]);
+		jButton.setColor(lvl.colors[3]);
+		kButton.setColor(lvl.colors[4]);
 		genButton(dButton);
 		genButton(fButton);
 		genButton(sButton);
@@ -311,7 +276,7 @@ public class SongPlayer extends Pane {
 		if (lane.size() > 0 && distance < super.getHeight() / 3) {
 
 			FillTransition ft = new FillTransition(Duration.millis(500), button);
-			ft.setToValue(button.getColor());
+			ft.setToValue(button.getFillColor());
 
 			super.getChildren().removeAll(lane.get(getClosestNote(lane)));
 			lane.remove(lane.get(getClosestNote(lane)));
