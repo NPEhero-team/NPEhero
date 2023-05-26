@@ -22,6 +22,16 @@ import javafx.util.*;
 import main.Difficulty;
 import main.ScoreController;
 
+
+
+//hi aidan here are some objects you can use
+// cntrl.setScore(0) - pass in int
+// cntrl.getScore() - returns int
+// d.bpm - int, defined in difficulty metadata
+// lvl.colors - array of colors (size 5) for the block colors
+// d.notes - File, notes.txt in the difficulty folder
+
+
 public class SongPlayer extends Pane {
 	private int bpm = 83;
 	Timer timer = new Timer(bpm);

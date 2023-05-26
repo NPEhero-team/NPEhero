@@ -43,7 +43,7 @@ public class LevelSurround extends Pane
         title.getStyleClass().add("t2");
 
         Text artist = new Text();
-        artist.setText(level.getArtist()+" - "+difficulty);
+        artist.setText(level.getArtist()+" - "+difficulty.title);
         artist.getStyleClass().add("t3");
 
         VBox titleTextBox = new VBox();

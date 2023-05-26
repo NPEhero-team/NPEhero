@@ -11,7 +11,7 @@ public class LevelController
 
     public LevelController()
     {
-        for (File curFileInLevels: new File("src/assets/levels").listFiles()) //iterates through all files/folders in src/assets/levels
+        for (File curFileInLevels: new File("levels").listFiles()) //iterates through all files/folders in src/assets/levels
         {
             Level level = new Level();
             for(File curFileInCurLevel: curFileInLevels.listFiles()) //iterates through all files/folders in src/assets/levels/LEVEL

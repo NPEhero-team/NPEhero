@@ -2,17 +2,12 @@ package main;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import javafx.beans.*;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-
 import java.io.FileWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

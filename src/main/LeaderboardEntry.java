@@ -1,45 +1,28 @@
 package main;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 public class LeaderboardEntry 
 {
-    private SimpleIntegerProperty score;
-    private SimpleStringProperty name;
-    private SimpleStringProperty date;
+    private int score;
+    private String name;
+    private String date;
 
-    //all below is required for table view
     public LeaderboardEntry(String name, int score, String date)
     {
-        this.name = new SimpleStringProperty(name);
-        this.score = new SimpleIntegerProperty(score);
-        this.date = new SimpleStringProperty(date);
+        this.name = name;
+        this.score = score;
+        this.date = date;
     }
 
     public int getScore() {
-        return score.get();
-    }
-
-    public void setScore(int score) {
-        this.score.set(score);
+        return score;
     }
 
     public String getName() {
-        return name.get();
-    }
-
-    public void setName(String name) {
-        this.name.set(name);
+        return name;
     }
 
     public String getDate()
     {
-        return date.get();
-    }
-
-    public void setDate(String date)
-    {
-        this.date = new SimpleStringProperty(date);
+        return date;
     }
 }

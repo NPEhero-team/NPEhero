@@ -1,11 +1,7 @@
 package gui;
 
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -41,7 +37,7 @@ public class Leaderboard extends Pane
         scoreCol.setCellValueFactory(new PropertyValueFactory<LeaderboardEntry, String>("score"));
         dateCol.setCellValueFactory(new PropertyValueFactory<LeaderboardEntry, String>("date"));
 
-        scores.setItems(diff.leaderboard);
+        scores.setItems(diff.getLeaderboard());
 
         scores.getStyleClass().add("unselectable");
 
