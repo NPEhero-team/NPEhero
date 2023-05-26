@@ -21,7 +21,7 @@ public class Level
     public ArrayList<Difficulty> diffList = new ArrayList<Difficulty>();
 
     public Image background; //optional
-    public Color[] colors = new Color[5];//optional, have default colors
+    public Color[] colors = new Color[]{Color.RED,Color.BLUE,Color.GREEN,Color.PURPLE,Color.YELLOW};//optional, have default colors
 
     private JSONObject levelStuff;
 
