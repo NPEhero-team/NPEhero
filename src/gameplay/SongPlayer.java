@@ -1,8 +1,11 @@
 package gameplay;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
 
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyCode;
@@ -33,8 +36,8 @@ import main.ScoreController;
 
 
 public class SongPlayer extends Pane {
-	private int bpm = 83;
-	Timer timer = new Timer(bpm);
+	private int bpm;
+	Timer timer;
 	final int TIME = 1500; // delay for notes falling down the screen
 
 	Score scoreCounter = new Score();
@@ -67,47 +70,80 @@ public class SongPlayer extends Pane {
 
 	/**
 	 * Establishes what the chart for the song is going to look like
+	 * @throws FileNotFoundException
 	 */
-	public void loadSong() {
-		dSends.add(new NoteInfo(4.000));
-		dSends.add(new NoteInfo(4.333));
-		dSends.add(new NoteInfo(4.666));
-		fSends.add(new NoteInfo(5.000));
-		kSends.add(new NoteInfo(5.500));
-		spaceSends.add(new NoteInfo(6.000));
-		jSends.add(new NoteInfo(6.000));
-		jSends.add(new NoteInfo(6.250));
-		dSends.add(new NoteInfo(6.500));
-		jSends.add(new NoteInfo(6.750));
-		spaceSends.add(new NoteInfo(7.000));
-		fSends.add(new NoteInfo(7.500));
-		jSends.add(new NoteInfo(7.750));
-		spaceSends.add(new NoteInfo(8.000));
-		fSends.add(new NoteInfo(8.500));
-		jSends.add(new NoteInfo(8.500));
-		dSends.add(new NoteInfo(9.000));
-		spaceSends.add(new NoteInfo(9.000));
-		kSends.add(new NoteInfo(9.000));
-		spaceSends.add(new NoteInfo(9.500));
+	public void loadSong(File notes) throws FileNotFoundException {
+		System.out.println("TEST 2");
+		try (Scanner scan = new Scanner(notes)) {
+			while (scan.hasNext()) {
+				if (scan.next().charAt(0) == 'd') {
+					dSends.add(new NoteInfo(Double.parseDouble(scan.next().substring(1))));
+				}
+				if (scan.next().charAt(0) == 'f') {
+					fSends.add(new NoteInfo(Double.parseDouble(scan.next().substring(1))));
+				}
+				if (scan.next().charAt(0) == 's') {
+					spaceSends.add(new NoteInfo(Double.parseDouble(scan.next().substring(1))));
+				}
+				if (scan.next().charAt(0) == 'j') {
+					jSends.add(new NoteInfo(Double.parseDouble(scan.next().substring(1))));
+				}
+				if (scan.next().charAt(0) == 'k') {
+					kSends.add(new NoteInfo(Double.parseDouble(scan.next().substring(1))));
+				}
+			}
+			// dSends.add(new NoteInfo(4.000));
+			// dSends.add(new NoteInfo(4.333));
+			// dSends.add(new NoteInfo(4.666));
+			// fSends.add(new NoteInfo(5.000));
+			// kSends.add(new NoteInfo(5.500));
+			// spaceSends.add(new NoteInfo(6.000));
+			// jSends.add(new NoteInfo(6.000));
+			// jSends.add(new NoteInfo(6.250));
+			// dSends.add(new NoteInfo(6.500));
+			// jSends.add(new NoteInfo(6.750));
+			// spaceSends.add(new NoteInfo(7.000));
+			// fSends.add(new NoteInfo(7.500));
+			// jSends.add(new NoteInfo(7.750));
+			// spaceSends.add(new NoteInfo(8.000));
+			// fSends.add(new NoteInfo(8.500));
+			// jSends.add(new NoteInfo(8.500));
+			// dSends.add(new NoteInfo(9.000));
+			// spaceSends.add(new NoteInfo(9.000));
+			// kSends.add(new NoteInfo(9.000));
+			// spaceSends.add(new NoteInfo(9.500));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		kSends.add(new NoteInfo(10.000));
-		dSends.add(new NoteInfo(10.000));
-		kSends.add(new NoteInfo(10.333));
-		fSends.add(new NoteInfo(10.333));
-		kSends.add(new NoteInfo(10.666));
-		spaceSends.add(new NoteInfo(10.666));
-		dSends.add(new NoteInfo(11.000));
-		spaceSends.add(new NoteInfo(11.000));
-		dSends.add(new NoteInfo(11.333));
+		// kSends.add(new NoteInfo(10.000));
+		// dSends.add(new NoteInfo(10.000));
+		// kSends.add(new NoteInfo(10.333));
+		// fSends.add(new NoteInfo(10.333));
+		// kSends.add(new NoteInfo(10.666));
+		// spaceSends.add(new NoteInfo(10.666));
+		// dSends.add(new NoteInfo(11.000));
+		// spaceSends.add(new NoteInfo(11.000));
+		// dSends.add(new NoteInfo(11.333));
 
-		jSends.add(new NoteInfo(11.333));
-		dSends.add(new NoteInfo(11.666));
-		kSends.add(new NoteInfo(11.666));
-		spaceSends.add(new NoteInfo(12.000));
+		// jSends.add(new NoteInfo(11.333));
+		// dSends.add(new NoteInfo(11.666));
+		// kSends.add(new NoteInfo(11.666));
+		// spaceSends.add(new NoteInfo(12.000));
 	}
 
 	public SongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
-		loadSong();
+		bpm = d.bpm;
+		timer = new Timer(bpm);
+
+		System.out.println("test");
+
+		try {
+			loadSong(d.notes);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		
 
 		Rectangle field = new Rectangle(50, 50, new Color(0, 0, 0, 0.7));
@@ -117,6 +153,11 @@ public class SongPlayer extends Pane {
 		goalPerfect.heightProperty().bind(super.heightProperty().divide(32));
 		goalPerfect.heightProperty().bind(super.widthProperty());
 
+		dButton.setFill(lvl.colors[0]);
+		fButton.setFill(lvl.colors[1]);
+		sButton.setFill(lvl.colors[2]);
+		jButton.setFill(lvl.colors[3]);
+		kButton.setFill(lvl.colors[4]);
 		genButton(dButton);
 		genButton(fButton);
 		genButton(sButton);
@@ -224,11 +265,11 @@ public class SongPlayer extends Pane {
 
 		@Override
 		public void handle(long arg0) {
-			sendNote(dSends, dLane, dButton.getLayoutX(), Color.RED);
-			sendNote(fSends, fLane, fButton.getLayoutX(), Color.BLUE);
-			sendNote(spaceSends, spaceLane, sButton.getLayoutX(), Color.GREEN);
-			sendNote(jSends, jLane, jButton.getLayoutX(), Color.PURPLE);
-			sendNote(kSends, kLane, kButton.getLayoutX(), Color.YELLOW);
+			sendNote(dSends, dLane, dButton.getLayoutX(), dButton.getColor());
+			sendNote(fSends, fLane, fButton.getLayoutX(), fButton.getColor());
+			sendNote(spaceSends, spaceLane, sButton.getLayoutX(), sButton.getColor());
+			sendNote(jSends, jLane, jButton.getLayoutX(), jButton.getColor());
+			sendNote(kSends, kLane, kButton.getLayoutX(), kButton.getColor());
 		}
 	};
 
@@ -294,13 +335,5 @@ public class SongPlayer extends Pane {
 			return 0;
 		}
 		return -1;
-	}
-
-	// public ObservableStringValue getScoreString() {
-	// 	return
-	// }
-
-	public int getCombo() {
-		return scoreCounter.getCombo();
 	}
 }
