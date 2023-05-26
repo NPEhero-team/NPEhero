@@ -1,7 +1,6 @@
 package main;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,8 +11,12 @@ public class Difficulty
     public ObservableList<LeaderboardEntry> leaderboard = FXCollections.observableArrayList();
     public File notes;
 
-    public String toString()
-    {
-        return title;
+    public void parseMetadata(File file) {
+        title = "placeholderDiff";
+    }
+
+    public void parseLeaderboard(File file) {
+        //and here
+        leaderboard.add(new LeaderboardEntry("placeholderScore", 0, "0/0/0"));
     }
 }

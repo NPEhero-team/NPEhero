@@ -1,11 +1,9 @@
 package main;
 
-import org.json.simple.parser.ParseException;
-
+import java.io.File;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
 public class LevelController
 {
@@ -13,51 +11,48 @@ public class LevelController
 
     public LevelController()
     {
+        for (File curFileInLevels: new File("src/assets/levels").listFiles()) //iterates through all files/folders in src/assets/levels
+        {
+            Level level = new Level();
+            for(File curFileInCurLevel: curFileInLevels.listFiles()) //iterates through all files/folders in src/assets/levels/LEVEL
+            {
+                if (curFileInCurLevel.isDirectory()) //all subfolders within a level folder are difficulties
+                {
+                    Difficulty diff = new Difficulty();
+                    for(File curFileInCurDiff: curFileInCurLevel.listFiles()) //iterates through all files/folders in src/assets/levels/LEVEL/DIFFICULTY
+                    {
+                        if (curFileInCurDiff.getName().equals("metadata.json"))
+                        {
+                            diff.parseMetadata(curFileInCurDiff);
+                        }
+                        if (curFileInCurDiff.getName().equals("leaderboard.json"))
+                        {
+                            diff.parseLeaderboard(curFileInCurDiff);
+                        }
+                        if (curFileInCurDiff.getName().equals("notes.txt"))
+                        {
+                            diff.notes = curFileInCurDiff;
+                        }
+                    }
+                    level.diffList.add(diff);
+                }
 
-        Difficulty d1 = new Difficulty();
-        d1.title = "Easy";
-        LeaderboardEntry lb = new LeaderboardEntry("t-bone", 1000, "DATE");
-        //lb.setName("t-bone");
-        //lb.setScore(1000);
-        d1.leaderboard.add(lb);
+                if (curFileInCurLevel.getName().equals("preview.png"))
+                {
+                    level.preview = new Image(curFileInCurLevel.toURI().toString());
+                }
 
-        Difficulty d2 = new Difficulty();
-        d2.title = "Medium";
-        Difficulty d3 = new Difficulty();
-        d3.title = "Hard";
-        Difficulty d4 = new Difficulty();
-        d4.title = "Expert";
-        Difficulty d5 = new Difficulty();
-        d5.title = "Impossible";
+                if (curFileInCurLevel.getName().equals("metadata.json"))
+                {
+                    level.parseMetadata(curFileInCurLevel);
+                }
 
-        Level testLevel = new Level();
-        //testLevel.setTitle("test level class");
-        testLevel.desc = "this level is being used to test the LevelController class";
-        //testLevel.setArtist("testArtist");
-        testLevel.setColors(Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.PURPLE);
-        testLevel.diffList.add(d1);
-        testLevel.diffList.add(d2);
-        levelList.add(testLevel);
-
-        Level testLevel2 = new Level();
-        //testLevel2.setTitle("another one");
-        testLevel2.desc = "it can say something else too";
-        //testLevel2.setAritst("testArtist2");
-        testLevel2.setColors(Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.PURPLE);
-        testLevel2.diffList.add(d2);
-        testLevel2.diffList.add(d3);
-        testLevel2.diffList.add(d4);
-        testLevel2.preview = new Image("assets/pico.png");
-        levelList.add(testLevel2);
-         
-        
+                if (curFileInCurLevel.getName().equals("background.png"))
+                {
+                    level.background = new Image(curFileInCurLevel.toURI().toString());
+                }
+            }
+            levelList.add(level);
+        }
     }
-
-    public void readInLevels()
-    {
-        //oh boy time for a flowchart
-    } 
-
-
-
 }

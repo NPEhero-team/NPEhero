@@ -35,12 +35,21 @@ public class Level
         colors = newColors;
     }
 
-    //all below is required for table view
-    public Level()
+    public String getTitle() 
+    {
+        return title;
+    }
+
+    public String getArtist() 
+    {
+        return artist;
+    }
+
+    public void parseMetadata(File file) 
     {
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
-		try(FileReader reader = new FileReader("src/assets/levels/test level/metadata.json"))
+		try(FileReader reader = new FileReader(file))
 		{
 			Object obj = jsonParser.parse(reader); 
 			
@@ -62,25 +71,10 @@ public class Level
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-		} catch (ParseException e) {
-            // TODO Auto-generated catch block
+		} 
+        catch (ParseException e) 
+        {
             e.printStackTrace();
         }
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getArtist() {
-        return artist;
-    }
-
-    // public void setTitle(String title) {
-    //     this.title.set(title);
-    // }
-
-    // public void setArtist(String artist) {
-    //     this.artist.set(artist);
-    // }
 }
