@@ -41,8 +41,7 @@ public class SongPlayer extends Pane {
 	Timer timer;
 	final int TIME = 1500; // delay for notes falling down the screen
 
-	Score scoreCounter = new Score();
-	StringProperty scoreString = new SimpleStringProperty();
+	main.ScoreController scoreCounter = new ScoreController();
 
 	Rectangle goalPerfect = new Rectangle();
 	HBox buttonBox = new HBox();
@@ -103,7 +102,7 @@ public class SongPlayer extends Pane {
 	public SongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
 		bpm = d.bpm;
 		timer = new Timer(60);
-
+		scoreCounter = cntrl;
 
 		try {
 			loadSong(d.notes);
@@ -283,14 +282,12 @@ public class SongPlayer extends Pane {
 			if (distance < super.getHeight() / 16) {
 				ft.setFromValue(Color.WHITE);
 				ft.play();
-				scoreCounter.combo();
 				scoreCounter.perfect();
 				return 2;
 			}
 			if (distance < super.getHeight() / 5) {
 				ft.setFromValue(Color.CYAN);
 				ft.play();
-				scoreCounter.combo();
 				scoreCounter.good();
 				return 1;
 			}
@@ -301,4 +298,5 @@ public class SongPlayer extends Pane {
 		}
 		return -1;
 	}
+
 }
