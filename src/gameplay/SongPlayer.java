@@ -2,7 +2,6 @@ package gameplay;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -17,14 +16,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.animation.*;
-import javafx.beans.Observable;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableStringValue;
 import javafx.util.*;
 import main.Difficulty;
 import main.ScoreController;
+import sound.AudioFilePlayer;
 
 
 
@@ -74,7 +69,6 @@ public class SongPlayer extends Pane {
 	 */
 	public void loadSong(File notes) throws FileNotFoundException {
 		Scanner scan = new Scanner(new File(notes.getPath()));
-		System.out.println(notes.getPath());
 		try{
 			while (scan.hasNext()) {
 				String input = scan.next();
@@ -169,6 +163,8 @@ public class SongPlayer extends Pane {
 		goalPerfect.setY(dButton.getY());
 		super.getChildren().addAll(root, goalPerfect);
 
+		sound.AudioFilePlayer music = new AudioFilePlayer("src/assets/BookBetrayal.wav");
+		music.play();
 		gameLoop.start();
 	}
 
@@ -181,18 +177,18 @@ public class SongPlayer extends Pane {
 	 * @param pos   the x pos of the note to be sent
 	 * @param c     the color of the sent note
 	 */
-	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, double pos, Color c) {
+	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, TButton button) {
 		if (sends.peek() != null && timer.time() > sends.peek().getTime()-(TIME*bpm/60000)) {
 			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME));
 
-			lane.add(new Block(c, 50, 50, 5));
+			lane.add(new Block(button.getColor(), 50, 50, 5));
 			int index = lane.size() - 1;
 			sends.remove();
 			lane.get(index).heightProperty().bind(super.widthProperty().divide(8));
 			lane.get(index).widthProperty().bind(super.widthProperty().divide(8));
 			lane.get(index).arcHeightProperty().bind(super.widthProperty().divide(25));
 			lane.get(index).arcWidthProperty().bind(super.widthProperty().divide(25));
-			lane.get(index).setX(pos);
+			lane.get(index).setX(button.getLayoutX());
 			lane.get(index).setY(-lane.get(index).getHeight());
 			anim.setByY(super.getHeight() + lane.get(index).getHeight());
 			anim.setCycleCount(1);
@@ -203,6 +199,10 @@ public class SongPlayer extends Pane {
 			anim.setOnFinished(e -> {
 				if (super.getChildren().removeAll(anim.getNode())){
 					scoreCounter.miss();
+					FillTransition ft = new FillTransition(Duration.millis(500), button);
+					ft.setFromValue(Color.RED);
+					ft.setToValue(button.getFillColor());
+					ft.play();
 				}
 			});
 			super.getChildren().add(lane.get(lane.size() - 1));
@@ -229,11 +229,11 @@ public class SongPlayer extends Pane {
 
 		@Override
 		public void handle(long arg0) {
-			sendNote(dSends, dLane, dButton.getLayoutX(), dButton.getColor());
-			sendNote(fSends, fLane, fButton.getLayoutX(), fButton.getColor());
-			sendNote(spaceSends, spaceLane, sButton.getLayoutX(), sButton.getColor());
-			sendNote(jSends, jLane, jButton.getLayoutX(), jButton.getColor());
-			sendNote(kSends, kLane, kButton.getLayoutX(), kButton.getColor());
+			sendNote(dSends, dLane, dButton);
+			sendNote(fSends, fLane, fButton);
+			sendNote(spaceSends, spaceLane, sButton);
+			sendNote(jSends, jLane, jButton);
+			sendNote(kSends, kLane, kButton);
 		}
 	};
 
