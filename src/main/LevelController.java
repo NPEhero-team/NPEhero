@@ -33,6 +33,10 @@ public class LevelController
                         {
                             diff.notes = curFileInCurDiff;
                         }
+                        if (curFileInCurDiff.getName().equals("song.wav"))
+                        {
+                            diff.song = curFileInCurDiff;
+                        }
                     }
                     level.diffList.add(diff);
                 }
