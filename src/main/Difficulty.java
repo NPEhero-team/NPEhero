@@ -20,7 +20,7 @@ public class Difficulty
     public String title;
     private ObservableList<LeaderboardEntry> leaderboard;
     public File notes;
-    public int bpm;
+    public int bpm = 28;
     public File song;
     public int numBeats;
     public JSONObject diffStuff;
