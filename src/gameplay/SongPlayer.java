@@ -115,8 +115,8 @@ public class SongPlayer extends Pane {
 		difficulty = d;
 		pane = p;
 
-		songLength = 28; 
-		timer = new Timer(120);	//Sets the timer's bpm to that of the song
+		songLength = d.numBeats; 
+		timer = new Timer(d.bpm);	//Sets the timer's bpm to that of the song
 		scoreCounter = cntrl;			//Uses the song's designated scoreCounter
 
 		try {
@@ -176,7 +176,7 @@ public class SongPlayer extends Pane {
 		super.getChildren().addAll(root);	//puts all of the combonents in the pane to be rendered
 
 		gameLoop.start();		//starts the gameLoop, a periodic backround task runner that runs the methods within it 60 times every second
-		music = new AudioFilePlayer("src/assets/TestSync120bpm.wav");
+		music = new AudioFilePlayer(d.song.getPath());
 		music.play();
 	}
 
