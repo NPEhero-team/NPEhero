@@ -2,10 +2,15 @@ package gameplay;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.logging.Level;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import gui.GameOver;
 import javafx.geometry.Pos;
@@ -34,6 +39,13 @@ import sound.AudioFilePlayer;
 
 public class SongPlayer extends Pane {
 	private int bpm;		//initializes the bpm of the song, to be read in from a metadata file later
+	private int songLength; //initializes the length of the song in terms of the song's bpm, to be read in later
+
+	sound.AudioFilePlayer music;
+	private main.Level level;
+	private Difficulty difficulty;
+	private Pane pane;
+
 	Timer timer;			//the timer that determines when notes will fall, counted in terms of the song's bpm
 	final int TIME = 1500;  //delay for notes falling down the screen
 
@@ -94,6 +106,12 @@ public class SongPlayer extends Pane {
 
 	public SongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
 		bpm = d.bpm;					//Reads the song's bpm from a metadata file
+		
+		level = lvl;
+		difficulty = d;
+		pane = p;
+
+		songLength = 28; 
 		timer = new Timer(120);	//Sets the timer's bpm to that of the song
 		scoreCounter = cntrl;			//Uses the song's designated scoreCounter
 
@@ -153,9 +171,9 @@ public class SongPlayer extends Pane {
 
 		super.getChildren().addAll(root);	//puts all of the combonents in the pane to be rendered
 
-		sound.AudioFilePlayer music = new AudioFilePlayer("src/assets/TestSync120bpm.wav");
-		music.play();
 		gameLoop.start();		//starts the gameLoop, a periodic backround task runner that runs the methods within it 60 times every second
+		music = new AudioFilePlayer("src/assets/TestSync120bpm.wav");
+		music.play();
 	}
 
 	/**
@@ -224,8 +242,27 @@ public class SongPlayer extends Pane {
 			sendNote(spaceSends, spaceLane, sButton);
 			sendNote(jSends, jLane, jButton);
 			sendNote(kSends, kLane, kButton);
+			if (timer.time() > songLength) {
+				try {
+					cancel();
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+					e.printStackTrace();
+				}
+				gui.Driver.setMenu(new GameOver(level, difficulty, pane, scoreCounter.getScore()));
+			}
 		}
 	};
+
+	/**
+	 * Stops the gameloop and the music
+	 * @throws LineUnavailableException
+	 * @throws IOException
+	 * @throws UnsupportedAudioFileException
+	 */
+	public void cancel() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		gameLoop.stop();
+		music.stop();
+	}
 
 	/**
 	 * returns the pos in the lane array of the closest note to the goal
