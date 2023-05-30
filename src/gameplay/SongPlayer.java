@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
+import gui.GameOver;
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -29,6 +30,7 @@ import sound.AudioFilePlayer;
 // lvl.colors - array of colors (size 5) for the block colors
 // d.notes - File, notes.txt in the difficulty folder
 
+// gui.Driver.setMenu(new GameOver(lvl, d, p, cntrl.getScore()));
 
 public class SongPlayer extends Pane {
 	private int bpm;		//initializes the bpm of the song, to be read in from a metadata file later
