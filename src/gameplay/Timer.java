@@ -8,9 +8,9 @@ package gameplay;
 public class Timer
 {
     private long timeStart = System.currentTimeMillis();
-    private int bpm;
+    private double bpm;
 
-    public Timer(int newBpm) {
+    public Timer(double newBpm) {
         bpm = newBpm;
     }
 

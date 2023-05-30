@@ -50,19 +50,19 @@ package sound;
                
               audioClip.start();
                
-              while (!playCompleted) 
-              {
-                  // wait for the playback to complete
-                  try 
-                  {
-                      Thread.sleep(1000);
-                  } 
-                  catch (InterruptedException ex) 
-                  {
-                      ex.printStackTrace();
-                  }
-              }    
-              audioClip.close(); //stops the audio clip  
+            //   while (!playCompleted) 
+            //   {
+            //       // wait for the playback to complete
+            //       try 
+            //       {
+            //           Thread.sleep(1000);
+            //       } 
+            //       catch (InterruptedException ex) 
+            //       {
+            //           ex.printStackTrace();
+            //       }
+            //   }    
+            //  audioClip.close(); //stops the audio clip  
           }
           catch (UnsupportedAudioFileException ex) 
           {
@@ -90,14 +90,14 @@ package sound;
       {
           LineEvent.Type type = event.getType();
            
-          if (type == LineEvent.Type.START) 
-          {
-              System.out.println("Playback started.");        
-          } 
-          else if (type == LineEvent.Type.STOP) 
-          {
-              playCompleted = true;
-              System.out.println("Playback completed.");
-          }
+        //   if (type == LineEvent.Type.START) 
+        //   {
+        //       System.out.println("Playback started.");        
+        //   } 
+        //   else if (type == LineEvent.Type.STOP) 
+        //   {
+        //       playCompleted = true;
+        //       System.out.println("Playback completed.");
+        //   }
       }   
   }

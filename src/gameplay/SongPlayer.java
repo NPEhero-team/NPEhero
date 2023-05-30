@@ -14,7 +14,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.animation.*;
 import javafx.util.*;
 import main.Difficulty;
@@ -32,21 +31,19 @@ import sound.AudioFilePlayer;
 
 
 public class SongPlayer extends Pane {
-	private int bpm;
-	Timer timer;
-	final int TIME = 1500; // delay for notes falling down the screen
+	private int bpm;		//initializes the bpm of the song, to be read in from a metadata file later
+	Timer timer;			//the timer that determines when notes will fall, counted in terms of the song's bpm
+	final int TIME = 1500;  //delay for notes falling down the screen
 
-	main.ScoreController scoreCounter = new ScoreController();
+	main.ScoreController scoreCounter = new ScoreController();	//used to keep track of the user's score
 
-	Rectangle goalPerfect = new Rectangle();
-	HBox buttonBox = new HBox();
-	VBox polish = new VBox();
-	VBox place = new VBox();
+	HBox buttonBox = new HBox();	//used to align the buttons horizontally
+	VBox place = new VBox();		//used to place the buttons within the frame
 
-	TButton dButton = new TButton(Color.RED, 50, 50, 5);
-	Queue<NoteInfo> dSends = new LinkedList<NoteInfo>(); // Queue that dictates when to send the notes
-	ArrayList<Block> dLane = new ArrayList<Block>(); // Array list containing all the notes currently on the field
-
+	TButton dButton = new TButton(Color.RED, 50, 50, 5);	//Initializes the button, each parameter is a placeholder that is changed later
+	Queue<NoteInfo> dSends = new LinkedList<NoteInfo>(); 		//Queue that dictates when to send the notes
+	ArrayList<Block> dLane = new ArrayList<Block>(); 			//Array list containing all the notes currently on the field for that lane
+																//process is repeated for the following four buttons
 	TButton fButton = new TButton(Color.BLUE, 50, 50, 5);
 	Queue<NoteInfo> fSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> fLane = new ArrayList<Block>();
@@ -68,7 +65,7 @@ public class SongPlayer extends Pane {
 	 * @throws FileNotFoundException
 	 */
 	public void loadSong(File notes) throws FileNotFoundException {
-		Scanner scan = new Scanner(new File(notes.getPath()));
+		Scanner scan = new Scanner(new File(notes.getPath()));	//file reader for reading in the notes from a notes.txt file
 		try{
 			while (scan.hasNext()) {
 				String input = scan.next();
@@ -94,35 +91,32 @@ public class SongPlayer extends Pane {
 	}
 
 	public SongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
-		bpm = d.bpm;
-		timer = new Timer(60);
-		scoreCounter = cntrl;
+		bpm = d.bpm;					//Reads the song's bpm from a metadata file
+		timer = new Timer(120);	//Sets the timer's bpm to that of the song
+		scoreCounter = cntrl;			//Uses the song's designated scoreCounter
 
 		try {
-			loadSong(d.notes);
+			loadSong(d.notes);			//Calls the file loading from the song's notes.txt file
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		Rectangle field = new Rectangle(50, 50, new Color(0, 0, 0, 0.7));
-		field.heightProperty().bind(super.heightProperty());
-		field.widthProperty().bind(super.widthProperty());
 
-		goalPerfect.heightProperty().bind(super.heightProperty().divide(32));
-		goalPerfect.heightProperty().bind(super.widthProperty());
-
-		dButton.setColor(lvl.colors[0]);
-		fButton.setColor(lvl.colors[1]);
-		sButton.setColor(lvl.colors[2]);
+		dButton.setColor(lvl.colors[0]);	//sets the color of the five buttons to be
+		fButton.setColor(lvl.colors[1]);	//the colors outlined in the songs metadata
+		sButton.setColor(lvl.colors[2]);	//file
 		jButton.setColor(lvl.colors[3]);
 		kButton.setColor(lvl.colors[4]);
-		genButton(dButton);
-		genButton(fButton);
+		genButton(dButton);		//binds the size of each button to the screen, so that
+		genButton(fButton);		//they are dynamically resizeable
 		genButton(sButton);
 		genButton(jButton);
 		genButton(kButton);
 		
 		gui.Driver.primaryStage.getScene().setOnKeyPressed(e -> {
+			/**
+			 * The keyboard detection for the game: when a key is pressed it
+			 * calls the checkNote() method for the corresponding lane
+			 */
 			if (e.getCode() == KeyCode.D) {
 				checkNote(dLane, dButton);
 			}
@@ -138,34 +132,28 @@ public class SongPlayer extends Pane {
 			if (e.getCode() == KeyCode.K) {
 				checkNote(kLane, kButton);
 			}
+			//prints the user's current score and combo, for debugging purposes
 			System.out.println("Score: " + scoreCounter.getScore() + "\nCombo: " + scoreCounter.getCombo() + "\n");
 		});
 
-		// buttonBox.setStyle("-fx-padding: 0;" + "-fx-border-style: solid inside;"
-		// 		+ "-fx-border-width: 0;" + "-fx-border-insets: 20;"
-		// 		+ "-fx-background-color: black;" + "-fx-opacity: 0.67;");
-		buttonBox.setAlignment(Pos.CENTER);
-		buttonBox.getChildren().addAll(dButton, fButton, sButton, jButton, kButton);
-		buttonBox.setSpacing(10);
+		buttonBox.setAlignment(Pos.CENTER);		//puts the buttons in the center of the screen
+		buttonBox.getChildren().addAll(dButton, fButton, sButton, jButton, kButton);	//places the buttons in the correct row order
+		buttonBox.setSpacing(10); //sets the space between each button
 
-		polish.getChildren().addAll(field);
-		polish.setAlignment(Pos.BASELINE_CENTER);
-
-		place.prefWidthProperty().bind(super.widthProperty());
-		place.prefHeightProperty().bind(super.heightProperty());
-		place.getChildren().addAll(buttonBox);
-		place.setAlignment(Pos.BOTTOM_CENTER);
-		place.setSpacing(10);
+		place.prefWidthProperty().bind(super.widthProperty());		//Sets the height and with of the scene
+		place.prefHeightProperty().bind(super.heightProperty());	//to natch the window
+		place.getChildren().addAll(buttonBox);		//adds the buttonBox to the screen
+		place.setAlignment(Pos.BOTTOM_CENTER);		//sets the alignment of the pane
+		place.setSpacing(10);	
 
 		StackPane root = new StackPane();
-		root.getChildren().addAll(place);
+		root.getChildren().addAll(place);	//aligns the components within the pane
 
-		goalPerfect.setY(dButton.getY());
-		super.getChildren().addAll(root, goalPerfect);
+		super.getChildren().addAll(root);	//puts all of the combonents in the pane to be rendered
 
-		sound.AudioFilePlayer music = new AudioFilePlayer("src/assets/BookBetrayal.wav");
+		sound.AudioFilePlayer music = new AudioFilePlayer("src/assets/TestSync120bpm.wav");
 		music.play();
-		gameLoop.start();
+		gameLoop.start();		//starts the gameLoop, a periodic backround task runner that runs the methods within it 60 times every second
 	}
 
 	/**
