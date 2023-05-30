@@ -11,6 +11,8 @@ public class Difficulty
     private ObservableList<LeaderboardEntry> leaderboard = FXCollections.observableArrayList();
     public File notes;
     public int bpm;
+    public File song;
+    public int numBeats;
 
     public void parseMetadata(File file) {
         //hi zach put json reader stuff here
