@@ -20,7 +20,6 @@ public class SettingsController
 	
 	public void saveAndWrite(int newEffVol, int newMusVol)
 	{
-		
 		settings.put("musicVol", newMusVol);
 		settings.put("effectsVol", newEffVol);
 		try (FileWriter file = new FileWriter("settings.json")) 
