@@ -1,5 +1,10 @@
 package gui;
 
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import gameplay.SongPlayer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,9 +18,10 @@ import javafx.scene.text.Text;
 import main.Difficulty;
 import main.Level;
 import main.ScoreController;
+import sound.AudioFilePlayer;
 
 public class LevelSurround extends Pane
-{
+{   
     /*
      * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
      * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
@@ -28,7 +34,14 @@ public class LevelSurround extends Pane
 
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> Driver.setMenu(prev));
+        exit.setOnAction(e -> {
+            Driver.setMenu(prev);
+            try {
+                game.cancel();
+            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+                e1.printStackTrace();
+            }
+        });
 
         Button pause = new Button();
         pause.setText("Pause");
@@ -92,7 +105,7 @@ public class LevelSurround extends Pane
         scoreTextBox.minWidthProperty().bind(super.prefWidthProperty().subtract(game.minWidthProperty()).divide(2));
 
         HBox centerBox = new HBox();
-        centerBox.getChildren().addAll(comboTextBox,game, scoreTextBox);
+        centerBox.getChildren().addAll(comboTextBox, game, scoreTextBox);
         centerBox.setAlignment(Pos.BOTTOM_CENTER);
 
         StackPane root = new StackPane();
@@ -122,5 +135,7 @@ public class LevelSurround extends Pane
         testfinish.setText(level.getTitle() + "launch game end");
         testfinish.setOnAction(e -> Driver.setMenu(new GameOver(level, difficulty, prev, sc.getScore())));
         Driver.debug.addButton(testfinish);
+
+        game.start();
     }
 }
