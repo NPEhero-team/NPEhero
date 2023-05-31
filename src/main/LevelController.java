@@ -1,6 +1,8 @@
 package main;
 
 import java.io.File;
+import java.io.IOException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
@@ -23,11 +25,21 @@ public class LevelController
                     {
                         if (curFileInCurDiff.getName().equals("metadata.json"))
                         {
-                            diff.parseMetadata(curFileInCurDiff);
+                            try {
+                                diff.parseMetadata(curFileInCurDiff);
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
                         }
                         if (curFileInCurDiff.getName().equals("leaderboard.json"))
                         {
-                            diff.parseLeaderboard(curFileInCurDiff);
+                            try {
+                                diff.parseLeaderboard(curFileInCurDiff);
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
                         }
                         if (curFileInCurDiff.getName().equals("notes.txt"))
                         {

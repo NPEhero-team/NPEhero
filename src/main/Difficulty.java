@@ -1,15 +1,11 @@
 package main;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.ParseException;
 import java.time.LocalDate;
-
-import javax.lang.model.util.ElementScanner14;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,95 +17,84 @@ import javafx.collections.ObservableList;
 public class Difficulty 
 {
     public String title;
-    private ObservableList<LeaderboardEntry> leaderboard;
+    private ObservableList<LeaderboardEntry> leaderboard = FXCollections.observableArrayList();
     public File notes;
     public int bpm = 28;
     public File song;
     public int numBeats;
-    public JSONObject diffStuff;
-    public JSONObject leaderboardStuff;
-    public LeaderboardEntry[] fileLeaderboard;
-    private String filepath;
+    private File leaderboardFile;
     
 
     public void parseMetadata(File file) throws FileNotFoundException, IOException 
     {
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
-        System.out.println("test");
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                System.out.println(line);
-            }
-         }
 		try(FileReader reader = new FileReader(file))
 		{
 			Object obj = jsonParser.parse(reader); 
-			
-			diffStuff = (JSONObject)(obj); //converts read object to a JSONObject
+			JSONObject diffStuff = (JSONObject)(obj); //converts read object to a JSONObject
             
             title = (String) diffStuff.get("title");
-            bpm = (int) diffStuff.get("bpm");
-            numBeats = (int) diffStuff.get("numBeats");            
+            bpm = Integer.parseInt(""+diffStuff.get("bpm"));
+            numBeats = Integer.parseInt(""+diffStuff.get("numBeats"));  
+            
 		}
-		catch (FileNotFoundException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		} catch (org.json.simple.parser.ParseException e) 
+		catch (Exception e)
         {
-            e.printStackTrace();
-        } 
-
+            System.out.println("Error in json file "+file);
+            //e.printStackTrace();
+        }
     }
 
-    public void parseLeaderboard(File file) throws FileNotFoundException, IOException {
-        //and here
-        //leaderboard.add(new LeaderboardEntry("placeholderScore", 0, "0/0/0"));
-
+    public void parseLeaderboard(File file) throws FileNotFoundException, IOException 
+    {
+        leaderboardFile = file;
         JSONParser jsonParser = new JSONParser(); //parser to read the file
-
-        filepath = file.getPath();
-        
 
 		try(FileReader reader = new FileReader(file))
 		{
             Object obj = jsonParser.parse(reader); 
 			
-			leaderboardStuff = (JSONObject)(obj); //converts read object to a JSONArray
-            
-            fileLeaderboard = (LeaderboardEntry[]) leaderboardStuff.get("leaderboard");
+			JSONArray leaderboardStuff = (JSONArray)(obj); //converts read object to a JSONArray
 
-            leaderboard.addAll(fileLeaderboard);
+            for (Object cur: leaderboardStuff)
+            {
+                JSONObject cur2 = (JSONObject) cur;
+
+                String name = (String) cur2.get("name");
+                int score = Integer.parseInt(""+cur2.get("score"));
+                String date = (String) cur2.get("date");
+                leaderboard.add(new LeaderboardEntry(name, score, date));
+            }
 		}
-		catch (FileNotFoundException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		} catch (org.json.simple.parser.ParseException e) 
+		catch (Exception e)
         {
-            e.printStackTrace();
-        } 
+            System.out.println("Error in json file "+leaderboardFile);
+            //e.printStackTrace();
+        }
     }
 
     public void addToLeaderboard(String name, int score) 
     {
         leaderboard.add(new LeaderboardEntry(name, score, ""+LocalDate.now())); //do not delete this tho its not a placeholder
         
-        try (FileWriter fileWriter = new FileWriter(filepath)) 
+        try (FileWriter fileWriter = new FileWriter(leaderboardFile)) 
 		{
             //write the settings JSONObject instance to the file 
-            fileWriter.write(((JSONArray) leaderboard).toJSONString()); 
+            JSONArray jsonArray = new JSONArray();
+            for (LeaderboardEntry cur: leaderboard)
+            {
+                JSONObject obj = new JSONObject();
+                obj.put("name", cur.getName());
+                obj.put("score", cur.getScore());
+                obj.put("date",cur.getDate());
+                jsonArray.add(obj);
+            }
+            jsonArray.writeJSONString(fileWriter);
             fileWriter.flush();
  
-        } catch (IOException e) {
+        } 
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

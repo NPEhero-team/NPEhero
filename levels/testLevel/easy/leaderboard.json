@@ -1,15 +1,17 @@
-{
-    "leaderboard": 
-    [
-        {
-            "name": "tbone",
-            "date": "today",
-            "score": "100"
-        },
-        {
-            "name": "zbone",
-            "date": "today",
-            "score": "0"
-        }
-    ]
-}
+[
+    {
+        "date": "today",
+        "score": 100,
+        "name": "tbone"
+    },
+    {
+        "date": "today",
+        "score": 0,
+        "name": "zbone"
+    },
+    {
+        "date": "2023-05-30",
+        "score": 0,
+        "name": "greg"
+    }
+]
