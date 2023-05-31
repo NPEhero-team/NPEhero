@@ -45,7 +45,8 @@ public class SongPlayer extends Pane {
 	private int bpm;		//initializes the bpm of the song, to be read in from a metadata file later
 	private int songLength; //initializes the length of the song in terms of the song's bpm, to be read in later
 
-	sound.AudioFilePlayer music;
+	AudioFilePlayer music;
+
 	private main.Level level;
 	private Difficulty difficulty;
 	private Pane pane;
@@ -110,13 +111,15 @@ public class SongPlayer extends Pane {
 
 	public SongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
 		bpm = d.bpm;					//Reads the song's bpm from a metadata file
-		
 		level = lvl;
 		difficulty = d;
 		pane = p;
+		music = new AudioFilePlayer(difficulty.song.getPath());
 
-		songLength = d.numBeats; 
-		timer = new Timer(d.bpm);	//Sets the timer's bpm to that of the song
+		System.out.println(d.bpm + " " + d.numBeats);
+
+		songLength = 28; //PLACEHOLDER BPM AND TIMER
+		timer = new Timer(120);	//Sets the timer's bpm to that of the song
 		scoreCounter = cntrl;			//Uses the song's designated scoreCounter
 
 		try {
@@ -174,10 +177,6 @@ public class SongPlayer extends Pane {
 		root.getChildren().addAll(place);	//aligns the components within the pane
 
 		super.getChildren().addAll(root);	//puts all of the combonents in the pane to be rendered
-
-		gameLoop.start();		//starts the gameLoop, a periodic backround task runner that runs the methods within it 60 times every second
-		music = new AudioFilePlayer(d.song.getPath());
-		music.play();
 	}
 
 	/**
@@ -257,8 +256,14 @@ public class SongPlayer extends Pane {
 		}
 	};
 
+	//starts the gameLoop, a periodic backround task runner that runs the methods within it 60 times every second
+	public void start() {
+		music.play();
+		gameLoop.start();
+	}
+
 	/**
-	 * Stops the gameloop and the music
+	 * Stops the gameloop
 	 * @throws LineUnavailableException
 	 * @throws IOException
 	 * @throws UnsupportedAudioFileException
