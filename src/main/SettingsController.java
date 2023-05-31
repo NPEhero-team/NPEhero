@@ -28,7 +28,8 @@ public class SettingsController
             file.write(settings.toJSONString()); 
             file.flush();
  
-        } catch (IOException e) {
+        } 
+		catch (IOException e) {
             e.printStackTrace();
         }
 	}
