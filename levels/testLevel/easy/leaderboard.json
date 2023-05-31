@@ -1,0 +1,15 @@
+{
+    "leaderboard": 
+    [
+        {
+            "name": "tbone",
+            "date": "today",
+            "score": "100"
+        },
+        {
+            "name": "zbone",
+            "date": "today",
+            "score": "0"
+        }
+    ]
+}

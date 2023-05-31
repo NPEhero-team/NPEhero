@@ -65,8 +65,10 @@ public class Difficulty
 
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 
-        filepath = file.getPath();
-		
+        filepath = file.getName();
+        
+        System.out.println(file);
+
 		try(FileReader reader = new FileReader(file))
 		{
             Object obj = jsonParser.parse(reader); 
@@ -93,6 +95,7 @@ public class Difficulty
     public void addToLeaderboard(String name, int score) 
     {
         leaderboard.add(new LeaderboardEntry(name, score, ""+LocalDate.now())); //do not delete this tho its not a placeholder
+        
         try (FileWriter fileWriter = new FileWriter(filepath)) 
 		{
             //write the settings JSONObject instance to the file 
