@@ -1,5 +1,6 @@
 package main;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -31,10 +32,17 @@ public class Difficulty
     private String filepath;
     
 
-    public void parseMetadata(File file) 
+    public void parseMetadata(File file) throws FileNotFoundException, IOException 
     {
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
+        System.out.println("test");
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+         }
 		try(FileReader reader = new FileReader(file))
 		{
 			Object obj = jsonParser.parse(reader); 
@@ -59,15 +67,14 @@ public class Difficulty
 
     }
 
-    public void parseLeaderboard(File file) {
+    public void parseLeaderboard(File file) throws FileNotFoundException, IOException {
         //and here
         //leaderboard.add(new LeaderboardEntry("placeholderScore", 0, "0/0/0"));
 
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 
-        filepath = file.getName();
+        filepath = file.getPath();
         
-        System.out.println(file);
 
 		try(FileReader reader = new FileReader(file))
 		{
