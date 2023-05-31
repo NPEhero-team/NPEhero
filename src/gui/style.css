@@ -39,12 +39,6 @@
     -fx-text-fill: rgb(0, 0, 0);
 }
 
-
-
-
-
-
-
 /* table */
 
 TableView {
@@ -59,14 +53,10 @@ TableView {
 
 .table-view .table-cell{
     -fx-border-color: transparent;
-    /* -fx-padding: 2 0 2 10px; */
 }
 
 .table-view .column-header-background{
     -fx-background-color: transparent;
-    /* -fx-background-radius: 7px 7px 0px 0px;
-    -fx-background-insets: 0 11px 0 0;
-    -fx-padding: 0 0 5px 0; */
 }
 
 .table-cell {
@@ -76,12 +66,10 @@ TableView {
 .table-view .column-header {
     -fx-text-background-color: rgb(168, 168, 168);
     -fx-background-color: transparent;
-    /* -fx-background-radius: 5;    
-    -fx-background-color: rgba(0, 0, 0, 0.5);  */
 }
 
 .table-row-cell {
-    /* -fx-padding: .5em; */
+    -fx-cell-size: 40;
     -fx-background-color: transparent;
     -fx-background-radius: 3;
     -fx-text-background-color: rgb(255, 255, 255);
@@ -125,12 +113,6 @@ TableView:focused .list-cell:focused {
     -fx-border-color: transparent;
     -fx-text-background-color: white;
 }
-
-
-
-
-
-
 
 /* slider */
 
