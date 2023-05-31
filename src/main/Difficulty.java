@@ -19,7 +19,7 @@ public class Difficulty
     public String title;
     private ObservableList<LeaderboardEntry> leaderboard = FXCollections.observableArrayList();
     public File notes;
-    public int bpm = 28;
+    public int bpm;
     public File song;
     public int numBeats;
     private File leaderboardFile;
@@ -35,8 +35,8 @@ public class Difficulty
 			JSONObject diffStuff = (JSONObject)(obj); //converts read object to a JSONObject
             
             title = (String) diffStuff.get("title");
-            bpm = Integer.parseInt(""+diffStuff.get("bpm"));
-            numBeats = Integer.parseInt(""+diffStuff.get("numBeats"));  
+            bpm = (int)(diffStuff.get("bpm"));           
+            numBeats = (int)(diffStuff.get("numBeats"));  
             
 		}
 		catch (Exception e)
@@ -99,7 +99,8 @@ public class Difficulty
         }
     }
 
-    public ObservableList<LeaderboardEntry> getLeaderboard() {
+    public ObservableList<LeaderboardEntry> getLeaderboard() 
+    {
         return leaderboard;
     }
 }
