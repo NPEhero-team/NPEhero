@@ -32,7 +32,7 @@ public class GameOver extends Pane
         levelName.getStyleClass().add("t2");
 
         Text levelArtist = new Text();
-        levelArtist.setText(level.getArtist()+" - "+diff);
+        levelArtist.setText(level.getArtist()+" - "+diff.title);
         levelArtist.getStyleClass().add("t3");
 
         VBox levelDetailsBox = new VBox();

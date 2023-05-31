@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -21,13 +22,12 @@ public class Leaderboard extends Pane
      */
     public Leaderboard(Level level, Difficulty diff, Pane prev)
     {
-        //sets up table view: requires special getters, setters and constructors to work
+        //sets up table view: requires java bean getters, setters and constructors to work
         TableView<LeaderboardEntry> scores = new TableView<LeaderboardEntry>();
 
         TableColumn<LeaderboardEntry, String> nameCol = new TableColumn<LeaderboardEntry, String>("Name");
         TableColumn<LeaderboardEntry, String> scoreCol = new TableColumn<LeaderboardEntry, String>("Score");
         TableColumn<LeaderboardEntry, String> dateCol = new TableColumn<LeaderboardEntry, String>("Date");
-        //scoreCol.minWidthProperty().bind(scores.widthProperty().subtract(nameCol.widthProperty()));
 
         scores.getColumns().add(nameCol);
         scores.getColumns().add(scoreCol);
@@ -44,6 +44,8 @@ public class Leaderboard extends Pane
         scores.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
         scores.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
 
+        scoreCol.setSortType(SortType.DESCENDING);
+        scores.getSortOrder().add(scoreCol);
 
         Button exit = new Button();
         exit.setText("Back");
