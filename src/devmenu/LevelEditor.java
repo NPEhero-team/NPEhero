@@ -22,6 +22,7 @@ public class LevelEditor
     {
         Text folderNameLabel = new Text("Folder name");
         TextField folderName = new TextField(level.thisDir.getName());
+        folderName.setDisable(true);
 
         Text titleLabel = new Text("Title");
         TextField title = new TextField(level.getTitle());
@@ -47,6 +48,13 @@ public class LevelEditor
 
         Text diffLabel = new Text("Difficulties");
 
+        Button refresh = new Button("Refresh");
+        refresh.setOnAction(e -> {
+            diffList2.clear();
+            diffList2.addAll(level.getDiffList());
+            diffList.setItems(diffList2);
+        });
+
         TextField newDiff = new TextField("new");
         Button newDiffButton = new Button("add");
         newDiffButton.setOnAction(e -> level.addDiff(newDiff.getText()));
@@ -67,7 +75,7 @@ public class LevelEditor
         });
 
         VBox main = new VBox();
-        main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,artistLabel,artist,descLabel,desc,colorsLabel,c1,c2,c3,c4,c5,diffLabel,diffList,newDiffBox,save);
+        main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,artistLabel,artist,descLabel,desc,colorsLabel,c1,c2,c3,c4,c5,diffLabel,diffList,refresh,newDiffBox,save);
         
         Stage primaryStage = new Stage();
         Scene scene = new Scene(main);

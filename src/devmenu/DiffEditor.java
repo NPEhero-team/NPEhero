@@ -14,6 +14,7 @@ public class DiffEditor
     {
         Text folderNameLabel = new Text("Folder name (ordered alphabetically)");
         TextField folderName = new TextField(diff.thisDir.getName());
+        folderName.setDisable(true);
 
         Text titleLabel = new Text("Title");
         TextField title = new TextField(diff.title);

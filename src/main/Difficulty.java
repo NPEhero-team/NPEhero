@@ -17,7 +17,7 @@ import javafx.collections.ObservableList;
 public class Difficulty 
 {
     public File thisDir;
-    public String title;
+    public String title = "Unnamed";
     private ObservableList<LeaderboardEntry> leaderboard = FXCollections.observableArrayList();
     public File notes;
     public int bpm;
@@ -28,7 +28,6 @@ public class Difficulty
     public Difficulty(File file)
     {
         thisDir = file;
-        readData();
     }
 
     public void readData()
@@ -37,7 +36,7 @@ public class Difficulty
         {
             if (cur.getName().equals("metadata.json"))
             {
-                parseMetadata(cur);
+                parseMetadata();
             }
             if (cur.getName().equals("leaderboard.json"))
             {
@@ -55,8 +54,9 @@ public class Difficulty
     }
 
 
-    public void parseMetadata(File file)
+    public void parseMetadata()
     {
+        File file = new File(thisDir, "metadata.json");
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
 		try(FileReader reader = new FileReader(file))
@@ -139,7 +139,23 @@ public class Difficulty
         return title;
     }
 
-    public void writeMetadata() {
-        
+    public void writeMetadata() 
+    {
+        FileWriter fileWriter;
+        try 
+        {
+            File file = new File(thisDir, "metadata.json");
+            fileWriter = new FileWriter(file);
+            JSONObject obj = new JSONObject();
+            obj.put("title", title);
+            obj.put("bpm", bpm);
+            obj.put("numBeats", numBeats);
+            obj.writeJSONString(fileWriter);
+            fileWriter.flush();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
     }
 }

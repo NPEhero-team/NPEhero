@@ -39,6 +39,9 @@ public class LevelList
         levels.setItems(Driver.levelController.levelList);
         levels.setOnMouseClicked(e -> new LevelEditor(levels.getSelectionModel().getSelectedItem()));
 
+        Button refresh = new Button("Refresh");
+        refresh.setOnAction(e -> levels.setItems(Driver.levelController.levelList));
+
         TextField newLevel = new TextField("new");
         Button newLevelButton = new Button("add");
         newLevelButton.setOnAction(e -> Driver.levelController.addLevel(newLevel.getText()));
@@ -46,7 +49,7 @@ public class LevelList
         newLevelBox.getChildren().addAll(newLevel,newLevelButton);
 
         VBox main = new VBox();
-        main.getChildren().addAll(levels,newLevelBox);
+        main.getChildren().addAll(levels,refresh,newLevelBox);
         Scene scene = new Scene(main);
         primaryStage.setScene(scene);
         primaryStage.show();

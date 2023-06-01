@@ -12,24 +12,24 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import devmenu.LevelList;
 import gui.Driver;
 
 public class Level 
 {
     public File thisDir;
-    private String title;
-    private String artist;
+    private String title = "Unnamed";
+    private String artist = "Unknown";
     private ArrayList<Difficulty> diffList;
 
     public Image preview; //optional
-    public String desc;
+    public String desc = "No description";
     public Image background; //optional
-    public Color[] colors;//optional, have default colors
+    public Color[] colors = {Color.RED,Color.BLUE,Color.GREEN,Color.PURPLE,Color.YELLOW};//optional, have default colors
 
     public Level(File dir)
     {
         thisDir = dir;
-        readData();
     }
 
     public void readData()
@@ -40,6 +40,7 @@ public class Level
             if (cur.isDirectory()) //all subfolders within a level folder are difficulties
             {
                 Difficulty diff = new Difficulty(cur);
+                diff.readData();
                 diffList.add(diff);
             }
 
@@ -105,12 +106,13 @@ public class Level
             obj.put("title", title);
             obj.put("artist", artist);
             obj.put("desc", desc);
-            obj.put("color1",colors[0]);
-            obj.put("color2",colors[1]);
-            obj.put("color3",colors[2]);
-            obj.put("color4",colors[3]);
-            obj.put("color5",colors[4]);
+            obj.put("color1",colors[0].toString());
+            obj.put("color2",colors[1].toString());
+            obj.put("color3",colors[2].toString());
+            obj.put("color4",colors[3].toString());
+            obj.put("color5",colors[4].toString());
             obj.writeJSONString(fileWriter);
+            fileWriter.flush();
         } 
         catch (IOException e) {
             e.printStackTrace();
@@ -132,17 +134,10 @@ public class Level
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Difficulty temp = new Difficulty(diffDir);
+        temp.title = text;
+        temp.writeMetadata();
         readData();
-    }
-
-    public void removeDiff(Difficulty diff) 
-    {
-        //soon
-    }
-
-    public void renameDiff(Difficulty diff, String newName)
-    {
-        //soon
     }
 
     public String getTitle() 

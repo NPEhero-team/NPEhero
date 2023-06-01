@@ -22,6 +22,7 @@ public class LevelController
         for (File cur: thisDir.listFiles()) //iterates through all files/folders in levels
         {
             Level level = new Level(cur);
+            level.readData();
             levelList.add(level);
         }
     }
@@ -39,16 +40,9 @@ public class LevelController
         {
             e.printStackTrace();
         }
+        Level temp = new Level(levelDir);
+        temp.setTitle(text);
+        temp.writeMetadata();
         readData();
-    }
-
-    public void removeLevel(Level level)
-    {
-        //soon
-    }
-
-    public void renameLevel(Level level, String newName)
-    {
-        //soon
     }
 }
