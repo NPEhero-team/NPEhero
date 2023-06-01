@@ -1,7 +1,9 @@
-package gui;
+package devmenu;
 
+import gui.Driver;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -17,6 +19,10 @@ public class DebugMenu
     VBox primaryPane = new VBox();
     public DebugMenu()
     {
+        Button levelCreator = new Button();
+        levelCreator.setText("LEVEL CREATOR");
+        levelCreator.setOnAction(e -> new LevelList());
+
         Button wallpaperTest = new Button();
         wallpaperTest.setText("wallpaper trees");
         wallpaperTest.setOnAction(e -> Driver.setBackground("assets/trees.png"));
@@ -33,7 +39,7 @@ public class DebugMenu
         testVol.setText("print volumes");
         testVol.setOnAction(e -> System.out.println("sfx:"+Driver.settingsController.effectsVol+" msc:"+Driver.settingsController.musicVol));
 
-        primaryPane.getChildren().addAll(wallpaperTest,wallpaperTest2,wallpaperTest3,testVol);
+        primaryPane.getChildren().addAll(levelCreator,wallpaperTest,wallpaperTest2,wallpaperTest3,testVol);
         
         Scene primaryScene = new Scene(primaryPane);
         primaryStage.setScene(primaryScene);

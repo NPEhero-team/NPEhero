@@ -16,6 +16,7 @@ import javafx.collections.ObservableList;
 
 public class Difficulty 
 {
+    public File thisDir;
     public String title;
     private ObservableList<LeaderboardEntry> leaderboard = FXCollections.observableArrayList();
     public File notes;
@@ -24,8 +25,37 @@ public class Difficulty
     public int numBeats;
     private File leaderboardFile;
     
+    public Difficulty(File file)
+    {
+        thisDir = file;
+        readData();
+    }
 
-    public void parseMetadata(File file) throws FileNotFoundException, IOException 
+    public void readData()
+    {
+        for(File cur: thisDir.listFiles()) //iterates through all files/folders in src/assets/levels/LEVEL/DIFFICULTY
+        {
+            if (cur.getName().equals("metadata.json"))
+            {
+                parseMetadata(cur);
+            }
+            if (cur.getName().equals("leaderboard.json"))
+            {
+                parseLeaderboard(cur);
+            }
+            if (cur.getName().equals("notes.txt"))
+            {
+                notes = cur;
+            }
+            if (cur.getName().equals("song.wav"))
+            {
+                song = cur;
+            }
+        }
+    }
+
+
+    public void parseMetadata(File file)
     {
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
@@ -46,7 +76,7 @@ public class Difficulty
         }
     }
 
-    public void parseLeaderboard(File file) throws FileNotFoundException, IOException 
+    public void parseLeaderboard(File file)
     {
         leaderboardFile = file;
         JSONParser jsonParser = new JSONParser(); //parser to read the file
@@ -102,5 +132,14 @@ public class Difficulty
     public ObservableList<LeaderboardEntry> getLeaderboard() 
     {
         return leaderboard;
+    }
+
+    public String toString()
+    {
+        return title;
+    }
+
+    public void writeMetadata() {
+        
     }
 }

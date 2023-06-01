@@ -12,47 +12,62 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import gui.Driver;
+
 public class Level 
 {
-    public Image preview; //optional
+    public File thisDir;
     private String title;
     private String artist;
-    public String desc;
-    public ArrayList<Difficulty> diffList = new ArrayList<Difficulty>();
+    private ArrayList<Difficulty> diffList;
 
+    public Image preview; //optional
+    public String desc;
     public Image background; //optional
     public Color[] colors;//optional, have default colors
-    public Color c1;
-    public Color c2;
-    public Color c3;
-    public Color c4;
-    public Color c5;
 
-    private JSONObject levelStuff;
-
-    public void setColors(Color... newColors) 
+    public Level(File dir)
     {
-        colors = newColors;
+        thisDir = dir;
+        readData();
     }
 
-    public String getTitle() 
+    public void readData()
     {
-        return title;
+        diffList = new ArrayList<Difficulty>();
+        for(File cur: thisDir.listFiles()) //iterates through all files/folders in src/assets/levels/LEVEL
+        {
+            if (cur.isDirectory()) //all subfolders within a level folder are difficulties
+            {
+                Difficulty diff = new Difficulty(cur);
+                diffList.add(diff);
+            }
+
+            if (cur.getName().equals("preview.png"))
+            {
+                preview = new Image(cur.toURI().toString());
+            }
+
+            if (cur.getName().equals("metadata.json"))
+            {
+                parseMetadata();
+            }
+
+            if (cur.getName().equals("background.png"))
+            {
+                background = new Image(cur.toURI().toString());
+            }
+        }
     }
 
-    public String getArtist() 
-    {
-        return artist;
-    }
-
-    public void parseMetadata(File file) 
+    public void parseMetadata() 
     {
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
-		try(FileReader reader = new FileReader(file))
+		try(FileReader reader = new FileReader(new File(thisDir, "metadata.json")))
 		{
 			Object obj = jsonParser.parse(reader); 
-			
+			JSONObject levelStuff = new JSONObject();
 			levelStuff = (JSONObject)(obj); //converts read object to a JSONObject
 
             title = (String)(levelStuff.get("title"));
@@ -63,34 +78,88 @@ public class Level
             {
                 colors = new Color[5];
 
-                c1 = Color.web((String)(levelStuff.get("color1"))); //read in all the custom colors
-                c2 = Color.web((String)(levelStuff.get("color2")));
-                c3 = Color.web((String)(levelStuff.get("color3")));
-                c4 = Color.web((String)(levelStuff.get("color4")));
-                c5 = Color.web((String)(levelStuff.get("color5")));
-
-                colors[0] = c1;
-                colors[1] = c2;
-                colors[2] = c3;
-                colors[3] = c4;
-                colors[4] = c5;
+                colors[0] = Color.web((String)(levelStuff.get("color1"))); //read in all the custom colors
+                colors[1] = Color.web((String)(levelStuff.get("color2")));
+                colors[2] = Color.web((String)(levelStuff.get("color3")));
+                colors[3] = Color.web((String)(levelStuff.get("color4")));
+                colors[4] = Color.web((String)(levelStuff.get("color5")));
             }
             else
             {
                 colors = new Color[]{Color.RED,Color.BLUE,Color.GREEN,Color.PURPLE,Color.YELLOW};
             }
 		}
-		catch (FileNotFoundException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		} 
-        catch (ParseException e) 
+    }
+
+    public void writeMetadata()
+    {
+        FileWriter fileWriter;
+        try 
         {
+            fileWriter = new FileWriter(new File(thisDir, "metadata.json"));
+            JSONObject obj = new JSONObject();
+            obj.put("title", title);
+            obj.put("artist", artist);
+            obj.put("desc", desc);
+            obj.put("color1",colors[0]);
+            obj.put("color2",colors[1]);
+            obj.put("color3",colors[2]);
+            obj.put("color4",colors[3]);
+            obj.put("color5",colors[4]);
+            obj.writeJSONString(fileWriter);
+        } 
+        catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<Difficulty> getDiffList()
+    {
+        return diffList;
+    }
+
+    public void addDiff(String text) 
+    {
+        File diffDir = new File(thisDir, text);
+        diffDir.mkdirs();
+        File metadataDir = new File(diffDir, "metadata.json");
+        try {
+            metadataDir.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        readData();
+    }
+
+    public void removeDiff(Difficulty diff) 
+    {
+        //soon
+    }
+
+    public void renameDiff(Difficulty diff, String newName)
+    {
+        //soon
+    }
+
+    public String getTitle() 
+    {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getArtist() 
+    {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
     }
 }

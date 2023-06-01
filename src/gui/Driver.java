@@ -25,6 +25,8 @@ import main.LevelController;
 import main.SettingsController;
 import org.json.simple.parser.ParseException;
 
+import devmenu.DebugMenu;
+
 
 public class Driver extends Application 
 {
