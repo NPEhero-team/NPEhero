@@ -17,7 +17,7 @@ public class Difficulty
     public String title = "Unnamed";
     private ObservableList<LeaderboardEntry> leaderboard = FXCollections.observableArrayList();
     public File notes;
-    public Double bpm;
+    public Double bpm = 0.0;
     public int numBeats;
     public Level level;
     

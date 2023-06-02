@@ -1,5 +1,8 @@
 package devmenu;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -33,7 +36,13 @@ public class DiffEditor
         TextField numBeats = new TextField(diff.numBeats+"");
 
         Button editNotes = new Button("Edit notes");
-        editNotes.setOnAction(e -> new NotesEditor(diff));
+        editNotes.setOnAction(e -> {
+            try {
+                new NotesEditor(diff);
+            } catch (FileNotFoundException | UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+            }
+        });
 
         Button editScores = new Button("Edit leaderboard");
 
