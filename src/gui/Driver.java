@@ -1,16 +1,10 @@
 package gui;
 
-import javafx.util.Duration;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.Property;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -23,7 +17,13 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.LevelController;
 import main.SettingsController;
-import org.json.simple.parser.ParseException;
+
+// import javafx.scene.image.ImageView;
+// import javafx.beans.property.Property;
+// import javafx.util.Duration;
+// import javafx.animation.KeyFrame;
+// import javafx.animation.KeyValue;
+// import javafx.animation.Timeline;
 
 import devmenu.DebugMenu;
 

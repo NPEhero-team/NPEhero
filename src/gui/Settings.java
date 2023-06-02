@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -65,9 +66,28 @@ public class Settings extends Pane
         fullBox.setPadding(new Insets(10));
 
 
+        Text devLabel = new Text("Advanced");
+        devLabel.getStyleClass().add("t3");
+        
+        Button levelEdit = new Button("Level Utility");
+        levelEdit.setOnAction(e -> new devmenu.LevelList());
+
         Button devMenu = new Button();
         devMenu.setText("Debug Menu");
         devMenu.setOnAction(e -> Driver.debug.show());
+
+        VBox devBox = new VBox();
+        devBox.getStyleClass().add("box");
+        devBox.getChildren().addAll(devLabel,levelEdit,devMenu);
+        devBox.setVisible(false);
+        devBox.setManaged(false);
+        devBox.setPadding(new Insets(10));
+
+        ToggleButton advanced = new ToggleButton("Advanced");
+        advanced.getStyleClass().remove("toggle-button");
+        advanced.getStyleClass().add("button");
+        advanced.selectedProperty().bindBidirectional(devBox.managedProperty());
+        advanced.selectedProperty().bindBidirectional(devBox.visibleProperty());
 
         Button exit = new Button();
         exit.setText("Back");
@@ -75,13 +95,13 @@ public class Settings extends Pane
 
         BorderPane buttonBox = new BorderPane();
         buttonBox.setLeft(exit);
-        buttonBox.setRight(devMenu);
+        buttonBox.setRight(advanced);
 
 
         VBox options = new VBox();
         options.setSpacing(10);
         options.setAlignment(Pos.CENTER);
-        options.getChildren().addAll(musicBox,SFXBox,fullBox,buttonBox);
+        options.getChildren().addAll(musicBox,SFXBox,fullBox,devBox,buttonBox);
         options.maxWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
         options.setMinWidth(400);
         options.prefHeightProperty().bind(super.prefHeightProperty());

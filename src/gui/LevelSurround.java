@@ -18,7 +18,6 @@ import javafx.scene.text.Text;
 import main.Difficulty;
 import main.Level;
 import main.ScoreController;
-import sound.AudioFilePlayer;
 
 public class LevelSurround extends Pane
 {   

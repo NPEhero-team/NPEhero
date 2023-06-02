@@ -2,6 +2,9 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,21 +14,32 @@ public class LevelController
     File thisDir = new File("levels");
     public static ObservableList<Level> levelList;
 
+    /**
+     * Creates a levelController, which holds all the levels
+     */
     public LevelController()
     {
         readData();
     }
 
+    /**
+     * Reads contents of folder and creates cooresponding levels
+     */
     public void readData()
     {
         levelList = FXCollections.observableArrayList();
         for (File cur: thisDir.listFiles()) //iterates through all files/folders in levels
         {
             Level level = new Level(cur);
+            level.readData();
             levelList.add(level);
         }
     }
 
+    /**
+     * Adds a level to the list by creating a directory and required files
+     * @param text: the name of the directory and default title
+     */
     public void addLevel(String text) 
     {
         File levelDir = new File(thisDir,text);
@@ -39,16 +53,28 @@ public class LevelController
         {
             e.printStackTrace();
         }
+        Level temp = new Level(levelDir);
+        temp.setTitle(text);
+        temp.writeMetadata();
         readData();
     }
 
+    /**
+     * Removes level from the filesystem then reloads this levelController
+     * @param level: the level to be removed
+     */
     public void removeLevel(Level level)
     {
-        //soon
-    }
+        File hold = level.thisDir;
+        levelList.remove(level);
 
-    public void renameLevel(Level level, String newName)
-    {
-        //soon
+        try {
+            Files.walk(hold.toPath())
+            .sorted(Comparator.reverseOrder())
+            .map(Path::toFile)
+            .forEach(File::delete);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
