@@ -1,16 +1,13 @@
 package main;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -21,15 +18,20 @@ public class Difficulty
     private ObservableList<LeaderboardEntry> leaderboard = FXCollections.observableArrayList();
     public File notes;
     public int bpm;
-    public File song;
     public int numBeats;
-    private File leaderboardFile;
     
-    public Difficulty(File file)
+    /**
+     * Creates a new Difficulty and gives it a file path
+     * @param newDir: The file path of the Difficulty
+     */
+    public Difficulty(File newDir)
     {
-        thisDir = file;
+        thisDir = newDir;
     }
 
+    /**
+     * Checks for files in the difficulty folder and runs cooresponding actions
+     */
     public void readData()
     {
         for(File cur: thisDir.listFiles()) //iterates through all files/folders in src/assets/levels/LEVEL/DIFFICULTY
@@ -40,20 +42,18 @@ public class Difficulty
             }
             if (cur.getName().equals("leaderboard.json"))
             {
-                parseLeaderboard(cur);
+                parseLeaderboard();
             }
             if (cur.getName().equals("notes.txt"))
             {
                 notes = cur;
             }
-            if (cur.getName().equals("song.wav"))
-            {
-                song = cur;
-            }
         }
     }
 
-
+    /**
+     * Reads in json metadata and assigns values to variables
+     */
     public void parseMetadata()
     {
         File file = new File(thisDir, "metadata.json");
@@ -65,20 +65,44 @@ public class Difficulty
 			JSONObject diffStuff = (JSONObject)(obj); //converts read object to a JSONObject
             
             title = (String) diffStuff.get("title");
-            bpm = (int)(diffStuff.get("bpm"));           
-            numBeats = (int)(diffStuff.get("numBeats"));  
-            
+            bpm = Integer.parseInt(diffStuff.get("bpm")+"");
+            numBeats = Integer.parseInt(diffStuff.get("numBeats")+"");
 		}
 		catch (Exception e)
         {
-            System.out.println("Error in json file "+file);
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
-    public void parseLeaderboard(File file)
+    /**
+     * Writes metadata to json file
+     */
+    public void writeMetadata() 
     {
-        leaderboardFile = file;
+        FileWriter fileWriter;
+        try 
+        {
+            File file = new File(thisDir, "metadata.json");
+            fileWriter = new FileWriter(file);
+            JSONObject obj = new JSONObject();
+            obj.put("title", title);
+            obj.put("bpm", bpm);
+            obj.put("numBeats", numBeats);
+            obj.writeJSONString(fileWriter);
+            fileWriter.flush();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Reads in json leaderboard and assigns populates list with leaderboardEntries
+     */
+    public void parseLeaderboard()
+    {
+        File file = new File(thisDir, "leaderboard.json");
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 
 		try(FileReader reader = new FileReader(file))
@@ -99,17 +123,20 @@ public class Difficulty
 		}
 		catch (Exception e)
         {
-            System.out.println("Error in json file "+leaderboardFile);
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
-    public void addToLeaderboard(String name, int score) 
+    /**
+     * Writes leaderboard to json file
+     */
+    public void writeLeaderboard()
     {
-        leaderboard.add(new LeaderboardEntry(name, score, ""+LocalDate.now())); //do not delete this tho its not a placeholder
-        
-        try (FileWriter fileWriter = new FileWriter(leaderboardFile)) 
+        FileWriter fileWriter;
+        try
 		{
+            File file = new File(thisDir, "leaderboard.json");
+            fileWriter = new FileWriter(file);
             //write the settings JSONObject instance to the file 
             JSONArray jsonArray = new JSONArray();
             for (LeaderboardEntry cur: leaderboard)
@@ -129,6 +156,17 @@ public class Difficulty
         }
     }
 
+    /**
+     * Adds new leaderboardEntry to list and updates json file
+     * @param name: the players name
+     * @param score the players score
+     */
+    public void addToLeaderboard(String name, int score) 
+    {
+        leaderboard.add(new LeaderboardEntry(name, score, ""+LocalDate.now())); //do not delete this tho its not a placeholder
+        writeLeaderboard();
+    }
+
     public ObservableList<LeaderboardEntry> getLeaderboard() 
     {
         return leaderboard;
@@ -137,25 +175,5 @@ public class Difficulty
     public String toString()
     {
         return title;
-    }
-
-    public void writeMetadata() 
-    {
-        FileWriter fileWriter;
-        try 
-        {
-            File file = new File(thisDir, "metadata.json");
-            fileWriter = new FileWriter(file);
-            JSONObject obj = new JSONObject();
-            obj.put("title", title);
-            obj.put("bpm", bpm);
-            obj.put("numBeats", numBeats);
-            obj.writeJSONString(fileWriter);
-            fileWriter.flush();
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-        }
     }
 }

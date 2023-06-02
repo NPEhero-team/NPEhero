@@ -1,7 +1,6 @@
 package devmenu;
 
 import java.io.File;
-
 import gameplay.Timer;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

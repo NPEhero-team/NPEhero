@@ -2,18 +2,17 @@ package main;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import java.io.FileWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import devmenu.LevelList;
-import gui.Driver;
 
 public class Level 
 {
@@ -26,12 +25,20 @@ public class Level
     public String desc = "No description";
     public Image background; //optional
     public Color[] colors = {Color.RED,Color.BLUE,Color.GREEN,Color.PURPLE,Color.YELLOW};//optional, have default colors
+    public File song;
 
-    public Level(File dir)
+    /**
+     * Creates a new level and gives it a file path
+     * @param newDir: The path of the Level
+     */
+    public Level(File newDir)
     {
-        thisDir = dir;
+        thisDir = newDir;
     }
 
+    /**
+     * Checks for files in the level folder and runs cooresponding actions
+     */
     public void readData()
     {
         diffList = new ArrayList<Difficulty>();
@@ -43,24 +50,28 @@ public class Level
                 diff.readData();
                 diffList.add(diff);
             }
-
-            if (cur.getName().equals("preview.png"))
-            {
-                preview = new Image(cur.toURI().toString());
-            }
-
             if (cur.getName().equals("metadata.json"))
             {
                 parseMetadata();
             }
-
+            if (cur.getName().equals("preview.png"))
+            {
+                preview = new Image(cur.toURI().toString());
+            }
             if (cur.getName().equals("background.png"))
             {
                 background = new Image(cur.toURI().toString());
             }
+            if (cur.getName().equals("song.wav"))
+            {
+                song = cur;
+            }
         }
     }
 
+    /**
+     * Reads in json metadata and assigns values to variables
+     */
     public void parseMetadata() 
     {
         JSONParser jsonParser = new JSONParser(); //parser to read the file
@@ -96,6 +107,9 @@ public class Level
 		} 
     }
 
+    /**
+     * Writes metadata to json file
+     */
     public void writeMetadata()
     {
         FileWriter fileWriter;
@@ -119,25 +133,68 @@ public class Level
         }
     }
 
-    public ArrayList<Difficulty> getDiffList()
-    {
-        return diffList;
-    }
-
+    /**
+     * Adds a difficulty by creating a directory and required files
+     * @param text: the name of the directory and default title
+     */
     public void addDiff(String text) 
     {
         File diffDir = new File(thisDir, text);
         diffDir.mkdirs();
         File metadataDir = new File(diffDir, "metadata.json");
+        File leaderboardDir = new File(diffDir, "leaderboard.json");
+        File notesDir = new File(diffDir, "notes.txt");
         try {
             metadataDir.createNewFile();
+            leaderboardDir.createNewFile();
+            notesDir.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
         Difficulty temp = new Difficulty(diffDir);
         temp.title = text;
         temp.writeMetadata();
+        temp.writeLeaderboard();
         readData();
+    }
+
+    /**
+     * Removes the difficaulty from the filesystem then reloads the level
+     * @param diff: the difficulty to be removed
+     */
+    public void removeDiff(Difficulty diff)
+    {
+        File hold = diff.thisDir;
+        diffList.remove(diff);
+
+        try {
+            Files.walk(hold.toPath())
+            .sorted(Comparator.reverseOrder())
+            .map(Path::toFile)
+            .forEach(File::delete);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Copies a file into the level directory
+     * @param newFile: the file to be copied
+     * @param name: the new file name
+     */
+    public void addFile(File newFile, String name)
+    {
+        try {
+            Files.copy(newFile.toPath(), new File(thisDir, name).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        readData();
+    }
+
+    public ArrayList<Difficulty> getDiffList()
+    {
+        return diffList;
     }
 
     public String getTitle() 

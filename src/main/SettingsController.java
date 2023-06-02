@@ -15,26 +15,9 @@ public class SettingsController
 {
 	public SimpleIntegerProperty effectsVol = new SimpleIntegerProperty(0);
 	public SimpleIntegerProperty musicVol = new SimpleIntegerProperty(0);
-	private boolean fullscreen;
 	private JSONObject settings;
 	
-	public void saveAndWrite(int newEffVol, int newMusVol)
-	{
-		settings.put("musicVol", newMusVol);
-		settings.put("effectsVol", newEffVol);
-		try (FileWriter file = new FileWriter("settings.json")) 
-		{
-            //write the settings JSONObject instance to the file
-            file.write(settings.toJSONString()); 
-            file.flush();
- 
-        } 
-		catch (IOException e) {
-            e.printStackTrace();
-        }
-	}
-	
-	public void readFile() throws ParseException
+	public void read() throws ParseException
 	{
 		JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
@@ -57,5 +40,20 @@ public class SettingsController
 		}
 				
 	}
-	
+
+	public void write(int newEffVol, int newMusVol)
+	{
+		settings.put("musicVol", newMusVol);
+		settings.put("effectsVol", newEffVol);
+		try (FileWriter file = new FileWriter("settings.json")) 
+		{
+            //write the settings JSONObject instance to the file
+            file.write(settings.toJSONString()); 
+            file.flush();
+ 
+        } 
+		catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
 }

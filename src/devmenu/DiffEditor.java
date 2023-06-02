@@ -10,8 +10,15 @@ import main.Difficulty;
 
 public class DiffEditor
 {
+    /*
+     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
+     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
+     * style classes are defined in the style.css file.
+     */
     public DiffEditor(Difficulty diff)
     {
+        Stage primaryStage = new Stage();
+
         Text folderNameLabel = new Text("Folder name (ordered alphabetically)");
         TextField folderName = new TextField(diff.thisDir.getName());
         folderName.setDisable(true);
@@ -31,21 +38,16 @@ public class DiffEditor
         Button editScores = new Button("Edit leaderboard");
 
         Button save = new Button("Save");
-        save.setOnAction(e -> {
+        save.setOnAction(e -> { //assigns text feilds to values
             diff.title = title.getText();
             diff.bpm = Integer.parseInt(bpm.getText());
             diff.numBeats = Integer.parseInt(numBeats.getText());
-            if(! diff.thisDir.getName().equals(folderName.getText()));
-            {
-                //will rename
-            }
             diff.writeMetadata();
         });
 
         VBox main = new VBox();
         main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,bpmLabel,bpm,numBeatsLabel,numBeats,editNotes,editScores,save);
         Scene scene = new Scene(main);
-        Stage primaryStage = new Stage();
         primaryStage.setScene(scene);
         primaryStage.show();
     }

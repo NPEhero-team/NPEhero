@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import main.Level;
+import main.LevelController;
 
 public class LevelSelector extends Pane
 {   
@@ -33,7 +34,7 @@ public class LevelSelector extends Pane
         titleCol.setCellValueFactory(new PropertyValueFactory<Level, String>("title"));
         artistCol.setCellValueFactory(new PropertyValueFactory<Level, String>("artist"));
 
-        levels.setItems(Driver.levelController.levelList);
+        levels.setItems(LevelController.levelList);
 
         levels.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
         levels.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));

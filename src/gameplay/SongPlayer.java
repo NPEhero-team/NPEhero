@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
-import java.util.logging.Level;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -114,7 +113,7 @@ public class SongPlayer extends Pane {
 		level = lvl;
 		difficulty = d;
 		pane = p;
-		music = new AudioFilePlayer(difficulty.song.getPath());
+		music = new AudioFilePlayer(level.song.getPath());
 
 		System.out.println(d.bpm + " " + d.numBeats);
 
