@@ -40,7 +40,7 @@ public class DiffEditor
         Button save = new Button("Save");
         save.setOnAction(e -> { //assigns text feilds to values
             diff.title = title.getText();
-            diff.bpm = Integer.parseInt(bpm.getText());
+            diff.bpm = Double.parseDouble(bpm.getText());
             diff.numBeats = Integer.parseInt(numBeats.getText());
             diff.writeMetadata();
         });

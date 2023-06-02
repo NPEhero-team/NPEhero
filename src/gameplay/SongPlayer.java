@@ -41,7 +41,7 @@ import sound.AudioFilePlayer;
 
 
 public class SongPlayer extends Pane {
-	private int bpm;		//initializes the bpm of the song, to be read in from a metadata file later
+	private Double bpm;		//initializes the bpm of the song, to be read in from a metadata file later
 	private int songLength; //initializes the length of the song in terms of the song's bpm, to be read in later
 
 	AudioFilePlayer music;
