@@ -19,10 +19,10 @@ public class Timer
     }
 
     public double time() {
-        return ((double)(System.currentTimeMillis()-timeStart))*(bpm/60000.0);
+        return ((double)(System.currentTimeMillis()-timeStart)-1000)*(bpm/60000.0);
     }
 
     public String toString() {
-        return ""+((double)(System.currentTimeMillis()-timeStart))*(bpm/60000.0);
+        return ""+((double)(System.currentTimeMillis()-timeStart)-1000)*(bpm/60000.0);
     }
 }
