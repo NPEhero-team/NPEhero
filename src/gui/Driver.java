@@ -14,9 +14,15 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import main.LevelController;
 import main.SettingsController;
+import sound.AudioFilePlayer;
+
+import javax.sound.sampled.AudioFileFormat;
 
 // import javafx.scene.image.ImageView;
 // import javafx.beans.property.Property;
@@ -26,10 +32,14 @@ import main.SettingsController;
 // import javafx.animation.Timeline;
 
 import devmenu.DebugMenu;
+import gameplay.SongPlayer;
 
 
 public class Driver extends Application 
 {
+    gameplay.SongPlayer placeHolder = new gameplay.SongPlayer();
+    public static AudioFilePlayer mediaPlayer;
+    
     public static Stage primaryStage;
     static Pane primaryPane = new Pane();
 
@@ -52,6 +62,9 @@ public class Driver extends Application
     @Override
     public void start(Stage newPrimaryStage)
     {   
+        mediaPlayer = new AudioFilePlayer("src/assets/MenuMusicPlaceholder.wav");
+        mediaPlayer.play();
+        
         primaryStage = newPrimaryStage;
 
         Scene primaryScene = new Scene(primaryPane, 800, 600);
@@ -60,6 +73,7 @@ public class Driver extends Application
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("NPE Hero");
 
+        fixMenuSync();
         setMenu(new MainMenu());
         setBackground("assets/forest.png");
 
@@ -71,6 +85,11 @@ public class Driver extends Application
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.setFullScreenExitHint("");
         primaryStage.show();
+    }
+
+    private void fixMenuSync() {
+        primaryPane.getChildren().addAll(placeHolder);
+        primaryPane.getChildren().removeAll(placeHolder);
     }
 
     /**

@@ -44,14 +44,12 @@ public class SongPlayer extends Pane {
 	private Double bpm;		//initializes the bpm of the song, to be read in from a metadata file later
 	private int songLength; //initializes the length of the song in terms of the song's bpm, to be read in later
 
-	AudioFilePlayer music;
-
 	private main.Level level;
 	private Difficulty difficulty;
 	private Pane pane;
 
 	Timer timer;			//the timer that determines when notes will fall, counted in terms of the song's bpm
-	final int TIME = 1500;  //delay for notes falling down the screen
+	final int TIME = 1000;  //delay for notes falling down the screen
 
 	main.ScoreController scoreCounter = new ScoreController();	//used to keep track of the user's score
 
@@ -108,17 +106,27 @@ public class SongPlayer extends Pane {
 		}
 	}
 
+	public SongPlayer() {
+	}
+
 	public SongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
+		try {
+			gui.Driver.mediaPlayer.stop();
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+			e.printStackTrace();
+		}
+		gui.Driver.mediaPlayer = new AudioFilePlayer(lvl.song.getPath());
+		gui.Driver.mediaPlayer.play();
+
 		bpm = d.bpm;					//Reads the song's bpm from a metadata file
 		level = lvl;
 		difficulty = d;
 		pane = p;
-		music = new AudioFilePlayer(level.song.getPath());
 
 		System.out.println(d.bpm + " " + d.numBeats);
 
-		songLength = 28; //PLACEHOLDER BPM AND TIMER
-		timer = new Timer(120);	//Sets the timer's bpm to that of the song
+		songLength = d.numBeats;
+		timer = new Timer(bpm);	//Sets the timer's bpm to that of the song
 		scoreCounter = cntrl;			//Uses the song's designated scoreCounter
 
 		try {
@@ -189,7 +197,7 @@ public class SongPlayer extends Pane {
 	 */
 	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, TButton button) {
 		if (sends.peek() != null && timer.time() > sends.peek().getTime()-(TIME*bpm/60000)) {
-			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME));
+			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME+70));
 
 			lane.add(new Block(button.getColor(), 50, 50, 5));
 			int index = lane.size() - 1;
@@ -246,11 +254,11 @@ public class SongPlayer extends Pane {
 			sendNote(kSends, kLane, kButton);
 			if (timer.time() > songLength) {
 				try {
+					gui.Driver.setMenu(new GameOver(level, difficulty, pane, scoreCounter.getScore()));
 					cancel();
 				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
 					e.printStackTrace();
 				}
-				gui.Driver.setMenu(new GameOver(level, difficulty, pane, scoreCounter.getScore()));
 			}
 		}
 	};
@@ -258,7 +266,6 @@ public class SongPlayer extends Pane {
 	//starts the gameLoop, a periodic backround task runner that runs the methods within it 60 times every second
 	public void start() 
 	{
-		music.play();
 		gameLoop.start();
 	}
 
@@ -270,7 +277,9 @@ public class SongPlayer extends Pane {
 	 */
 	public void cancel() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		gameLoop.stop();
-		music.stop();
+		gui.Driver.mediaPlayer.stop();
+		gui.Driver.mediaPlayer = new AudioFilePlayer("src/assets/MenuMusicPlaceholder.wav");
+		gui.Driver.mediaPlayer.play();
 	}
 
 	/**
