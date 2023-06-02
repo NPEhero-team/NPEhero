@@ -61,7 +61,7 @@ public class Driver extends Application
         primaryStage.setTitle("NPE Hero");
 
         setMenu(new MainMenu());
-        setBackground("assets/water.png");
+        setBackground("assets/forest.png");
 
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> { //full screen stuff
             if (KeyCode.F11.equals(event.getCode())) {

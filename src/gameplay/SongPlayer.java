@@ -257,7 +257,8 @@ public class SongPlayer extends Pane {
 	};
 
 	//starts the gameLoop, a periodic backround task runner that runs the methods within it 60 times every second
-	public void start() {
+	public void start() 
+	{
 		music.play();
 		gameLoop.start();
 	}
