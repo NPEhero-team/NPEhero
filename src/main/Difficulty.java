@@ -19,14 +19,16 @@ public class Difficulty
     public File notes;
     public int bpm;
     public int numBeats;
+    public Level level;
     
     /**
      * Creates a new Difficulty and gives it a file path
      * @param newDir: The file path of the Difficulty
      */
-    public Difficulty(File newDir)
+    public Difficulty(File newDir, Level level)
     {
         thisDir = newDir;
+        this.level = level;
     }
 
     /**

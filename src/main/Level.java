@@ -46,7 +46,7 @@ public class Level
         {
             if (cur.isDirectory()) //all subfolders within a level folder are difficulties
             {
-                Difficulty diff = new Difficulty(cur);
+                Difficulty diff = new Difficulty(cur,this);
                 diff.readData();
                 diffList.add(diff);
             }
@@ -151,7 +151,7 @@ public class Level
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Difficulty temp = new Difficulty(diffDir);
+        Difficulty temp = new Difficulty(diffDir,this);
         temp.title = text;
         temp.writeMetadata();
         temp.writeLeaderboard();
