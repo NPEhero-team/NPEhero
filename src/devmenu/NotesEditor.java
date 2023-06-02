@@ -92,10 +92,15 @@ public class NotesEditor
 
     private void stop()
     {
+        try {
         mediaPlayer.stop();
         diff.numBeats = (int)timer.time();
         timer = null;
         writer.close();
         help.setText(t1);
+        }
+        catch (Exception e)
+        {
+        }
     }
 }
