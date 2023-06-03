@@ -22,7 +22,7 @@ public class Timer
         return ((double)(System.currentTimeMillis()-timeStart)-2000)*(bpm/60000.0);
     }
 
-    public String toString() {
-        return ""+((double)(System.currentTimeMillis()-timeStart)-2000)*(bpm/60000.0);
+    public String toString() {      
+        return ""+((Math.round(10*(((double)(System.currentTimeMillis()-timeStart))*(bpm/60000.0))))/10.0);
     }
 }
