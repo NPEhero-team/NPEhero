@@ -38,18 +38,22 @@ public class NotesEditor
 
         help = new Text(t1);
 
+        Text cur = new Text("-----");
+
         Button start = new Button("Start");
         start.setOnAction(e -> start());
+        start.setFocusTraversable(false);
 
-        Button stop = new Button("Pause");
+        Button stop = new Button("Stop");
         stop.setOnAction(e -> stop());
+        stop.setFocusTraversable(false);
 
         Media song = new Media(diff.level.song.toURI().toString());
         mediaPlayer = new MediaPlayer(song);
         new MediaView(mediaPlayer);
 
         VBox main = new VBox();
-        main.getChildren().addAll(help,start,stop);
+        main.getChildren().addAll(help,cur,start,stop);
 
         Scene scene = new Scene(main);
         Stage primaryStage = new Stage();
@@ -61,18 +65,23 @@ public class NotesEditor
         scene.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.D) {
 				writer.println("d"+timer);
+                cur.setText("d"+timer);
 			}
 			if (e.getCode() == KeyCode.F) {
 				writer.println("f"+timer);
+                cur.setText("f"+timer);
 			}
 			if (e.getCode() == KeyCode.SPACE) {
 				writer.println("s"+timer);
+                cur.setText("s"+timer);
 			}
 			if (e.getCode() == KeyCode.J) {
 				writer.println("j"+timer);
+                cur.setText("j"+timer);
 			}
 			if (e.getCode() == KeyCode.K) {
 				writer.println("k"+timer);
+                cur.setText("k"+timer);
 			}
             if (e.getCode() == KeyCode.ESCAPE)
             {
