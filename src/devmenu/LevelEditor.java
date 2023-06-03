@@ -123,11 +123,17 @@ public class LevelEditor
             level.writeMetadata();
         });
 
-        VBox main = new VBox();
-        main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,artistLabel,artist,descLabel,desc,colorsLabel,
-            c1,c2,c3,c4,c5,filesLabel,previewButton,backgroundButton,songButton,diffLabel,diffList,buttons,newDiffBox,save);
+        VBox options = new VBox();
+        options.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,artistLabel,artist,descLabel,desc,colorsLabel,
+            c1,c2,c3,c4,c5,filesLabel,previewButton,backgroundButton,songButton,save);
+
+        VBox diffBox = new VBox();
+        diffBox.getChildren().addAll(diffLabel,diffList,buttons,newDiffBox);
+
+        HBox mainBox = new HBox();
+        mainBox.getChildren().addAll(options,diffBox);
     
-        Scene scene = new Scene(main);
+        Scene scene = new Scene(mainBox);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
