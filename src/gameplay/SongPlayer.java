@@ -12,6 +12,7 @@ import java.util.Scanner;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import gui.Driver;
 import gui.GameOver;
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyCode;
@@ -120,6 +121,9 @@ public class SongPlayer extends Pane {
 		new MediaView(gui.Driver.mediaPlayer);
 
 
+		if (lvl.background != null) {
+			Driver.setBackground(lvl.background.getUrl());
+		}
 		bpm = d.bpm;					//Reads the song's bpm from a metadata file
 		level = lvl;
 		difficulty = d;
@@ -153,6 +157,7 @@ public class SongPlayer extends Pane {
 			 * The keyboard detection for the game: when a key is pressed it
 			 * calls the checkNote() method for the corresponding lane
 			 */
+			System.out.println(timer.time());
 			if (e.getCode() == KeyCode.D) {
 				checkNote(dLane, dButton);
 			}
@@ -239,7 +244,7 @@ public class SongPlayer extends Pane {
 		button.widthProperty().bind(super.widthProperty().divide(8));
 		button.arcHeightProperty().bind(super.widthProperty().divide(25));
 		button.arcWidthProperty().bind(super.widthProperty().divide(25));
-		button.setStrokeWidth(3);
+		button.strokeWidthProperty().bind(super.widthProperty().divide(120));
 	}
 
 	/**
@@ -277,6 +282,7 @@ public class SongPlayer extends Pane {
 	 * @throws UnsupportedAudioFileException
 	 */
 	public void cancel() {
+		gui.Driver.setBackground("assets/forest.png");
 		gameLoop.stop();
 		gui.Driver.mediaPlayer.stop();
 		Media song = new Media(Paths.get("src/assets/MenuMusicPlaceholder.wav").toUri().toString());
