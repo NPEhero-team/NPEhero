@@ -3,6 +3,7 @@ package gameplay;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -18,6 +19,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.animation.*;
 import javafx.util.*;
@@ -110,13 +114,11 @@ public class SongPlayer extends Pane {
 	}
 
 	public SongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
-		try {
-			gui.Driver.mediaPlayer.stop();
-		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-			e.printStackTrace();
-		}
-		gui.Driver.mediaPlayer = new AudioFilePlayer(lvl.song.getPath());
-		gui.Driver.mediaPlayer.play();
+		gui.Driver.mediaPlayer.stop();
+		Media song = new Media(Paths.get(lvl.song.getPath()).toUri().toString());
+		gui.Driver.mediaPlayer = new MediaPlayer(song);
+		new MediaView(gui.Driver.mediaPlayer);
+
 
 		bpm = d.bpm;					//Reads the song's bpm from a metadata file
 		level = lvl;
@@ -196,7 +198,7 @@ public class SongPlayer extends Pane {
 	 * @param c     the color of the sent note
 	 */
 	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, TButton button) {
-		if (sends.peek() != null && timer.time() > sends.peek().getTime()-(TIME*bpm/60000)) {
+		if (sends.peek() != null && timer.time() > sends.peek().getTime()-(1000*(bpm/60000.0))) {
 			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME+70));
 
 			lane.add(new Block(button.getColor(), 50, 50, 5));
@@ -260,6 +262,9 @@ public class SongPlayer extends Pane {
 					e.printStackTrace();
 				}
 			}
+			if (timer.time() > 0.0) {
+				gui.Driver.mediaPlayer.play();
+			}
 		}
 	};
 
@@ -278,7 +283,9 @@ public class SongPlayer extends Pane {
 	public void cancel() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		gameLoop.stop();
 		gui.Driver.mediaPlayer.stop();
-		gui.Driver.mediaPlayer = new AudioFilePlayer("src/assets/MenuMusicPlaceholder.wav");
+		Media song = new Media(Paths.get("src/assets/MenuMusicPlaceholder.wav").toUri().toString());
+        gui.Driver.mediaPlayer = new MediaPlayer(song);
+        new MediaView(gui.Driver.mediaPlayer);
 		gui.Driver.mediaPlayer.play();
 	}
 

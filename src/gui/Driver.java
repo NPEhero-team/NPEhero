@@ -22,6 +22,8 @@ import main.LevelController;
 import main.SettingsController;
 import sound.AudioFilePlayer;
 
+import java.nio.file.Paths;
+
 import javax.sound.sampled.AudioFileFormat;
 
 // import javafx.scene.image.ImageView;
@@ -37,8 +39,8 @@ import gameplay.SongPlayer;
 
 public class Driver extends Application 
 {
-    gameplay.SongPlayer placeHolder = new gameplay.SongPlayer();
-    public static AudioFilePlayer mediaPlayer;
+
+    public static MediaPlayer mediaPlayer;
     
     public static Stage primaryStage;
     static Pane primaryPane = new Pane();
@@ -62,7 +64,9 @@ public class Driver extends Application
     @Override
     public void start(Stage newPrimaryStage)
     {   
-        mediaPlayer = new AudioFilePlayer("src/assets/MenuMusicPlaceholder.wav");
+        Media song = new Media(Paths.get("src/assets/MenuMusicPlaceholder.wav").toUri().toString());
+        mediaPlayer = new MediaPlayer(song);
+        new MediaView(mediaPlayer);
         mediaPlayer.play();
         
         primaryStage = newPrimaryStage;
@@ -73,7 +77,7 @@ public class Driver extends Application
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("NPE Hero");
 
-        fixMenuSync();
+        
         setMenu(new MainMenu());
         setBackground("assets/forest.png");
 
@@ -85,11 +89,6 @@ public class Driver extends Application
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.setFullScreenExitHint("");
         primaryStage.show();
-    }
-
-    private void fixMenuSync() {
-        primaryPane.getChildren().addAll(placeHolder);
-        primaryPane.getChildren().removeAll(placeHolder);
     }
 
     /**
