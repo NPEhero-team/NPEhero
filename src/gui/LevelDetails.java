@@ -95,10 +95,16 @@ public class LevelDetails extends VBox
                 diffSelector.getChildren().add(temp);
             }
             play.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull()); //disables play button when no difficulty is selected
-            play.setOnAction(e -> Driver.setMenu(new LevelSurround(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu())));
+            play.setOnAction(e -> {
+                Driver.menuFx.play("src/assets/MenuForward.wav");
+                Driver.setMenu(new LevelSurround(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
+            });
 
             leaderboard.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull());
-            leaderboard.setOnAction(e -> Driver.setMenu(new Leaderboard(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu())));
+            leaderboard.setOnAction(e -> {
+                Driver.menuFx.play("src/assets/MenuForward.wav");
+                Driver.setMenu(new Leaderboard(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
+            });
 
 
             HBox diffBox = new HBox();

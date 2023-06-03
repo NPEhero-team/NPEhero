@@ -199,7 +199,7 @@ public class SongPlayer extends Pane {
 	 */
 	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, TButton button) {
 		if (sends.peek() != null && timer.time() > sends.peek().getTime()-(1000*(bpm/60000.0))) {
-			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME+70));
+			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME+60));
 
 			lane.add(new Block(button.getColor(), 50, 50, 5));
 			int index = lane.size() - 1;
@@ -255,12 +255,8 @@ public class SongPlayer extends Pane {
 			sendNote(jSends, jLane, jButton);
 			sendNote(kSends, kLane, kButton);
 			if (timer.time() > songLength) {
-				try {
-					gui.Driver.setMenu(new GameOver(level, difficulty, pane, scoreCounter.getScore()));
-					cancel();
-				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-					e.printStackTrace();
-				}
+				gui.Driver.setMenu(new GameOver(level, difficulty, pane, scoreCounter.getScore()));
+				cancel();	
 			}
 			if (timer.time() > 0.0) {
 				gui.Driver.mediaPlayer.play();
@@ -280,11 +276,12 @@ public class SongPlayer extends Pane {
 	 * @throws IOException
 	 * @throws UnsupportedAudioFileException
 	 */
-	public void cancel() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public void cancel() {
 		gameLoop.stop();
 		gui.Driver.mediaPlayer.stop();
 		Media song = new Media(Paths.get("src/assets/MenuMusicPlaceholder.wav").toUri().toString());
         gui.Driver.mediaPlayer = new MediaPlayer(song);
+		gui.Driver.mediaPlayer.setCycleCount(Integer.MAX_VALUE);
         new MediaView(gui.Driver.mediaPlayer);
 		gui.Driver.mediaPlayer.play();
 	}

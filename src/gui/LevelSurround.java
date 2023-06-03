@@ -35,11 +35,8 @@ public class LevelSurround extends Pane
         exit.setText("Back");
         exit.setOnAction(e -> {
             Driver.setMenu(prev);
-            try {
-                game.cancel();
-            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
-                e1.printStackTrace();
-            }
+            Driver.menuFx.play("src/assets/MenuBackward.wav");
+            game.cancel();
         });
 
         Button pause = new Button();

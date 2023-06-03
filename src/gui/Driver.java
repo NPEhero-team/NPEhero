@@ -18,9 +18,11 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import main.LevelController;
 import main.SettingsController;
 import sound.AudioFilePlayer;
+import sound.ShortAudioPlayer;
 
 import java.nio.file.Paths;
 
@@ -39,6 +41,7 @@ import gameplay.SongPlayer;
 
 public class Driver extends Application 
 {
+    public static ShortAudioPlayer menuFx = new ShortAudioPlayer();
 
     public static MediaPlayer mediaPlayer;
     
@@ -67,6 +70,7 @@ public class Driver extends Application
         Media song = new Media(Paths.get("src/assets/MenuMusicPlaceholder.wav").toUri().toString());
         mediaPlayer = new MediaPlayer(song);
         new MediaView(mediaPlayer);
+        mediaPlayer.setCycleCount(Integer.MAX_VALUE);
         mediaPlayer.play();
         
         primaryStage = newPrimaryStage;

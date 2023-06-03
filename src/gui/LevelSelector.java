@@ -43,7 +43,9 @@ public class LevelSelector extends Pane
 
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> Driver.setMenu(new MainMenu()));
+        exit.setOnAction(e -> {Driver.setMenu(new MainMenu());
+            Driver.menuFx.play("src/assets/MenuBackward.wav");
+        });
 
         VBox leftBox = new VBox();
         leftBox.setAlignment(Pos.CENTER_LEFT);

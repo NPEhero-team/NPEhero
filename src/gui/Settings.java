@@ -58,7 +58,10 @@ public class Settings extends Pane
         fullscreen.setText("Toggle (F11)");
         fullscreen.getStyleClass().remove("toggle-button");
         fullscreen.getStyleClass().add("button");
-        fullscreen.setOnAction(e -> Driver.primaryStage.setFullScreen(!Driver.primaryStage.isFullScreen()));
+        fullscreen.setOnAction(e -> {
+            Driver.menuFx.play("src/assets/MenuForward.wav");
+            Driver.primaryStage.setFullScreen(!Driver.primaryStage.isFullScreen());
+        });
 
         VBox fullBox = new VBox();
         fullBox.getChildren().addAll(fullText,fullscreen);
@@ -70,11 +73,17 @@ public class Settings extends Pane
         devLabel.getStyleClass().add("t3");
         
         Button levelEdit = new Button("Level Utility");
-        levelEdit.setOnAction(e -> new devmenu.LevelList());
+        levelEdit.setOnAction(e -> {
+            Driver.menuFx.play("src/assets/MenuForward.wav");
+            new devmenu.LevelList();
+        });
 
         Button devMenu = new Button();
         devMenu.setText("Debug Menu");
-        devMenu.setOnAction(e -> Driver.debug.show());
+        devMenu.setOnAction(e -> {
+            Driver.menuFx.play("src/assets/MenuForward.wav");
+            Driver.debug.show();
+        });
 
         VBox devBox = new VBox();
         devBox.getStyleClass().add("box");
@@ -91,7 +100,10 @@ public class Settings extends Pane
 
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> Driver.setMenu(new MainMenu()));
+        exit.setOnAction(e -> {
+            Driver.menuFx.play("src/assets/MenuBackward.wav");
+            Driver.setMenu(new MainMenu());
+        });
 
         BorderPane buttonBox = new BorderPane();
         buttonBox.setLeft(exit);
