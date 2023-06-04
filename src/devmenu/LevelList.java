@@ -29,14 +29,18 @@ public class LevelList
 
         TableColumn<Level,String> titleCol = new TableColumn<Level,String>("Title");
         TableColumn<Level,String> artistCol = new TableColumn<Level,String>("Artist");
+        TableColumn<Level,Boolean> validCol = new TableColumn<>("Valid?");
 
         levels.getColumns().add(titleCol);
         levels.getColumns().add(artistCol);
+        levels.getColumns().add(validCol);
 
         titleCol.setCellValueFactory(new PropertyValueFactory<Level, String>("title"));
         artistCol.setCellValueFactory(new PropertyValueFactory<Level, String>("artist"));
+        validCol.setCellValueFactory(new PropertyValueFactory<Level, Boolean>("valid"));
 
-        levels.setItems(LevelController.levelList);
+        levels.setItems(LevelController.getLevelList());
+
 
         Button edit = new Button("Edit");
         edit.setOnAction(e -> new LevelEditor(levels.getSelectionModel().getSelectedItem()));
@@ -45,7 +49,10 @@ public class LevelList
         remove.setOnAction(e -> gui.Driver.levelController.removeLevel(levels.getSelectionModel().getSelectedItem()));
 
         Button refresh = new Button("Refresh");
-        refresh.setOnAction(e -> levels.setItems(LevelController.levelList));
+        refresh.setOnAction(e -> {
+            Driver.levelController.readData();
+            levels.setItems(LevelController.getLevelList());
+        });
 
         HBox buttons = new HBox();
         buttons.getChildren().addAll(edit,remove,refresh);

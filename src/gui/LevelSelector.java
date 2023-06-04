@@ -34,7 +34,7 @@ public class LevelSelector extends Pane
         titleCol.setCellValueFactory(new PropertyValueFactory<Level, String>("title"));
         artistCol.setCellValueFactory(new PropertyValueFactory<Level, String>("artist"));
 
-        levels.setItems(LevelController.levelList);
+        levels.setItems(LevelController.getValidLevelList());
 
         levels.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
         levels.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));

@@ -1,8 +1,10 @@
 package main;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Comparator;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import java.io.FileWriter;
@@ -19,7 +21,9 @@ public class Level
     public File thisDir;
     private String title = "Unnamed";
     private String artist = "Unknown";
-    private ArrayList<Difficulty> diffList;
+    private ObservableList<Difficulty> diffList;
+    private ObservableList<Difficulty> validDiffList;
+    private boolean isValid;
 
     public Image preview; //optional
     public String desc = "No description";
@@ -36,44 +40,85 @@ public class Level
         thisDir = newDir;
     }
 
-    /**
-     * Checks for files in the level folder and runs cooresponding actions
-     */
     public void readData()
     {
-        diffList = new ArrayList<Difficulty>();
+        boolean isValid1 = true;
+        if (new File(thisDir, "metadata.json").exists())
+        {
+            if (!parseMetadata())
+            {
+                System.err.println(new File(thisDir, "metadata.json")+" contains error(s)");
+                isValid1 = false;
+            }
+        }
+        else
+        {
+            System.err.println(thisDir+" is missing metadata.json");
+            isValid1 = false;
+        }
+
+        if (new File(thisDir, "song.wav").exists())
+        {
+            song = new File(thisDir,"song.wav");
+        }
+        else
+        {
+            System.err.println(thisDir+" is missing song.wav");
+            isValid1 = false;
+        }
+
+        if (new File(thisDir, "background.png").exists())
+        {
+            background = new Image(new File(thisDir,"background.png").toURI().toString());
+        }
+        else
+        {
+            System.out.println(thisDir+" is missing background.png, though it is not required");
+        }
+
+        if (! new File(thisDir, "preview.png").exists())
+        {
+            preview = new Image(new File(thisDir,"preview.png").toURI().toString());
+        }
+        else
+        {
+            System.out.println(thisDir+" is missing preview.png, though it is not required");
+        }
+
+        diffList = FXCollections.observableArrayList();
+        validDiffList = FXCollections.observableArrayList();
         for(File cur: thisDir.listFiles()) //iterates through all files/folders in src/assets/levels/LEVEL
         {
             if (cur.isDirectory()) //all subfolders within a level folder are difficulties
             {
                 Difficulty diff = new Difficulty(cur,this);
                 diff.readData();
-                diffList.add(diff);
-            }
-            if (cur.getName().equals("metadata.json"))
-            {
-                parseMetadata();
-            }
-            if (cur.getName().equals("preview.png"))
-            {
-                preview = new Image(cur.toURI().toString());
-            }
-            if (cur.getName().equals("background.png"))
-            {
-                background = new Image(cur.toURI().toString());
-            }
-            if (cur.getName().equals("song.wav"))
-            {
-                song = cur;
+                if (diff.isValid)
+                {
+                    diffList.add(diff);
+                    validDiffList.add(diff);
+                }
+                else
+                {
+                    diffList.add(diff);
+                }
             }
         }
+        if (validDiffList.size() == 0)
+        {
+            System.err.println(thisDir+" contains no valid difficulties");
+            isValid1 = false;
+        }
+
+        isValid = isValid1;
     }
 
     /**
      * Reads in json metadata and assigns values to variables
      */
-    public void parseMetadata() 
+    public boolean parseMetadata() 
     {
+        boolean isValid = true;
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
 		try(FileReader reader = new FileReader(new File(thisDir, "metadata.json")))
@@ -104,7 +149,9 @@ public class Level
 		catch (Exception e) 
 		{
 			e.printStackTrace();
+            isValid = false;
 		} 
+        return isValid;
     }
 
     /**
@@ -165,8 +212,6 @@ public class Level
     public void removeDiff(Difficulty diff)
     {
         File hold = diff.thisDir;
-        diffList.remove(diff);
-
         try {
             Files.walk(hold.toPath())
             .sorted(Comparator.reverseOrder())
@@ -175,6 +220,7 @@ public class Level
         } catch (IOException e) {
             e.printStackTrace();
         }
+        readData();
     }
 
     /**
@@ -192,9 +238,12 @@ public class Level
         readData();
     }
 
-    public ArrayList<Difficulty> getDiffList()
-    {
+    public ObservableList<Difficulty> getDiffList() {
         return diffList;
+    }
+
+    public ObservableList<Difficulty> getValidDiffList() {
+        return validDiffList;
     }
 
     public String getTitle() 
@@ -213,5 +262,9 @@ public class Level
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 }

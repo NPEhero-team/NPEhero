@@ -12,7 +12,8 @@ import javafx.collections.ObservableList;
 public class LevelController
 {
     File thisDir = new File("levels");
-    public static ObservableList<Level> levelList;
+    private static ObservableList<Level> levelList;
+    private static ObservableList<Level> validLevelList;
 
     /**
      * Creates a levelController, which holds all the levels
@@ -28,11 +29,16 @@ public class LevelController
     public void readData()
     {
         levelList = FXCollections.observableArrayList();
+        validLevelList = FXCollections.observableArrayList();
         for (File cur: thisDir.listFiles()) //iterates through all files/folders in levels
         {
             Level level = new Level(cur);
             level.readData();
             levelList.add(level);
+            if (level.isValid())
+            {
+                validLevelList.add(level);
+            }
         }
     }
 
@@ -76,5 +82,14 @@ public class LevelController
         } catch (IOException e) {
             e.printStackTrace();
         }
+        readData();
+    }
+
+    public static ObservableList<Level> getLevelList() {
+        return levelList;
+    }
+
+    public static ObservableList<Level> getValidLevelList() {
+        return validLevelList;
     }
 }

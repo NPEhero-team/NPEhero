@@ -11,7 +11,7 @@ import org.json.simple.parser.JSONParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Difficulty 
+public class Difficulty
 {
     public File thisDir;
     public String title = "Unnamed";
@@ -20,6 +20,7 @@ public class Difficulty
     public Double bpm = 0.0;
     public int numBeats;
     public Level level;
+    public boolean isValid = false;
     
     /**
      * Creates a new Difficulty and gives it a file path
@@ -31,33 +32,54 @@ public class Difficulty
         this.level = level;
     }
 
-    /**
-     * Checks for files in the difficulty folder and runs cooresponding actions
-     */
     public void readData()
     {
-        for(File cur: thisDir.listFiles()) //iterates through all files/folders in src/assets/levels/LEVEL/DIFFICULTY
+        boolean isValid1 = true;
+        if (new File(thisDir, "metadata.json").exists())
         {
-            if (cur.getName().equals("metadata.json"))
+            if (!parseMetadata())
             {
-                parseMetadata();
-            }
-            if (cur.getName().equals("leaderboard.json"))
-            {
-                parseLeaderboard();
-            }
-            if (cur.getName().equals("notes.txt"))
-            {
-                notes = cur;
+                isValid1 = false;
             }
         }
+        else
+        {
+            System.err.println(thisDir+" is missing metadata.json");
+            isValid1 = false;
+        }
+
+        if (new File(thisDir, "leaderboard.json").exists())
+        {
+            if (!parseLeaderboard())
+            {
+                isValid1 = false;
+            }
+        }
+        else
+        {
+            System.err.println(thisDir+" is missing leaderboard.json");
+            isValid1 = false;
+        }
+
+        if (new File(thisDir, "notes.txt").exists())
+        {
+            notes = new File(thisDir, "notes.txt");
+        }
+        else
+        {
+            System.err.println(thisDir+" is missing notes.txt");
+            isValid1 = false;
+        }
+
+        isValid = isValid1;
     }
 
     /**
      * Reads in json metadata and assigns values to variables
      */
-    public void parseMetadata()
+    public boolean parseMetadata()
     {
+        boolean isValid = true;
         File file = new File(thisDir, "metadata.json");
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 		
@@ -73,7 +95,9 @@ public class Difficulty
 		catch (Exception e)
         {
             e.printStackTrace();
+            isValid = false;
         }
+        return isValid;
     }
 
     /**
@@ -102,8 +126,9 @@ public class Difficulty
     /**
      * Reads in json leaderboard and assigns populates list with leaderboardEntries
      */
-    public void parseLeaderboard()
+    public boolean parseLeaderboard()
     {
+        boolean isValid = true;
         File file = new File(thisDir, "leaderboard.json");
         JSONParser jsonParser = new JSONParser(); //parser to read the file
 
@@ -125,8 +150,10 @@ public class Difficulty
 		}
 		catch (Exception e)
         {
+            isValid = false;
             e.printStackTrace();
         }
+        return isValid;
     }
 
     /**
@@ -176,6 +203,14 @@ public class Difficulty
 
     public String toString()
     {
+        return title;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public String getTitle() {
         return title;
     }
 }

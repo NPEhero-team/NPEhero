@@ -6,8 +6,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -71,10 +75,19 @@ public class LevelEditor
 
         Text diffLabel = new Text("Difficulties");
 
-        ObservableList<Difficulty> diffList2 = FXCollections.observableArrayList();
-        diffList2.addAll(level.getDiffList());
-        ListView<Difficulty> diffList = new ListView<Difficulty>();
-        diffList.setItems(diffList2);
+        TableView<Difficulty> diffList = new TableView<Difficulty>();
+        
+        TableColumn<Difficulty,String> diffCol = new TableColumn<Difficulty,String>("Difficulty");
+        TableColumn<Difficulty,Boolean> validCol = new TableColumn<Difficulty,Boolean>("Valid?");
+
+        diffList.getColumns().add(diffCol);
+        diffList.getColumns().add(validCol);
+
+        diffCol.setCellValueFactory(new PropertyValueFactory<Difficulty,String>("title"));
+        validCol.setCellValueFactory(new PropertyValueFactory<Difficulty,Boolean>("valid"));
+
+        diffList.setItems(level.getDiffList());
+        
 
         Button edit = new Button("Edit");
         edit.setOnAction(e -> new DiffEditor(diffList.getSelectionModel().getSelectedItem()));
@@ -84,9 +97,8 @@ public class LevelEditor
 
         Button refresh = new Button("Refresh");
         refresh.setOnAction(e -> {
-            diffList2.clear();
-            diffList2.addAll(level.getDiffList());
-            diffList.setItems(diffList2);
+            level.readData();
+            diffList.setItems(level.getDiffList());
         });
 
         HBox buttons = new HBox();
