@@ -3,6 +3,10 @@ package devmenu;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
+import gui.Driver;
+import gui.LevelSelector;
+import gui.LevelSurround;
+import gui.MainMenu;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -44,7 +48,11 @@ public class DiffEditor
             }
         });
 
-        Button editScores = new Button("Edit leaderboard");
+        Button editScores = new Button("Clear leaderboard");
+        editScores.setOnAction(e -> diff.getLeaderboard().clear());
+
+        Button playLevel = new Button("Launch level");
+        playLevel.setOnAction(e -> Driver.setMenu(new LevelSurround(diff.level, diff, new MainMenu())));
 
         Button save = new Button("Save");
         save.setOnAction(e -> { //assigns text feilds to values
@@ -55,7 +63,7 @@ public class DiffEditor
         });
 
         VBox main = new VBox();
-        main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,bpmLabel,bpm,numBeatsLabel,numBeats,editNotes,editScores,save);
+        main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,bpmLabel,bpm,numBeatsLabel,numBeats,editNotes,editScores,playLevel,save);
         Scene scene = new Scene(main);
         primaryStage.setScene(scene);
         primaryStage.show();

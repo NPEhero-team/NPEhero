@@ -3,7 +3,6 @@ package gameplay;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -20,15 +19,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.animation.*;
 import javafx.util.*;
 import main.Difficulty;
 import main.ScoreController;
-import sound.AudioFilePlayer;
 
 
 
@@ -111,15 +106,9 @@ public class SongPlayer extends Pane {
 		}
 	}
 
-	public SongPlayer() {
-	}
-
 	public SongPlayer(main.Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
-		gui.Driver.mediaPlayer.stop();
-		Media song = new Media(Paths.get(lvl.song.getPath()).toUri().toString());
-		gui.Driver.mediaPlayer = new MediaPlayer(song);
-		new MediaView(gui.Driver.mediaPlayer);
 
+		Driver.soundController.playSong(lvl.song);
 
 		if (lvl.background != null) {
 			Driver.setBackground(lvl.background.getUrl());
@@ -129,7 +118,7 @@ public class SongPlayer extends Pane {
 		difficulty = d;
 		pane = p;
 
-		System.out.println(d.bpm + " " + d.numBeats);
+		//System.out.println(d.bpm + " " + d.numBeats);
 
 		songLength = d.numBeats;
 		timer = new Timer(bpm);	//Sets the timer's bpm to that of the song
@@ -157,7 +146,7 @@ public class SongPlayer extends Pane {
 			 * The keyboard detection for the game: when a key is pressed it
 			 * calls the checkNote() method for the corresponding lane
 			 */
-			System.out.println(timer.time());
+			//System.out.println(timer.time());
 			if (e.getCode() == KeyCode.D) {
 				checkNote(dLane, dButton);
 			}
@@ -174,7 +163,7 @@ public class SongPlayer extends Pane {
 				checkNote(kLane, kButton);
 			}
 			//prints the user's current score and combo, for debugging purposes
-			System.out.println("Score: " + scoreCounter.getScore() + "\nCombo: " + scoreCounter.getCombo() + "\n");
+			//System.out.println("Score: " + scoreCounter.getScore() + "\nCombo: " + scoreCounter.getCombo() + "\n");
 		});
 
 		buttonBox.setAlignment(Pos.CENTER);		//puts the buttons in the center of the screen
@@ -264,7 +253,6 @@ public class SongPlayer extends Pane {
 				cancel();	
 			}
 			if (timer.time() > 0.0) {
-				gui.Driver.mediaPlayer.play();
 			}
 		}
 	};
@@ -284,12 +272,7 @@ public class SongPlayer extends Pane {
 	public void cancel() {
 		gui.Driver.setBackground("assets/forest.png");
 		gameLoop.stop();
-		gui.Driver.mediaPlayer.stop();
-		Media song = new Media(Paths.get("src/assets/MenuMusicPlaceholder.wav").toUri().toString());
-        gui.Driver.mediaPlayer = new MediaPlayer(song);
-		gui.Driver.mediaPlayer.setCycleCount(Integer.MAX_VALUE);
-        new MediaView(gui.Driver.mediaPlayer);
-		gui.Driver.mediaPlayer.play();
+		Driver.soundController.endSong();
 	}
 
 	/**
@@ -326,31 +309,34 @@ public class SongPlayer extends Pane {
 	 * @return 2 for a perfect hit, 1 for a good hit, 0 for a miss, and -1 if there are no notes to hit
 	 */
 	private int checkNote(ArrayList<Block> lane, TButton button) {
-		double distance = distanceToGoal(lane.get(getClosestNote(lane)));
-		if (lane.size() > 0 && distance < super.getHeight() / 3) {
+		if (lane.size() != 0)
+		{
+			double distance = distanceToGoal(lane.get(getClosestNote(lane)));
+			if (lane.size() > 0 && distance < super.getHeight() / 3) {
 
-			FillTransition ft = new FillTransition(Duration.millis(500), button);
-			ft.setToValue(button.getFillColor());
+				FillTransition ft = new FillTransition(Duration.millis(500), button);
+				ft.setToValue(button.getFillColor());
 
-			super.getChildren().removeAll(lane.get(getClosestNote(lane)));
-			lane.remove(lane.get(getClosestNote(lane)));
-			if (distance < super.getHeight() / 16) {
-				ft.setFromValue(Color.WHITE);
+				super.getChildren().removeAll(lane.get(getClosestNote(lane)));
+				lane.remove(lane.get(getClosestNote(lane)));
+				if (distance < super.getHeight() / 16) {
+					ft.setFromValue(Color.WHITE);
+					ft.play();
+					scoreCounter.perfect();
+					return 2;
+				}
+				if (distance < super.getHeight() / 5) {
+					ft.setFromValue(Color.CYAN);
+					ft.play();
+					scoreCounter.good();
+					return 1;
+				}
+				ft.setFromValue(Color.RED);
 				ft.play();
-				scoreCounter.perfect();
-				return 2;
+				scoreCounter.miss();
+				return 0;
 			}
-			if (distance < super.getHeight() / 5) {
-				ft.setFromValue(Color.CYAN);
-				ft.play();
-				scoreCounter.good();
-				return 1;
-			}
-			ft.setFromValue(Color.RED);
-			ft.play();
-			scoreCounter.miss();
-			return 0;
-		}
+		}	
 		return -1;
 	}
 

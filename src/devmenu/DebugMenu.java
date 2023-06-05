@@ -32,7 +32,7 @@ public class DebugMenu
 
         Button testVol = new Button();
         testVol.setText("print volumes");
-        testVol.setOnAction(e -> System.out.println("sfx:"+Driver.settingsController.effectsVol+" msc:"+Driver.settingsController.musicVol));
+        testVol.setOnAction(e -> System.out.println("setc:"+Driver.settingsController.effectsVol+" sndc:"+Driver.soundController.songMediaPlayer.getVolume()));
 
         primaryPane.getChildren().addAll(wallpaperTest,wallpaperTest2,wallpaperTest3,testVol);
         

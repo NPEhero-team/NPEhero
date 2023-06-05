@@ -25,9 +25,9 @@ public class Settings extends Pane
         musicText.getStyleClass().add("t3");
 
         Slider musicSlider = new Slider();
-        musicSlider.setMax(100);
-        musicSlider.setMin(0);
         musicSlider.valueProperty().bindBidirectional(Driver.settingsController.musicVol);
+        musicSlider.setMin(0.0);
+        musicSlider.setMax(1.0);
 
         VBox musicBox = new VBox();
         musicBox.getChildren().addAll(musicText, musicSlider);
@@ -40,9 +40,9 @@ public class Settings extends Pane
         SFXText.getStyleClass().add("t3");
 
         Slider SFXSlider = new Slider();
-        SFXSlider.setMax(100);
-        SFXSlider.setMin(0);
         SFXSlider.valueProperty().bindBidirectional(Driver.settingsController.effectsVol);
+        SFXSlider.setMin(0.0);
+        SFXSlider.setMax(1.0);
 
         VBox SFXBox = new VBox();
         SFXBox.getChildren().addAll(SFXText, SFXSlider);
@@ -59,7 +59,7 @@ public class Settings extends Pane
         fullscreen.getStyleClass().remove("toggle-button");
         fullscreen.getStyleClass().add("button");
         fullscreen.setOnAction(e -> {
-            Driver.menuFx.play("src/assets/MenuForward.wav");
+            Driver.soundController.playSfx("forward");
             Driver.primaryStage.setFullScreen(!Driver.primaryStage.isFullScreen());
         });
 
@@ -74,14 +74,14 @@ public class Settings extends Pane
         
         Button levelEdit = new Button("Level Utility");
         levelEdit.setOnAction(e -> {
-            Driver.menuFx.play("src/assets/MenuForward.wav");
+            Driver.soundController.playSfx("forward");
             new devmenu.LevelList();
         });
 
         Button devMenu = new Button();
         devMenu.setText("Debug Menu");
         devMenu.setOnAction(e -> {
-            Driver.menuFx.play("src/assets/MenuForward.wav");
+            Driver.soundController.playSfx("forward");
             Driver.debug.show();
         });
 
@@ -101,7 +101,7 @@ public class Settings extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Driver.menuFx.play("src/assets/MenuBackward.wav");
+            Driver.soundController.playSfx("backward");
             Driver.setMenu(new MainMenu());
         });
 

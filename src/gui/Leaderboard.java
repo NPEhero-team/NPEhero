@@ -50,7 +50,7 @@ public class Leaderboard extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Driver.menuFx.play("src/assets/MenuBackward.wav");
+            Driver.soundController.playSfx("backward");
             Driver.setMenu(prev);
         });
 
