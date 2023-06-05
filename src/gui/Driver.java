@@ -67,7 +67,7 @@ public class Driver extends Application
     @Override
     public void start(Stage newPrimaryStage)
     {   
-        Media song = new Media(Paths.get("src/assets/MenuMusicPlaceholder.wav").toUri().toString());
+        Media song = new Media(Paths.get("src/assets/fairyfountain.wav").toUri().toString());
         mediaPlayer = new MediaPlayer(song);
         new MediaView(mediaPlayer);
         mediaPlayer.setCycleCount(Integer.MAX_VALUE);
