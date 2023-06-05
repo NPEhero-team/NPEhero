@@ -279,7 +279,7 @@ public class SongPlayer extends Pane {
 	 */
 	public void cancel() {
 		Driver.soundController.playMenuSong();
-		gui.Driver.setBackground("assets/forest.png");
+		gui.Driver.setBackground("assets/mountains.png");
 		gameLoop.stop();
 		Driver.soundController.endSong();
 	}

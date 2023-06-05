@@ -12,7 +12,7 @@ public class SoundController
     public MediaPlayer songMediaPlayer;
     public MediaPlayer sfxMediaPlayer;
     private HashMap<String,File> presets = new HashMap<>();
-    private File mainMenuSong = new File("src/assets/MenuMusicPlaceholder.wav");
+    private File mainMenuSong = new File("src/assets/fairyfountain.wav");
 
     public SoundController() 
     {

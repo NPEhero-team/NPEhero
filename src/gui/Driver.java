@@ -75,7 +75,7 @@ public class Driver extends Application
 
         
         setMenu(new MainMenu());
-        setBackground("assets/forest.png");
+        setBackground("assets/mountains.png");
 
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> { //full screen stuff
             if (KeyCode.F11.equals(event.getCode())) {
