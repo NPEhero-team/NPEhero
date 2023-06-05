@@ -35,7 +35,7 @@ public class SoundController
         songMediaPlayer.play();
     }
 
-    private void playMenuSong()
+    public void playMenuSong()
     {
         playSong(mainMenuSong);
         songMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -44,7 +44,10 @@ public class SoundController
 
     public void endSong()
     {
-        playMenuSong();
+        if (songMediaPlayer != null)
+        {
+            songMediaPlayer.stop();
+        }
     }
 
     public void playSfx(File sfxFile) 
