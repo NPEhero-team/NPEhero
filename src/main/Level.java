@@ -76,7 +76,7 @@ public class Level
             System.out.println(thisDir+" is missing background.png, though it is not required");
         }
 
-        if (! new File(thisDir, "preview.png").exists())
+        if (new File(thisDir, "preview.png").exists())
         {
             preview = new Image(new File(thisDir,"preview.png").toURI().toString());
         }
