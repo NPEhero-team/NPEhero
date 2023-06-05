@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 import gameplay.Timer;
+import gui.Driver;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -20,16 +21,13 @@ import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.Difficulty;
-import sound.AudioFilePlayer;
 
 public class NotesEditor
 {
     Text help;
-    String t1 = "Press Start to begin recording. Use the same keys.";
+    String t1 = "Press Start to begin recording. Use the same keys. Note: existing notes will be overwitten.";
     String t2 = "Now recording. Press Stop or ESC to finish";
-    MediaPlayer mediaPlayer;
     Difficulty diff;
-    AudioFilePlayer music;
     Timer timer;
     PrintWriter writer;
     public NotesEditor(Difficulty diff) throws FileNotFoundException, UnsupportedEncodingException
@@ -37,7 +35,6 @@ public class NotesEditor
         this.diff = diff;
 
         help = new Text(t1);
-
         Text cur = new Text("-----");
 
         Button start = new Button("Start");
@@ -49,8 +46,6 @@ public class NotesEditor
         stop.setFocusTraversable(false);
 
         Media song = new Media(diff.level.song.toURI().toString());
-        mediaPlayer = new MediaPlayer(song);
-        new MediaView(mediaPlayer);
 
         VBox main = new VBox();
         main.getChildren().addAll(help,cur,start,stop);
@@ -94,7 +89,7 @@ public class NotesEditor
 
     private void start()
     {
-        mediaPlayer.play();
+        Driver.soundController.playSong(diff.level.song);
         timer = new Timer(diff.bpm);
         help.setText(t2);
     }
@@ -102,7 +97,7 @@ public class NotesEditor
     private void stop()
     {
         try {
-        mediaPlayer.stop();
+        Driver.soundController.endSong();
         diff.numBeats = (int)timer.time();
         timer = null;
         writer.close();

@@ -70,7 +70,7 @@ public class GameOver extends Pane
         save.setOnAction(new EventHandler<ActionEvent>() { //this is the same as the "e ->" thing but it allows more than one line to be added 
             @Override
             public void handle(ActionEvent event) {
-                Driver.menuFx.play("src/assets/MenuForward.wav");
+                Driver.soundController.playSfx("forward");
                 save.setDisable(true);
                 name.setDisable(true);
                 diff.addToLeaderboard(name.getText(), score2);
@@ -91,14 +91,14 @@ public class GameOver extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Driver.menuFx.play("src/assets/MenuBackward.wav");
+            Driver.soundController.playSfx("backward");
             Driver.setMenu(lastMenu);
         });
 
         Button replay = new Button();
         replay.setText("Replay");
         replay.setOnAction(e -> {
-            Driver.menuFx.play("src/assets/MenuForward.wav");
+            Driver.soundController.playSfx("forward");
             Driver.setMenu(new LevelSurround(level, diff, lastMenu));
         });
 

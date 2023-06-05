@@ -21,8 +21,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.LevelController;
 import main.SettingsController;
-import sound.AudioFilePlayer;
-import sound.ShortAudioPlayer;
+import main.SoundController;
 
 import java.nio.file.Paths;
 
@@ -40,15 +39,12 @@ import gameplay.SongPlayer;
 
 
 public class Driver extends Application 
-{
-    public static ShortAudioPlayer menuFx = new ShortAudioPlayer();
-
-    public static MediaPlayer mediaPlayer;
-    
+{    
     public static Stage primaryStage;
     static Pane primaryPane = new Pane();
 
     public static SettingsController settingsController = new SettingsController();
+    public static SoundController soundController = new SoundController();
     public static LevelController levelController = new LevelController();
     public static DebugMenu debug = new DebugMenu();
 
@@ -67,15 +63,11 @@ public class Driver extends Application
     @Override
     public void start(Stage newPrimaryStage)
     {   
-        Media song = new Media(Paths.get("src/assets/MenuMusicPlaceholder.wav").toUri().toString());
-        mediaPlayer = new MediaPlayer(song);
-        new MediaView(mediaPlayer);
-        mediaPlayer.setCycleCount(Integer.MAX_VALUE);
-        mediaPlayer.play();
+
         
         primaryStage = newPrimaryStage;
 
-        Scene primaryScene = new Scene(primaryPane, 800, 600);
+        Scene primaryScene = new Scene(primaryPane, 800,600);
         primaryScene.getStylesheets().add("gui/style.css");
 
         primaryStage.setScene(primaryScene);

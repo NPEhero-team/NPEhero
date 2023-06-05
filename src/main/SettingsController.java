@@ -9,12 +9,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class SettingsController 
 {
-	public SimpleIntegerProperty effectsVol = new SimpleIntegerProperty(0);
-	public SimpleIntegerProperty musicVol = new SimpleIntegerProperty(0);
+	public SimpleDoubleProperty effectsVol = new SimpleDoubleProperty(1);
+	public SimpleDoubleProperty musicVol = new SimpleDoubleProperty(1);
 	private JSONObject settings;
 	
 	public void read() throws ParseException
@@ -27,8 +28,8 @@ public class SettingsController
 			
 			settings = (JSONObject)(obj); //converts read object to a JSONObject
 			
-			effectsVol.set((int) settings.get("effectsVol"));
-			musicVol.set((int) settings.get("musicVol"));
+			effectsVol.set((double) settings.get("effectsVol"));
+			musicVol.set((double) settings.get("musicVol"));
 		}
 		catch (FileNotFoundException e) 
 		{

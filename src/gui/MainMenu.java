@@ -32,19 +32,19 @@ public class MainMenu extends Pane
         Button play = new Button();
         play.setText("Play");
         play.setOnAction(e -> {Driver.setMenu(new LevelSelector());
-            Driver.menuFx.play("src/assets/MenuForward.wav");
+            Driver.soundController.playSfx("forward");
         });
 
         Button settings = new Button();
         settings.setText("Settings");
         settings.setOnAction(e -> {Driver.setMenu(new Settings());
-            Driver.menuFx.play("src/assets/MenuForward.wav");
+            Driver.soundController.playSfx("forward");
         });
 
         Button exit = new Button();
         exit.setText("Quit");
         exit.setOnAction(e -> {Driver.quit();
-            Driver.menuFx.play("src/assets/MenuBackward.wav");
+            Driver.soundController.playSfx("backward");
         });
 
         VBox buttonBox = new VBox();

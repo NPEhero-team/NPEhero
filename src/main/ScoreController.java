@@ -1,8 +1,8 @@
 package main;
 
+import gui.Driver;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import sound.ShortAudioPlayer;
 
 public class ScoreController{
 
@@ -11,8 +11,6 @@ public class ScoreController{
     private int comboMultiplier=1;
     public StringProperty scoreProperty = new SimpleStringProperty("0");
     public StringProperty comboProperty = new SimpleStringProperty("0");
-
-    sound.ShortAudioPlayer fx = new ShortAudioPlayer();
 
     /**
      * Called when the user performs a perfect hit
@@ -40,7 +38,7 @@ public class ScoreController{
      * Called when the user misses a note
      */
     public void miss() {
-        fx.play("src/assets/Miss.wav");
+        Driver.soundController.playSfx("miss");
         combo = 0;
         comboMultiplier = 1;
         scoreProperty.setValue(score+"");
@@ -52,7 +50,7 @@ public class ScoreController{
      * Increments the combo by one
      */
     private void combo() {
-        fx.play("src/assets/Hitsound.wav");
+        Driver.soundController.playSfx("hit");
         combo++;
         
         if (combo == 2) {

@@ -35,7 +35,7 @@ public class LevelSurround extends Pane
         exit.setText("Back");
         exit.setOnAction(e -> {
             Driver.setMenu(prev);
-            Driver.menuFx.play("src/assets/MenuBackward.wav");
+            Driver.soundController.playSfx("backward");
             game.cancel();
         });
 
