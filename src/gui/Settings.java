@@ -101,6 +101,7 @@ public class Settings extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
+            Driver.settingsController.write();
             Driver.soundController.playSfx("backward");
             Driver.setMenu(new MainMenu());
         });

@@ -11,7 +11,7 @@ import org.json.simple.parser.JSONParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Difficulty
+public class Difficulty implements Comparable<Difficulty>
 {
     public File thisDir;
     public String title = "Unnamed";
@@ -21,6 +21,7 @@ public class Difficulty
     public int numBeats;
     public Level level;
     public boolean isValid = false;
+    public int priority = 0;
     
     /**
      * Creates a new Difficulty and gives it a file path
@@ -88,9 +89,46 @@ public class Difficulty
 			Object obj = jsonParser.parse(reader); 
 			JSONObject diffStuff = (JSONObject)(obj); //converts read object to a JSONObject
             
-            title = (String) diffStuff.get("title");
-            bpm = Double.parseDouble(diffStuff.get("bpm")+"");
-            numBeats = Integer.parseInt(diffStuff.get("numBeats")+"");
+            if (diffStuff.containsKey("title"))
+            {
+                title = (String) diffStuff.get("title");
+            }
+            else
+            {
+                System.err.println(file+" is missing properety title");
+                isValid = false;
+            }
+
+            if (diffStuff.containsKey("bpm"))
+            {
+                bpm = Double.parseDouble(diffStuff.get("bpm")+"");
+            }
+            else
+            {
+                System.err.println(file+" is missing properety bpm");
+                isValid = false;
+            }
+
+            if (diffStuff.containsKey("numBeats"))
+            {
+                numBeats = Integer.parseInt(diffStuff.get("numBeats")+"");
+            }
+            else
+            {
+                System.err.println(file+" is missing properety numBeats");
+                isValid = false;
+            }
+
+            if (diffStuff.containsKey("priority"))
+            {
+                priority = Integer.parseInt(diffStuff.get("priority")+"");
+
+            }
+            else
+            {
+                System.err.println(file+" is missing properety priority");
+                isValid = false;
+            }
 		}
 		catch (Exception e)
         {
@@ -114,6 +152,7 @@ public class Difficulty
             obj.put("title", title);
             obj.put("bpm", bpm);
             obj.put("numBeats", numBeats);
+            obj.put("priority", priority);
             obj.writeJSONString(fileWriter);
             fileWriter.flush();
         } 
@@ -212,5 +251,10 @@ public class Difficulty
 
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public int compareTo(Difficulty d) {
+        return priority - d.priority;
     }
 }

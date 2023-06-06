@@ -25,7 +25,7 @@ public class GameOver extends Pane
     {
         Text topText = new Text();
         topText.setText("Level Complete");
-        topText.getStyleClass().add("t1");
+        topText.getStyleClass().add("t11");
 
         Text levelName = new Text();
         levelName.setText(level.getTitle());

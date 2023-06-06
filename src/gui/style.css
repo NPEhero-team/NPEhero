@@ -73,9 +73,9 @@ TableView {
     -fx-background-color: transparent;
     -fx-background-radius: 3;
     -fx-text-background-color: rgb(255, 255, 255);
-    -fx-border-width: 3;
-    -fx-border-radius: 5;
-    -fx-border-color: transparent;
+    /* -fx-border-width: 3; */
+    /* -fx-border-radius: 5; */
+    /* -fx-border-color: transparent; */
 }
 
 .table-row-cell:hover {
@@ -89,7 +89,7 @@ TableView:focused {
 
 TableView:focused .list-cell:focused {
     -fx-background-color: rgb(50, 50, 50, 0.5);
-    -fx-border-color: rgb(255, 255, 255);
+    /* -fx-border-color: rgb(255, 255, 255); */
 }
 
 .table-row-cell:selected {
@@ -99,18 +99,18 @@ TableView:focused .list-cell:focused {
 
 .table-row-cell:pressed {
     -fx-background-color: rgb(231, 231, 231);
-    -fx-border-color: transparent;
+    /* -fx-border-color: transparent; */
 }
 
 .table-row-cell:empty {
     -fx-background-color: transparent;
-    -fx-border-color: transparent;
+    /* -fx-border-color: transparent; */
     -fx-text-background-color: white;
 }
 
 .unselectable .table-row-cell{
     -fx-background-color: transparent;
-    -fx-border-color: transparent;
+    /* -fx-border-color: transparent; */
     -fx-text-background-color: white;
 }
 
@@ -195,6 +195,11 @@ Slider:focused .thumb{
 .t1 {
     -fx-font-size: 50;
     -fx-fill: white;
+}
+
+.t11 {
+    -fx-font-size: 50;
+    -fx-fill: black; 
 }
 
 .t2 {

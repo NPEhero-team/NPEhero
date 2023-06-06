@@ -14,28 +14,11 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import main.LevelController;
 import main.SettingsController;
 import main.SoundController;
-
-import java.nio.file.Paths;
-
-import javax.sound.sampled.AudioFileFormat;
-
-// import javafx.scene.image.ImageView;
-// import javafx.beans.property.Property;
-// import javafx.util.Duration;
-// import javafx.animation.KeyFrame;
-// import javafx.animation.KeyValue;
-// import javafx.animation.Timeline;
-
 import devmenu.DebugMenu;
-import gameplay.SongPlayer;
 
 
 public class Driver extends Application 
@@ -63,8 +46,6 @@ public class Driver extends Application
     @Override
     public void start(Stage newPrimaryStage)
     {   
-
-        
         primaryStage = newPrimaryStage;
 
         Scene primaryScene = new Scene(primaryPane, 800,600);
@@ -116,16 +97,6 @@ public class Driver extends Application
      */
     public static void setBackground(String url) //replaces background with a new one
     {
-        // Image image1;
-        // Image image2;
-        // ImageView imageView;
-        // KeyFrame keyFrame1On = new KeyFrame(Duration.seconds(0), new KeyValue(imageView.imageProperty(), image1));
-        // KeyFrame startFadeOut = new KeyFrame(Duration.seconds(0.2), new KeyValue(imageView.opacityProperty(), 1.0));
-        // KeyFrame endFadeOut = new KeyFrame(Duration.seconds(0.5), new KeyValue(imageView.opacityProperty(), 0.0));
-        // KeyFrame keyFrame2On = new KeyFrame(Duration.seconds(0.5), new KeyValue(imageView.imageProperty(), image2));
-        // KeyFrame endFadeIn = new KeyFrame(Duration.seconds(0.8), new KeyValue(imageView.opacityProperty(), 1.0));
-        // Timeline timelineOn = new Timeline(keyFrame1On, startFadeOut, endFadeOut, keyFrame2On, endFadeIn);
-
         primaryPane.setBackground(new Background(
             new BackgroundImage(
                     new Image(url),

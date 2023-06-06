@@ -1,6 +1,7 @@
 package main;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Comparator;
 
 import javafx.collections.FXCollections;
@@ -26,7 +27,7 @@ public class Level
     private boolean isValid;
 
     public Image preview; //optional
-    public String desc = "No description";
+    public String desc;
     public Image background; //optional
     public Color[] colors = {Color.RED,Color.BLUE,Color.GREEN,Color.PURPLE,Color.YELLOW};//optional, have default colors
     public File song;
@@ -71,18 +72,10 @@ public class Level
         {
             background = new Image(new File(thisDir,"background.png").toURI().toString());
         }
-        else
-        {
-            System.out.println(thisDir+" is missing background.png, though it is not required");
-        }
 
         if (new File(thisDir, "preview.png").exists())
         {
             preview = new Image(new File(thisDir,"preview.png").toURI().toString());
-        }
-        else
-        {
-            System.out.println(thisDir+" is missing preview.png, though it is not required");
         }
 
         diffList = FXCollections.observableArrayList();
@@ -110,6 +103,8 @@ public class Level
             isValid1 = false;
         }
 
+        Collections.sort(validDiffList);
+        Collections.sort(diffList);
         isValid = isValid1;
     }
 
@@ -120,18 +115,39 @@ public class Level
     {
         boolean isValid = true;
         JSONParser jsonParser = new JSONParser(); //parser to read the file
-		
-		try(FileReader reader = new FileReader(new File(thisDir, "metadata.json")))
+		File file = new File(thisDir, "metadata.json");
+		try(FileReader reader = new FileReader(file))
 		{
 			Object obj = jsonParser.parse(reader); 
 			JSONObject levelStuff = new JSONObject();
 			levelStuff = (JSONObject)(obj); //converts read object to a JSONObject
 
-            title = (String)(levelStuff.get("title"));
-            artist = (String)(levelStuff.get("artist"));
-            desc = (String)(levelStuff.get("desc"));
+            if (levelStuff.containsKey("title"))
+            {
+                title = (String) levelStuff.get("title");
+            }
+            else
+            {
+                System.err.println(file+" is missing properety title");
+                isValid = false;
+            }
 
-            if(( levelStuff).containsKey("color1")) //check for custom colors in a hexadecimal format
+            if (levelStuff.containsKey("artist"))
+            {
+                artist = (String)(levelStuff.get("artist"));
+            }
+            else
+            {
+                System.err.println(file+" is missing properety aritst");
+                isValid = false;
+            }
+
+            if (levelStuff.containsKey("desc"))
+            {
+                desc = (String) levelStuff.get("desc");
+            }
+
+            if(( levelStuff).containsKey("color1")) //check for custom colors in a hexadecimal format (zach was lazy for not checking all five colors but i will forgive him)
             {
                 colors = new Color[5];
 
@@ -140,10 +156,6 @@ public class Level
                 colors[2] = Color.web((String)(levelStuff.get("color3")));
                 colors[3] = Color.web((String)(levelStuff.get("color4")));
                 colors[4] = Color.web((String)(levelStuff.get("color5")));
-            }
-            else
-            {
-                colors = new Color[]{Color.RED,Color.BLUE,Color.GREEN,Color.PURPLE,Color.YELLOW};
             }
 		}
 		catch (Exception e) 
@@ -166,7 +178,10 @@ public class Level
             JSONObject obj = new JSONObject();
             obj.put("title", title);
             obj.put("artist", artist);
-            obj.put("desc", desc);
+            if (desc != null)
+            {
+                obj.put("desc", desc);
+            }
             obj.put("color1",colors[0].toString());
             obj.put("color2",colors[1].toString());
             obj.put("color3",colors[2].toString());
