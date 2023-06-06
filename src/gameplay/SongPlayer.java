@@ -46,6 +46,7 @@ public class SongPlayer extends Pane {
 
 	private File song;
 	private boolean songIsPlaying = false;
+	private boolean missMute = false;
 
 	private main.Level level;
 	private Difficulty difficulty;
@@ -221,7 +222,7 @@ public class SongPlayer extends Pane {
 
 			anim.setOnFinished(e -> {
 				if (super.getChildren().removeAll(anim.getNode())){
-					scoreCounter.miss();
+					scoreCounter.miss(missMute);
 					FillTransition ft = new FillTransition(Duration.millis(500), button.rect);
 					ft.setFromValue(Color.RED);
 					ft.setToValue(button.getFillColor());
@@ -265,6 +266,8 @@ public class SongPlayer extends Pane {
 				songIsPlaying = true;
 				Driver.soundController.playSong(song);
 			}
+			if (!SongPlayer.super.isVisible());
+				missMute = true;
 		}
 	};
 
@@ -331,7 +334,7 @@ public class SongPlayer extends Pane {
 
 				super.getChildren().removeAll(lane.get(getClosestNote(lane)));
 				lane.remove(lane.get(getClosestNote(lane)));
-				if (distance < super.getHeight() / 16) {
+				if (distance < super.getHeight() / 12) {
 					ft.setFromValue(Color.WHITE);
 					ft.play();
 					scoreCounter.perfect();
@@ -345,7 +348,7 @@ public class SongPlayer extends Pane {
 				}
 				ft.setFromValue(Color.RED);
 				ft.play();
-				scoreCounter.miss();
+				scoreCounter.miss(false);
 				return 0;
 			}
 		}	

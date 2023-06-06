@@ -37,8 +37,10 @@ public class ScoreController{
     /**
      * Called when the user misses a note
      */
-    public void miss() {
-        Driver.soundController.playSfx("miss");
+    public void miss(boolean muted) {
+        if (!muted) {
+            Driver.soundController.playSfx("miss");
+        }
         combo = 0;
         comboMultiplier = 1;
         scoreProperty.setValue(score+"");
