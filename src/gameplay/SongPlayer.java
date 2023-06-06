@@ -150,23 +150,26 @@ public class SongPlayer extends Pane {
 			 * calls the checkNote() method for the corresponding lane
 			 */
 			//System.out.println(timer.time());
-			if (e.getCode() == KeyCode.D) {
-				checkNote(dLane, dButton);
-			}
-			if (e.getCode() == KeyCode.F) {
-				checkNote(fLane, fButton);
-			}
-			if (e.getCode() == KeyCode.SPACE) {
-				checkNote(spaceLane, sButton);
-			}
-			if (e.getCode() == KeyCode.J) {
-				checkNote(jLane, jButton);
-			}
-			if (e.getCode() == KeyCode.K) {
-				checkNote(kLane, kButton);
-			}
-			if (e.getCode() == KeyCode.Q) {
-				System.out.println("" + timer.time());
+			if (super.isVisible())
+			{
+				if (e.getCode() == KeyCode.D) {
+					checkNote(dLane, dButton);
+				}
+				if (e.getCode() == KeyCode.F) {
+					checkNote(fLane, fButton);
+				}
+				if (e.getCode() == KeyCode.SPACE) {
+					checkNote(spaceLane, sButton);
+				}
+				if (e.getCode() == KeyCode.J) {
+					checkNote(jLane, jButton);
+				}
+				if (e.getCode() == KeyCode.K) {
+					checkNote(kLane, kButton);
+				}
+				if (e.getCode() == KeyCode.Q) {
+					System.out.println("" + timer.time());
+				}
 			}
 			//prints the user's current score and combo, for debugging purposes
 			//System.out.println("Score: " + scoreCounter.getScore() + "\nCombo: " + scoreCounter.getCombo() + "\n");
@@ -318,7 +321,7 @@ public class SongPlayer extends Pane {
 	 * @return 2 for a perfect hit, 1 for a good hit, 0 for a miss, and -1 if there are no notes to hit
 	 */
 	private int checkNote(ArrayList<Block> lane, Target button) {
-		if (lane.size() != 0)
+		if (lane.size() != 0 && super.isVisible())
 		{
 			double distance = distanceToGoal(lane.get(getClosestNote(lane)));
 			if (lane.size() > 0 && distance < super.getHeight() / 3) {

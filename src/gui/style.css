@@ -92,6 +92,11 @@ TableView:focused .list-cell:focused {
     /* -fx-border-color: rgb(255, 255, 255); */
 }
 
+.table-view .corner {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
 .table-row-cell:selected {
     -fx-background-color: rgb(255, 255, 255);
     -fx-text-background-color: rgb(0, 0, 0);
@@ -228,5 +233,4 @@ Slider:focused .thumb{
     /* -fx-text-fill: white; */
     /* -fx-border-width: 20; */
 }
-
 
