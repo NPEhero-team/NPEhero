@@ -20,7 +20,7 @@ public class ScoreController{
         score += 300*comboMultiplier;
         scoreProperty.setValue(score+"");
         comboProperty.setValue(combo +"");
-        System.out.println("Perfect!");
+        // System.out.println("Perfect!");
     }
 
     /**
@@ -31,7 +31,7 @@ public class ScoreController{
         score += 100*comboMultiplier;
         scoreProperty.setValue(score+"");
         comboProperty.setValue(combo+"");
-        System.out.println("Good");
+        // System.out.println("Good");
     }
 
     /**
@@ -43,7 +43,7 @@ public class ScoreController{
         comboMultiplier = 1;
         scoreProperty.setValue(score+"");
         comboProperty.setValue(combo+"");
-        System.out.println("Miss");
+        // System.out.println("Miss");
     }
 
     /*

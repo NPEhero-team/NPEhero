@@ -11,15 +11,18 @@ public class SoundController
 {
     public MediaPlayer songMediaPlayer;
     public MediaPlayer sfxMediaPlayer;
-    private HashMap<String,File> presets = new HashMap<>();
+    private HashMap<String,MediaPlayer> effects = new HashMap<>();
     private File mainMenuSong = new File("src/assets/fairyfountain.wav");
 
     public SoundController() 
     {
-        presets.put("forward", new File("src/assets/MenuForward.wav"));
-        presets.put("backward", new File("src/assets/MenuBackward.wav"));
-        presets.put("hit", new File("src/assets/Hitsound.wav"));
-        presets.put("miss", new File("src/assets/Miss.wav"));
+        effects.put("hit", new MediaPlayer(new Media(new File("src/assets/hit.wav").toURI().toString())));
+        effects.put("miss", new MediaPlayer(new Media(new File("src/assets/miss.wav").toURI().toString())));
+        effects.put("forward", new MediaPlayer(new Media(new File("src/assets/forward.wav").toURI().toString())));
+        effects.put("backward", new MediaPlayer(new Media(new File("src/assets/backward.wav").toURI().toString())));
+        effects.forEach((key,value) -> {
+            value.volumeProperty().bind(Driver.settingsController.effectsVol);
+        });
         playMenuSong();
     }
 
@@ -50,20 +53,9 @@ public class SoundController
         }
     }
 
-    public void playSfx(File sfxFile) 
-    {
-        if (sfxMediaPlayer != null)
-        {
-            sfxMediaPlayer.stop();
-        }
-        Media sound = new Media(sfxFile.toURI().toString());
-        sfxMediaPlayer = new MediaPlayer(sound);
-        sfxMediaPlayer.volumeProperty().bind(Driver.settingsController.effectsVol); //not working yet
-        sfxMediaPlayer.play();
-    }
-
     public void playSfx(String preset)
     {
-        playSfx(presets.get(preset));
+        effects.get(preset).stop();
+        effects.get(preset).play();
     }
 }

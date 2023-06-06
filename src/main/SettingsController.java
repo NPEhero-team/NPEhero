@@ -1,57 +1,53 @@
 package main;
 
 import java.io.FileWriter;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 public class SettingsController 
 {
 	public SimpleDoubleProperty effectsVol = new SimpleDoubleProperty(1);
 	public SimpleDoubleProperty musicVol = new SimpleDoubleProperty(1);
-	private JSONObject settings;
+	private File file = new File("settings.json");
+
+	public SettingsController()
+	{
+		read();
+	}
 	
-	public void read() throws ParseException
+	public void read()
 	{
 		JSONParser jsonParser = new JSONParser(); //parser to read the file
-		
-		try(FileReader reader = new FileReader("settings.json"))
+		try(FileReader reader = new FileReader(file))
 		{
 			Object obj = jsonParser.parse(reader); 
-			
+			JSONObject settings = new JSONObject();
 			settings = (JSONObject)(obj); //converts read object to a JSONObject
 			
-			effectsVol.set((double) settings.get("effectsVol"));
-			musicVol.set((double) settings.get("musicVol"));
+			effectsVol.set(Double.parseDouble(settings.get("effectsVol")+""));
+			musicVol.set(Double.parseDouble(settings.get("musicVol")+""));
 		}
-		catch (FileNotFoundException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-				
+		}		
 	}
 
-	public void write(int newEffVol, int newMusVol)
+	public void write()
 	{
-		settings.put("musicVol", newMusVol);
-		settings.put("effectsVol", newEffVol);
-		try (FileWriter file = new FileWriter("settings.json")) 
+		FileWriter fileWriter;
+		try
 		{
-            //write the settings JSONObject instance to the file
-            file.write(settings.toJSONString()); 
-            file.flush();
- 
+			fileWriter = new FileWriter(file);
+			JSONObject obj = new JSONObject();
+			obj.put("musicVol", musicVol.getValue());
+			obj.put("effectsVol", effectsVol.getValue());
+            obj.writeJSONString(fileWriter);
+            fileWriter.flush();
         } 
 		catch (IOException e) {
             e.printStackTrace();

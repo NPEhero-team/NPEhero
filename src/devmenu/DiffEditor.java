@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
 import gui.Driver;
-import gui.LevelSelector;
 import gui.LevelSurround;
 import gui.MainMenu;
 import javafx.scene.Scene;
@@ -39,6 +38,9 @@ public class DiffEditor
         Text numBeatsLabel = new Text("Number of beats");
         TextField numBeats = new TextField(diff.numBeats+"");
 
+        Text priorityLabel = new Text("priority (lower first)");
+        TextField priority = new TextField(diff.priority+"");
+
         Button editNotes = new Button("Edit notes");
         editNotes.setOnAction(e -> {
             try {
@@ -59,11 +61,12 @@ public class DiffEditor
             diff.title = title.getText();
             diff.bpm = Double.parseDouble(bpm.getText());
             diff.numBeats = Integer.parseInt(numBeats.getText());
+            diff.priority = Integer.parseInt(priority.getText());
             diff.writeMetadata();
         });
 
         VBox main = new VBox();
-        main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,bpmLabel,bpm,numBeatsLabel,numBeats,editNotes,editScores,playLevel,save);
+        main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,bpmLabel,bpm,numBeatsLabel,numBeats,priorityLabel,priority,editNotes,editScores,playLevel,save);
         Scene scene = new Scene(main);
         primaryStage.setScene(scene);
         primaryStage.show();
