@@ -59,23 +59,23 @@ public class SongPlayer extends Pane {
 	HBox buttonBox = new HBox();	//used to align the buttons horizontally
 	VBox place = new VBox();		//used to place the buttons within the frame
 
-	TButton dButton = new TButton(Color.RED, 50, 50, 5);	//Initializes the button, each parameter is a placeholder that is changed later
+	Target dButton = new Target(Color.RED, 50, 50, 5, 'd');	//Initializes the button, each parameter is a placeholder that is changed later
 	Queue<NoteInfo> dSends = new LinkedList<NoteInfo>(); 		//Queue that dictates when to send the notes
 	ArrayList<Block> dLane = new ArrayList<Block>(); 			//Array list containing all the notes currently on the field for that lane
 																//process is repeated for the following four buttons
-	TButton fButton = new TButton(Color.BLUE, 50, 50, 5);
+	Target fButton = new Target(Color.BLUE, 50, 50, 5, 'f');
 	Queue<NoteInfo> fSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> fLane = new ArrayList<Block>();
 
-	TButton sButton = new TButton(Color.GREEN, 50, 50, 5);
+	Target sButton = new Target(Color.GREEN, 50, 50, 5, '_');
 	Queue<NoteInfo> spaceSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> spaceLane = new ArrayList<Block>();
 
-	TButton jButton = new TButton(Color.PURPLE, 50, 50, 5);
+	Target jButton = new Target(Color.PURPLE, 50, 50, 5, 'j');
 	Queue<NoteInfo> jSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> jLane = new ArrayList<Block>();
 
-	TButton kButton = new TButton(Color.YELLOW, 50, 50, 5);
+	Target kButton = new Target(Color.YELLOW, 50, 50, 5, 'k');
 	Queue<NoteInfo> kSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> kLane = new ArrayList<Block>();
 
@@ -197,7 +197,7 @@ public class SongPlayer extends Pane {
 	 * @param pos   the x pos of the note to be sent
 	 * @param c     the color of the sent note
 	 */
-	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, TButton button) {
+	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, Target button) {
 		if (sends.peek() != null && timer.time() > sends.peek().getTime()-(1000*(bpm/60000.0))) {
 			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME+60));
 
@@ -219,7 +219,7 @@ public class SongPlayer extends Pane {
 			anim.setOnFinished(e -> {
 				if (super.getChildren().removeAll(anim.getNode())){
 					scoreCounter.miss();
-					FillTransition ft = new FillTransition(Duration.millis(500), button);
+					FillTransition ft = new FillTransition(Duration.millis(500), button.rect);
 					ft.setFromValue(Color.RED);
 					ft.setToValue(button.getFillColor());
 					ft.play();
@@ -234,12 +234,12 @@ public class SongPlayer extends Pane {
 	 * 
 	 * @param button
 	 */
-	private void genButton(TButton button) {
-		button.heightProperty().bind(super.widthProperty().divide(8));
-		button.widthProperty().bind(super.widthProperty().divide(8));
-		button.arcHeightProperty().bind(super.widthProperty().divide(25));
-		button.arcWidthProperty().bind(super.widthProperty().divide(25));
-		button.strokeWidthProperty().bind(super.widthProperty().divide(120));
+	private void genButton(Target button) {
+		button.rect.heightProperty().bind(super.widthProperty().divide(8));
+		button.rect.widthProperty().bind(super.widthProperty().divide(8));
+		button.rect.arcHeightProperty().bind(super.widthProperty().divide(25));
+		button.rect.arcWidthProperty().bind(super.widthProperty().divide(25));
+		button.rect.strokeWidthProperty().bind(super.widthProperty().divide(120));
 	}
 
 	/**
@@ -308,7 +308,7 @@ public class SongPlayer extends Pane {
 	 * @return
 	 */
 	private double distanceToGoal(Block note) {
-		return Math.abs((super.getHeight() - note.getTranslateY()) - dButton.getY());
+		return Math.abs((super.getHeight() - note.getTranslateY()) - dButton.rect.getY());
 	}
 
 	/**
@@ -317,13 +317,13 @@ public class SongPlayer extends Pane {
 	 * @param button the button checking for a hit
 	 * @return 2 for a perfect hit, 1 for a good hit, 0 for a miss, and -1 if there are no notes to hit
 	 */
-	private int checkNote(ArrayList<Block> lane, TButton button) {
+	private int checkNote(ArrayList<Block> lane, Target button) {
 		if (lane.size() != 0)
 		{
 			double distance = distanceToGoal(lane.get(getClosestNote(lane)));
 			if (lane.size() > 0 && distance < super.getHeight() / 3) {
 
-				FillTransition ft = new FillTransition(Duration.millis(500), button);
+				FillTransition ft = new FillTransition(Duration.millis(500), button.rect);
 				ft.setToValue(button.getFillColor());
 
 				super.getChildren().removeAll(lane.get(getClosestNote(lane)));

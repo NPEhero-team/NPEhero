@@ -9,6 +9,7 @@ import gameplay.SongPlayer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -55,10 +56,15 @@ public class LevelSurround extends Pane
         VBox titleTextBox = new VBox();
         titleTextBox.setAlignment(Pos.TOP_RIGHT);
         titleTextBox.getChildren().addAll(title, artist);
+        titleTextBox.getStyleClass().add("box");
+        titleTextBox.setPadding(new Insets(10));
 
-        BorderPane topBar = new BorderPane();
-        topBar.setLeft(buttonBox);
-        topBar.setRight(titleTextBox);
+        AnchorPane topBar = new AnchorPane();
+        topBar.getChildren().addAll(buttonBox,titleTextBox);
+        topBar.setLeftAnchor(buttonBox, 0.0);
+        topBar.setRightAnchor(titleTextBox, 0.0);
+        topBar.setTopAnchor(buttonBox, 0.0);
+        topBar.setTopAnchor(titleTextBox, 0.0);
         topBar.setPadding(new Insets(10));
         
 
@@ -74,7 +80,14 @@ public class LevelSurround extends Pane
         scoreTextBox.setAlignment(Pos.BOTTOM_LEFT);
         scoreTextBox.getChildren().addAll(scoreLabel,scoreDisplay);
         scoreTextBox.setPadding(new Insets(10));
+        scoreTextBox.getStyleClass().add("box");
+        scoreTextBox.minWidthProperty().bind(scoreTextBox.heightProperty());
 
+        AnchorPane scoreBox = new AnchorPane();
+        scoreBox.getChildren().add(scoreTextBox);
+        scoreBox.setLeftAnchor(scoreTextBox, 0.0);
+        scoreBox.setBottomAnchor(scoreTextBox, 0.0);
+        scoreBox.setPadding(new Insets(10));
 
         Text comboLabel = new Text();
         comboLabel.setText("Combo:");
@@ -88,17 +101,25 @@ public class LevelSurround extends Pane
         comboTextBox.setAlignment(Pos.BOTTOM_RIGHT);
         comboTextBox.getChildren().addAll(comboLabel,comboDisplay);
         comboTextBox.setPadding(new Insets(10));
+        comboTextBox.getStyleClass().add("box");
+        comboTextBox.minWidthProperty().bind(comboTextBox.heightProperty());
+
+        AnchorPane comboBox = new AnchorPane();
+        comboBox.getChildren().add(comboTextBox);
+        comboBox.setRightAnchor(comboTextBox, 0.0);
+        comboBox.setBottomAnchor(comboTextBox, 0.0);
+        comboBox.setPadding(new Insets(10));
 
         game.minWidthProperty().bind(super.prefHeightProperty().multiply(0.66));
         game.minHeightProperty().bind(super.prefHeightProperty());
         game.getStyleClass().add("box");
 
 
-        comboTextBox.minWidthProperty().bind(super.prefWidthProperty().subtract(game.minWidthProperty()).divide(2));
-        scoreTextBox.minWidthProperty().bind(super.prefWidthProperty().subtract(game.minWidthProperty()).divide(2));
+        comboBox.minWidthProperty().bind(super.prefWidthProperty().subtract(game.minWidthProperty()).divide(2));
+        scoreBox.minWidthProperty().bind(super.prefWidthProperty().subtract(game.minWidthProperty()).divide(2));
 
         HBox centerBox = new HBox();
-        centerBox.getChildren().addAll(comboTextBox, game, scoreTextBox);
+        centerBox.getChildren().addAll(comboBox, game, scoreBox);
         centerBox.setAlignment(Pos.BOTTOM_CENTER);
 
         StackPane root = new StackPane();
