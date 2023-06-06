@@ -256,7 +256,7 @@ public class SongPlayer extends Pane {
 			sendNote(kSends, kLane, kButton);
 			if (timer.time() > songLength) {
 				gui.Driver.setMenu(new GameOver(level, difficulty, pane, scoreCounter.getScore()));
-				cancel();	
+				cancel();
 			}
 			if (!songIsPlaying && timer.time() > 0.0) {
 				songIsPlaying = true;
@@ -278,10 +278,10 @@ public class SongPlayer extends Pane {
 	 * @throws UnsupportedAudioFileException
 	 */
 	public void cancel() {
+		Driver.soundController.endSong();
 		Driver.soundController.playMenuSong();
 		gui.Driver.setBackground("assets/mountains.png");
 		gameLoop.stop();
-		Driver.soundController.endSong();
 	}
 
 	/**
