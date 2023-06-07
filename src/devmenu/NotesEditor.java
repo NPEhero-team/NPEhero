@@ -1,23 +1,14 @@
 package devmenu;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-
 import gameplay.Timer;
 import gui.Driver;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.Difficulty;
@@ -44,8 +35,6 @@ public class NotesEditor
         Button stop = new Button("Stop");
         stop.setOnAction(e -> stop());
         stop.setFocusTraversable(false);
-
-        Media song = new Media(diff.level.song.toURI().toString());
 
         VBox main = new VBox();
         main.getChildren().addAll(help,cur,start,stop);
