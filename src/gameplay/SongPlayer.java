@@ -204,7 +204,7 @@ public class SongPlayer extends Pane {
 	 */
 	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, Target button) {
 		if (sends.peek() != null && timer.time() > sends.peek().getTime()-(1000*(bpm/60000.0))) {
-			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME+60));
+			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME+105));
 
 			lane.add(new Block(button.getColor(), 50, 50, 5));
 			int index = lane.size() - 1;
@@ -217,7 +217,8 @@ public class SongPlayer extends Pane {
 			lane.get(index).arcWidthProperty().bind(super.widthProperty().divide(25));
 			lane.get(index).setX(button.getLayoutX());
 			lane.get(index).setY(-lane.get(index).getHeight());
-			anim.setByY(super.getHeight() + lane.get(index).getHeight());
+			anim.setInterpolator(Interpolator.LINEAR);
+			anim.setByY(super.getHeight() + lane.get(index).getHeight() + 75);
 			anim.setCycleCount(1);
 			anim.setAutoReverse(false);
 			anim.setNode(lane.get(lane.size() - 1));
@@ -317,7 +318,7 @@ public class SongPlayer extends Pane {
 	 * @return
 	 */
 	private double distanceToGoal(Block note) {
-		return Math.abs((super.getHeight() - note.getTranslateY()) - dButton.rect.getY());
+		return Math.abs((super.getHeight() - note.getTranslateY() + note.getHeight()/2) - dButton.rect.getLayoutY());
 	}
 
 	/**
@@ -343,7 +344,7 @@ public class SongPlayer extends Pane {
 					scoreCounter.perfect();
 					return 2;
 				}
-				if (distance < super.getHeight() / 5) {
+				if (distance < super.getHeight() / 4) {
 					ft.setFromValue(Color.CYAN);
 					ft.play();
 					scoreCounter.good();
