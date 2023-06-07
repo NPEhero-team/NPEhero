@@ -19,6 +19,9 @@ public class SettingsController
 		read();
 	}
 	
+	/**
+	 * reads json data from settings.json
+	 */
 	public void read()
 	{
 		JSONParser jsonParser = new JSONParser(); //parser to read the file
@@ -37,6 +40,9 @@ public class SettingsController
 		}		
 	}
 
+	/**
+	 * writes json data to settings.json
+	 */
 	public void write()
 	{
 		FileWriter fileWriter;

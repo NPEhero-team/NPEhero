@@ -14,6 +14,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import gui.Driver;
 import gui.GameOver;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -115,7 +116,7 @@ public class SongPlayer extends Pane {
 		song = lvl.song;
 
 		if (lvl.background != null) {
-			Driver.setBackground(lvl.background.getUrl());
+			Driver.setBackground(lvl.background);
 		}
 		bpm = d.bpm;					//Reads the song's bpm from a metadata file
 		level = lvl;
@@ -208,6 +209,8 @@ public class SongPlayer extends Pane {
 			lane.add(new Block(button.getColor(), 50, 50, 5));
 			int index = lane.size() - 1;
 			sends.remove();
+			lane.get(index).setCache(true); //added by tbone to try to improve performance
+			lane.get(index).setCacheHint(CacheHint.SPEED); //this too
 			lane.get(index).heightProperty().bind(super.widthProperty().divide(8));
 			lane.get(index).widthProperty().bind(super.widthProperty().divide(8));
 			lane.get(index).arcHeightProperty().bind(super.widthProperty().divide(25));
@@ -286,7 +289,7 @@ public class SongPlayer extends Pane {
 	public void cancel() {
 		Driver.soundController.endSong();
 		Driver.soundController.playMenuSong();
-		gui.Driver.setBackground("assets/mountains.png");
+		gui.Driver.setMenuBackground();
 		gameLoop.stop();
 	}
 

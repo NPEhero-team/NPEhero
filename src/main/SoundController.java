@@ -6,6 +6,7 @@ import java.util.HashMap;
 import gui.Driver;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class SoundController 
 {
@@ -14,6 +15,9 @@ public class SoundController
     private HashMap<String,MediaPlayer> effects = new HashMap<>();
     private File mainMenuSong = new File("src/assets/fairyfountain.wav");
 
+    /**
+     * creates a new sound controller and starts playing the main menu music
+     */
     public SoundController() 
     {
         effects.put("hit", new MediaPlayer(new Media(new File("src/assets/hit.wav").toURI().toString())));
@@ -26,6 +30,10 @@ public class SoundController
         playMenuSong();
     }
 
+    /**
+     * plays the song that is passed in.
+     * @param songFile: the song
+     */
     public void playSong(File songFile)
     {
         if (songMediaPlayer != null)
@@ -38,6 +46,9 @@ public class SoundController
         songMediaPlayer.play();
     }
 
+    /**
+     * plays the main menu song
+     */
     public void playMenuSong()
     {
         playSong(mainMenuSong);
@@ -45,6 +56,9 @@ public class SoundController
         songMediaPlayer.play();
     }
 
+    /**
+     * stops the currently playing song
+     */
     public void endSong()
     {
         if (songMediaPlayer != null)
@@ -53,9 +67,15 @@ public class SoundController
         }
     }
 
+    /**
+     * plays a sound effect
+     * for the volume slider to take affect each mediaplayer needs to be pre loaded. 
+     * this rewinds and played the proper mediaplayer for the sound
+     * @param preset: a string of the name of the sound. possible sounds assigned in the constructor
+     */
     public void playSfx(String preset)
     {
-        effects.get(preset).stop();
+        effects.get(preset).seek(new Duration(0));
         effects.get(preset).play();
     }
 }

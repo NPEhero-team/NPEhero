@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import main.LevelController;
 import main.SettingsController;
 import main.SoundController;
+import java.io.File;
 import devmenu.DebugMenu;
 
 
@@ -56,7 +57,7 @@ public class Driver extends Application
 
         
         setMenu(new MainMenu());
-        setBackground("assets/mountains.png");
+        setMenuBackground();
 
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> { //full screen stuff
             if (KeyCode.F11.equals(event.getCode())) {
@@ -95,15 +96,20 @@ public class Driver extends Application
      * replaces the background image with a new one
      * @param url   the url of the image to set
      */
-    public static void setBackground(String url) //replaces background with a new one
+    public static void setBackground(Image image) //replaces background with a new one
     {
         primaryPane.setBackground(new Background(
             new BackgroundImage(
-                    new Image(url),
+                    image,
                     BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
                     new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
                     new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
             )));
+    }
+
+    public static void setMenuBackground()
+    {
+        setBackground(new Image(new File("src/assets/mountains.png").toURI().toString()));
     }
 
     /**
