@@ -17,4 +17,4 @@ Pase the following into VM arguements:
 `--module-path lib/windows/lib --add-modules javafx.controls,javafx.fxml,javafx.media`
 
 #### Linux
-`--module-path lib/linux --add-modules javafx.controls,javafx.fxml,javafx.media`
+`--module-path lib/linux --add-modules javafx.controls,javafx.fxml,javafx.media -Dprism.forceGPU=true`
