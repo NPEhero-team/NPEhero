@@ -1,5 +1,5 @@
 # Installation
-1. Install Java 17 or newer (except for the JDK11 build (not recommended) )
+1. Install Java 17 or newer
 1. Go to Deployments > Releases.
 1. Download the correct archive for your OS
 1. Unzip it into an empty directory
