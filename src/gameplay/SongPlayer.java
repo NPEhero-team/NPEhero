@@ -270,8 +270,6 @@ public class SongPlayer extends Pane {
 				songIsPlaying = true;
 				Driver.soundController.playSong(song);
 			}
-			if (!SongPlayer.super.isVisible());
-				missMute = true;
 		}
 	};
 
@@ -288,6 +286,7 @@ public class SongPlayer extends Pane {
 	 * @throws UnsupportedAudioFileException
 	 */
 	public void cancel() {
+		missMute = true;
 		Driver.soundController.endSong();
 		Driver.soundController.playMenuSong();
 		gui.Driver.setMenuBackground();
