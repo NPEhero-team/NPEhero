@@ -1,7 +1,7 @@
 # Installation
-1. Install Java 17 or newer (except for the JDK11 build (not reccomended) )
+1. Install Java 17 or newer (except for the JDK11 build (not recommended) )
 1. Go to Deployments > Releases.
-1. Download the correct ZIP for your OS
+1. Download the correct archive for your OS
 1. Unzip it into an empty directory
 1. Run the start file (start_linux.sh or start_windows.bat)
 
@@ -48,14 +48,14 @@ Do not forget the comma after the second to last item.
 1. Change the directory to your eclipse workspace
 1. Check "Import all existing Eclipse projects after clone finishes"
 1. Click finish
-1. Right click on project > Propereties
+1. Right click on project > Properties
 1. Select Run/Debug Settings > Driver
 1. Click Edit
-1. Click the Arguements tab
+1. Click the Arguments tab
 1. Paste in the [VM Arguements](https://gitlab.sowgro.net/npeinc/npehero#java-vm-arguements) for your OS
 
-## Java VM Arguements
-These are automatically run by the start files when installing from a ZIP.
+## Java VM Arguments
+These are automatically run by the start files when installing from an archive.
 
 #### Windows
 `--module-path lib/windows/lib --add-modules javafx.controls,javafx.fxml,javafx.media`
