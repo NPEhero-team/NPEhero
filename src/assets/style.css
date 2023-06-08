@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+
+/* global */
+
+.root{
+    -fx-font-family: "space mono";
+}
+
+/* button */
+
+.button { 
+    -fx-background-color: rgba(0, 0, 0, 0.5); 
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-border-width: 3;
+    -fx-border-radius: 5;
+    -fx-font-size: 25;
+    -fx-background-radius: 5;
+}
+
+.button:hover {
+    -fx-background-color: rgb(50, 50, 50, 0.5);
+}
+
+.button:focused {
+    -fx-background-color: rgb(50, 50, 50, 0.5);
+    -fx-border-color: rgb(255, 255, 255);
+}
+
+.button:selected {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-text-fill: rgb(0, 0, 0);
+
+}
+
+.button:pressed{
+    -fx-background-color: rgb(231, 231, 231);
+    -fx-border-color: transparent;
+    -fx-text-fill: rgb(0, 0, 0);
+}
+
+/* table */
+
+TableView {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: transparent;
+}
+
+.table-cell {
+    -fx-padding: .5em;
+}
+
+.table-view .column-header {
+    -fx-text-background-color: rgb(168, 168, 168);
+    -fx-background-color: transparent;
+}
+
+.table-row-cell {
+    -fx-cell-size: 40;
+    -fx-background-color: transparent;
+    -fx-background-radius: 3;
+    -fx-text-background-color: rgb(255, 255, 255);
+    /* -fx-border-width: 3; */
+    /* -fx-border-radius: 5; */
+    /* -fx-border-color: transparent; */
+}
+
+.table-row-cell:hover {
+    -fx-background-color: rgba(100, 100, 100, 0.5);
+    
+}
+
+TableView:focused {
+    -fx-effect: null;
+}
+
+TableView:focused .list-cell:focused {
+    -fx-background-color: rgb(50, 50, 50, 0.5);
+    /* -fx-border-color: rgb(255, 255, 255); */
+}
+
+.table-view .corner {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-text-background-color: rgb(0, 0, 0);
+}
+
+.table-row-cell:pressed {
+    -fx-background-color: rgb(231, 231, 231);
+    /* -fx-border-color: transparent; */
+}
+
+.table-row-cell:empty {
+    -fx-background-color: transparent;
+    /* -fx-border-color: transparent; */
+    -fx-text-background-color: white;
+}
+
+.unselectable .table-row-cell{
+    -fx-background-color: transparent;
+    /* -fx-border-color: transparent; */
+    -fx-text-background-color: white;
+}
+
+/* slider */
+
+Slider {
+    -fx-padding: 1em;
+}
+
+.track {
+    
+    -fx-padding: 3;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-radius: 5;
+}
+
+.thumb {
+    -fx-pref-height: 30;
+    -fx-prefer-width: 30;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-size: 25;
+    -fx-border-radius: 5;
+    -fx-border-color: rgb(231, 231, 231);
+    -fx-border-width: 3;
+}
+
+.thumb:hover {
+    -fx-background-color: rgb(50, 50, 50, 0.5);
+}
+
+Slider:focused .thumb{
+    -fx-background-color: rgb(255,255,255);
+    -fx-border-color: white;
+}
+
+.thumb:pressed {
+    -fx-background-color: rgb(231, 231, 231);
+    -fx-border-color: rgb(231, 231, 231);
+}
+
+/* scroll bars */
+ 
+.scroll-bar:horizontal ,
+.scroll-bar:vertical{
+    -fx-font-size: 5px;
+    -fx-background-color :transparent;
+    -fx-border-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-border-radius :2.0em;
+}
+
+.increment-button ,.decrement-button {
+    -fx-background-color:transparent;
+	-fx-border-color:transparent;
+}
+
+.scroll-bar:horizontal .track ,
+.scroll-bar:vertical .track{
+     -fx-background-color: rgba(0, 0, 0, 0.5);
+	 -fx-background-radius: 5em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color:white;
+	-fx-background-radius: 5em;
+    -fx-border-width: 0;
+ 
+}
+
+.scroll-bar .thumb:pressed {
+    -fx-background-color: rgb(231, 231, 231);
+}
+
+/* text */
+
+.t0 {
+    -fx-font-size: 125;
+    -fx-fill: black;
+}
+
+.t1 {
+    -fx-font-size: 50;
+    -fx-fill: white;
+}
+
+.t11 {
+    -fx-font-size: 50;
+    -fx-fill: black; 
+}
+
+.t2 {
+    -fx-font-size: 30;
+    -fx-fill: white;
+}
+
+.t3 {
+    -fx-fill: white;
+}
+
+/* text box */
+
+.box {
+    -fx-background-radius: 5;    
+    -fx-background-color: rgba(0, 0, 0, 0.5); 
+    -fx-text-fill: white;
+}
+
+/* debug */
+
+.debug {
+    /* -fx-background-radius: 5;     */
+    -fx-background-color: rgb(255, 0, 0); 
+    /* -fx-border-color: red; */
+    /* -fx-text-fill: white; */
+    /* -fx-border-width: 20; */
+}
+

@@ -50,7 +50,7 @@ public class Driver extends Application
         primaryStage = newPrimaryStage;
 
         Scene primaryScene = new Scene(primaryPane, 800,600);
-        primaryScene.getStylesheets().add("gui/style.css");
+        primaryScene.getStylesheets().add("assets/style.css");
 
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("NPE Hero");

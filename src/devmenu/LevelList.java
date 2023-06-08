@@ -15,8 +15,6 @@ import main.LevelController;
 
 public class LevelList 
 {
-    Stage primaryStage = new Stage();
-
     /*
      * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
      * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
@@ -65,7 +63,8 @@ public class LevelList
 
         VBox main = new VBox();
         main.getChildren().addAll(levels,buttons,newLevelBox);
-        Scene scene = new Scene(main);
+        Scene scene = new Scene(main, 400, 400);
+        Stage primaryStage = new Stage();
         primaryStage.setScene(scene);
         primaryStage.show();
     }

@@ -6,14 +6,14 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/windows/lib/javafx.base.jar"/>
-	<classpathentry kind="lib" path="lib/windows/lib/javafx.controls.jar"/>
-	<classpathentry kind="lib" path="lib/windows/lib/javafx.fxml.jar"/>
-	<classpathentry kind="lib" path="lib/windows/lib/javafx.graphics.jar"/>
-	<classpathentry kind="lib" path="lib/windows/lib/javafx.media.jar"/>
-	<classpathentry kind="lib" path="lib/windows/lib/javafx.swing.jar"/>
-	<classpathentry kind="lib" path="lib/windows/lib/javafx.web.jar"/>
-	<classpathentry kind="lib" path="lib/windows/lib/javafx-swt.jar"/>
+	<classpathentry kind="lib" path="lib/linux/javafx.base.jar"/>
+	<classpathentry kind="lib" path="lib/linux/javafx.controls.jar"/>
+	<classpathentry kind="lib" path="lib/linux/javafx.fxml.jar"/>
+	<classpathentry kind="lib" path="lib/linux/javafx.graphics.jar"/>
+	<classpathentry kind="lib" path="lib/linux/javafx.media.jar"/>
+	<classpathentry kind="lib" path="lib/linux/javafx.swing.jar"/>
+	<classpathentry kind="lib" path="lib/linux/javafx.web.jar"/>
+	<classpathentry kind="lib" path="lib/linux/javafx-swt.jar"/>
 	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
