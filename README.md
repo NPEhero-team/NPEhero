@@ -38,7 +38,7 @@ Do not forget the comma after the second to last item.
 
 ## Eclipse
 1. Click the search icon in the upper right corner
-2. Search "git repositories"
+2. Search "git repositories" and select it
 3. Click "Clone a git repository"
 1. Return to GitLab and click the blue clone button
 1. Copy the "Clone with HTTPS" link
