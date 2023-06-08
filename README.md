@@ -1,5 +1,5 @@
 # Installation
-1. Install Java 17 or newer
+1. Install Java 17 or newer (except for the JDK11 build (not reccomended) )
 1. Go to Deployments > Releases.
 1. Download the correct ZIP for your OS
 1. Unzip it into an empty directory
@@ -20,7 +20,7 @@
     1. Paste the link into the VSCode popup
 3. Click the run and debug button on the sidebar 
 1. Click "create launch.json" and open the file
-1. Add the key "vmArgs" and put in the VM arguements for your OS
+1. Add the key "vmArgs" and put in the [VM arguements](https://gitlab.sowgro.net/npeinc/npehero#java-vm-arguements) for your OS
 
 For example: 
 ```json
@@ -49,11 +49,10 @@ Do not forget the comma after the second to last item.
 1. Check "Import all existing Eclipse projects after clone finishes"
 1. Click finish
 1. Right click on project > Propereties
-1. Select Run/Debug Settings
-1. Select Driver
+1. Select Run/Debug Settings > Driver
 1. Click Edit
 1. Click the Arguements tab
-1. Paste in the VM Arguements for your OS
+1. Paste in the [VM Arguements](https://gitlab.sowgro.net/npeinc/npehero#java-vm-arguements) for your OS
 
 ## Java VM Arguements
 These are automatically run by the start files when installing from a ZIP.
