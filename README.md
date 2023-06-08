@@ -3,7 +3,7 @@
 1. Go to Deployments > Releases.
 1. Download the correct archive for your OS
 1. Unzip it into an empty directory
-1. Run the start file (start_linux.sh or start_windows.bat)
+1. Run the start file (start.sh or start.bat)
 
 # Run in IDE
 ## VSCode
