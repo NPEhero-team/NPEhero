@@ -18,7 +18,8 @@ import javafx.stage.Stage;
 import main.LevelController;
 import main.SettingsController;
 import main.SoundController;
-import java.io.File;
+import java.nio.file.Paths;
+
 import devmenu.DebugMenu;
 
 
@@ -50,7 +51,7 @@ public class Driver extends Application
         primaryStage = newPrimaryStage;
 
         Scene primaryScene = new Scene(primaryPane, 800,600);
-        primaryScene.getStylesheets().add("assets/style.css");
+        primaryScene.getStylesheets().add("gui/style.css");
 
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("NPE Hero");
@@ -109,7 +110,7 @@ public class Driver extends Application
 
     public static void setMenuBackground()
     {
-        setBackground(new Image(new File("src/assets/mountains.png").toURI().toString()));
+        setBackground(new Image(Paths.get("resources/mountains.png").toUri().toString()));
     }
 
     /**

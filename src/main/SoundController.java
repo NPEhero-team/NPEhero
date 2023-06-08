@@ -1,6 +1,7 @@
 package main;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 import gui.Driver;
@@ -13,17 +14,18 @@ public class SoundController
     public MediaPlayer songMediaPlayer;
     public MediaPlayer sfxMediaPlayer;
     private HashMap<String,MediaPlayer> effects = new HashMap<>();
-    private File mainMenuSong = new File("src/assets/fairyfountain.wav");
+    private File mainMenuSong = Paths.get("resources/fairyfountain.wav").toFile();
+    
 
     /**
      * creates a new sound controller and starts playing the main menu music
      */
     public SoundController() 
     {
-        effects.put("hit", new MediaPlayer(new Media(new File("src/assets/hit.wav").toURI().toString())));
-        effects.put("miss", new MediaPlayer(new Media(new File("src/assets/miss.wav").toURI().toString())));
-        effects.put("forward", new MediaPlayer(new Media(new File("src/assets/forward.wav").toURI().toString())));
-        effects.put("backward", new MediaPlayer(new Media(new File("src/assets/backward.wav").toURI().toString())));
+        effects.put("hit", new MediaPlayer(new Media(Paths.get("resources/hit.wav").toUri().toString())));
+        effects.put("miss", new MediaPlayer(new Media(Paths.get("resources/miss.wav").toUri().toString())));
+        effects.put("forward", new MediaPlayer(new Media(Paths.get("resources/forward.wav").toUri().toString())));
+        effects.put("backward", new MediaPlayer(new Media(Paths.get("resources/backward.wav").toUri().toString())));
         effects.forEach((key,value) -> {
             value.volumeProperty().bind(Driver.settingsController.effectsVol);
         });

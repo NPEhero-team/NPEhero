@@ -80,7 +80,7 @@ public class Level
 
         diffList = FXCollections.observableArrayList();
         validDiffList = FXCollections.observableArrayList();
-        for(File cur: thisDir.listFiles()) //iterates through all files/folders in src/assets/levels/LEVEL
+        for(File cur: thisDir.listFiles()) //iterates through all files/folders in /levels/LEVEL
         {
             if (cur.isDirectory()) //all subfolders within a level folder are difficulties
             {
