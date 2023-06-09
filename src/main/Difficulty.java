@@ -72,6 +72,18 @@ public class Difficulty implements Comparable<Difficulty>
             isValid1 = false;
         }
 
+        if (bpm == 0.0)
+        {
+            System.err.println(thisDir+" is missing a bpm");
+            isValid1 = false;
+        }
+
+        if (numBeats == 0)
+        {
+            System.err.println(thisDir+" is missing the number of beats");
+            isValid1 = false;
+        }
+
         isValid = isValid1;
     }
 

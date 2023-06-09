@@ -35,7 +35,7 @@ public class DiffEditor
         Text bpmLabel = new Text("BPM");
         TextField bpm = new TextField(diff.bpm+"");
 
-        Text numBeatsLabel = new Text("Number of beats");
+        Text numBeatsLabel = new Text("Number of beats (set by notes editor)");
         TextField numBeats = new TextField(diff.numBeats+"");
 
         Text priorityLabel = new Text("priority (lower first)");
@@ -56,6 +56,11 @@ public class DiffEditor
         Button playLevel = new Button("Launch level");
         playLevel.setOnAction(e -> Driver.setMenu(new LevelSurround(diff.level, diff, new MainMenu())));
 
+        Button refresh = new Button("Refresh");
+        refresh.setOnAction( e -> {
+            numBeats.setText(diff.numBeats+"");
+        });
+
         Button save = new Button("Save");
         save.setOnAction(e -> { //assigns text feilds to values
             diff.title = title.getText();
@@ -66,7 +71,7 @@ public class DiffEditor
         });
 
         VBox main = new VBox();
-        main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,bpmLabel,bpm,numBeatsLabel,numBeats,priorityLabel,priority,editNotes,editScores,playLevel,save);
+        main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,bpmLabel,bpm,numBeatsLabel,numBeats,refresh,priorityLabel,priority,editNotes,editScores,playLevel,save);
         Scene scene = new Scene(main);
         primaryStage.setScene(scene);
         primaryStage.show();
