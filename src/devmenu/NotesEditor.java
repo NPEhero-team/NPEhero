@@ -88,7 +88,7 @@ public class NotesEditor
         try 
         {
             Driver.soundController.endSong();
-            diff.numBeats = (int)timer.time();
+            diff.numBeats = (int)Double.parseDouble(timer.toString());
             timer = null;
             writer.close();
             help.setText(t1);
