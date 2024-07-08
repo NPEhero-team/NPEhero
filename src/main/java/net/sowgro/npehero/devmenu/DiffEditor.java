@@ -3,6 +3,7 @@ package net.sowgro.npehero.devmenu;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
+import javafx.scene.layout.Pane;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gui.LevelSurround;
 import net.sowgro.npehero.gui.MainMenu;
@@ -14,7 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.sowgro.npehero.main.Difficulty;
 
-public class DiffEditor
+public class DiffEditor extends Pane
 {
     /*
      * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
@@ -72,8 +73,9 @@ public class DiffEditor
 
         VBox main = new VBox();
         main.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,bpmLabel,bpm,numBeatsLabel,numBeats,refresh,priorityLabel,priority,editNotes,editScores,playLevel,save);
-        Scene scene = new Scene(main);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+//        Scene scene = new Scene(main);
+//        primaryStage.setScene(scene);
+//        primaryStage.show();
+        super.getChildren().add(main);
     }
 }

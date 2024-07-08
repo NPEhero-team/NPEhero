@@ -2,6 +2,7 @@ package net.sowgro.npehero.devmenu;
 
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.scene.layout.Pane;
 import net.sowgro.npehero.Driver;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,7 +15,7 @@ import javafx.stage.Stage;
 import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.main.LevelController;
 
-public class LevelList 
+public class LevelList extends Pane
 {
     /*
      * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
@@ -42,7 +43,7 @@ public class LevelList
 
 
         Button edit = new Button("Edit");
-        edit.setOnAction(e -> new LevelEditor(levels.getSelectionModel().getSelectedItem()));
+        edit.setOnAction(e -> Driver.setMenu(new LevelEditor(levels.getSelectionModel().getSelectedItem())));
 
         Button remove = new Button("Delete");
         remove.setOnAction(e -> Driver.levelController.removeLevel(levels.getSelectionModel().getSelectedItem()));
@@ -64,9 +65,6 @@ public class LevelList
 
         VBox main = new VBox();
         main.getChildren().addAll(levels,buttons,newLevelBox);
-        Scene scene = new Scene(main, 400, 400);
-        Stage primaryStage = new Stage();
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        super.getChildren().add(main);
     }
 }

@@ -4,6 +4,7 @@
 
 .root{
     -fx-font-family: "space mono";
+    -fx-font-size: 20;
 }
 
 /* button */

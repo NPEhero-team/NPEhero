@@ -3,6 +3,8 @@ package net.sowgro.npehero.devmenu;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+
+import javafx.scene.layout.Pane;
 import net.sowgro.npehero.gameplay.Timer;
 import net.sowgro.npehero.Driver;
 import javafx.scene.Scene;
@@ -13,7 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.sowgro.npehero.main.Difficulty;
 
-public class NotesEditor
+public class NotesEditor extends Pane
 {
     Text help;
     String t1 = "Press Start to begin recording. Use the same keys. Note: existing notes will be overwitten.";
@@ -39,13 +41,11 @@ public class NotesEditor
         VBox main = new VBox();
         main.getChildren().addAll(help,cur,start,stop);
 
-        Scene scene = new Scene(main);
-        Stage primaryStage = new Stage();
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        super.getChildren().add(main);
 
         writer = new PrintWriter(diff.notes, "UTF-8");
 
+        Scene scene = Driver.primaryStage.getScene();
         scene.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.D) {
 				writer.println("d"+timer);
@@ -73,7 +73,7 @@ public class NotesEditor
             }
 		});
 
-        primaryStage.setOnCloseRequest(e -> stop());
+        Driver.primaryStage.setOnCloseRequest(e -> stop());
     }
 
     private void start()

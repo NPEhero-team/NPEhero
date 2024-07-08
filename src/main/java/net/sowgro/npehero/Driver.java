@@ -15,6 +15,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import net.sowgro.npehero.devmenu.DebugMenu;
 import net.sowgro.npehero.gui.MainMenu;
 import net.sowgro.npehero.main.LevelController;
 import net.sowgro.npehero.main.SettingsController;

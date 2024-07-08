@@ -73,12 +73,6 @@ public class Settings extends Pane
 
         Text devLabel = new Text("Advanced");
         devLabel.getStyleClass().add("t3");
-        
-        Button levelEdit = new Button("Level Utility");
-        levelEdit.setOnAction(e -> {
-            Driver.soundController.playSfx("forward");
-            new LevelList();
-        });
 
         Button devMenu = new Button();
         devMenu.setText("Debug Menu");
@@ -89,7 +83,7 @@ public class Settings extends Pane
 
         VBox devBox = new VBox();
         devBox.getStyleClass().add("box");
-        devBox.getChildren().addAll(devLabel,levelEdit,devMenu);
+        devBox.getChildren().addAll(devLabel,devMenu);
         devBox.setVisible(false);
         devBox.setManaged(false);
         devBox.setPadding(new Insets(10));

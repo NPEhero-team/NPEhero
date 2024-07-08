@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
+import net.sowgro.npehero.devmenu.LevelList;
 
 
 public class MainMenu extends Pane
@@ -39,8 +40,15 @@ public class MainMenu extends Pane
 
         Button settings = new Button();
         settings.setText("Settings");
-        settings.setOnAction(e -> {Driver.setMenu(new Settings());
+        settings.setOnAction(_ -> {
+            Driver.setMenu(new Settings());
             Driver.soundController.playSfx("forward");
+        });
+
+        Button levelEdit = new Button("Level Editor");
+        levelEdit.setOnAction(e -> {
+            Driver.soundController.playSfx("forward");
+            Driver.setMenu(new LevelList());
         });
 
         Button exit = new Button();
@@ -50,7 +58,7 @@ public class MainMenu extends Pane
         });
 
         VBox buttonBox = new VBox();
-        buttonBox.getChildren().addAll(play, settings, exit);
+        buttonBox.getChildren().addAll(play, settings, levelEdit, exit);
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setSpacing(10);
 

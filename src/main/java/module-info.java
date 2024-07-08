@@ -5,8 +5,5 @@ module net.sowgro.npehero {
     requires json.simple;
     requires java.desktop;
 
-
-    opens net.sowgro.npehero to javafx.fxml;
-    exports net.sowgro.npehero.gui;
     exports net.sowgro.npehero;
 }

@@ -11,15 +11,17 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
 
-public class LevelEditor
+public class LevelEditor extends Pane
 { 
     private File selectedSong = null;
     private File selectedPreview = null;
@@ -32,8 +34,6 @@ public class LevelEditor
      */
     public LevelEditor(Level level)
     {
-        Stage primaryStage = new Stage();
-
         Text folderNameLabel = new Text("Folder name");
         TextField folderName = new TextField(level.thisDir.getName());
         folderName.setDisable(true);
@@ -59,17 +59,17 @@ public class LevelEditor
         FileChooser backgroundChooser = new FileChooser();
         backgroundChooser.getExtensionFilters().add(new ExtensionFilter("PNG", "*.png"));
         Button backgroundButton = new Button("Import background PNG");
-        backgroundButton.setOnAction(e -> {selectedBackground = backgroundChooser.showOpenDialog(primaryStage);});
+        backgroundButton.setOnAction(e -> {selectedBackground = backgroundChooser.showOpenDialog(Driver.primaryStage);});
 
         FileChooser previewChooser = new FileChooser();
         previewChooser.getExtensionFilters().add(new ExtensionFilter("PNG", "*.png"));
         Button previewButton = new Button("Import preview PNG");
-        previewButton.setOnAction(e -> {selectedPreview = previewChooser.showOpenDialog(primaryStage);});
+        previewButton.setOnAction(e -> {selectedPreview = previewChooser.showOpenDialog(Driver.primaryStage);});
 
         FileChooser songChooser = new FileChooser();
         songChooser.getExtensionFilters().add(new ExtensionFilter("WAV", "*.wav"));
         Button songButton = new Button("Import song WAV");
-        songButton.setOnAction(e -> selectedSong = songChooser.showOpenDialog(primaryStage));
+        songButton.setOnAction(e -> selectedSong = songChooser.showOpenDialog(Driver.primaryStage));
 
         Text diffLabel = new Text("Difficulties");
 
@@ -88,7 +88,7 @@ public class LevelEditor
         
 
         Button edit = new Button("Edit");
-        edit.setOnAction(e -> new DiffEditor(diffList.getSelectionModel().getSelectedItem()));
+        edit.setOnAction(e -> Driver.setMenu(new DiffEditor(diffList.getSelectionModel().getSelectedItem())));
 
         Button remove = new Button("Delete");
         remove.setOnAction(e -> level.removeDiff(diffList.getSelectionModel().getSelectedItem()));
@@ -142,9 +142,7 @@ public class LevelEditor
 
         HBox mainBox = new HBox();
         mainBox.getChildren().addAll(options,diffBox);
-    
-        Scene scene = new Scene(mainBox);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
+        super.getChildren().add(mainBox);
     }
 }
