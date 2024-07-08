@@ -1,1 +1,0 @@
-java --module-path lib/linux --add-modules javafx.controls,javafx.fxml,javafx.media -Dprism.forceGPU=true -jar npehero_linux.jar 

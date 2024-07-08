@@ -1,1 +1,0 @@
-java --module-path lib/windows/lib --add-modules javafx.controls,javafx.fxml,javafx.media -jar npehero_windows.jar
