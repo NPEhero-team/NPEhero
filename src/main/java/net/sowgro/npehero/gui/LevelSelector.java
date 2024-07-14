@@ -1,8 +1,6 @@
 package net.sowgro.npehero.gui;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -66,13 +64,8 @@ public class LevelSelector extends Pane
         rootBox.setSpacing(10);
 
         levels.getStyleClass().remove("list-view");
-        levels.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Level>() { //listens for change in selected item of the list
-
-			@Override
-			public void changed(ObservableValue<? extends Level> arg0, Level arg1, Level arg2) {
-				addDetails(rightBox, levels);
-			}	
-		});
+        //listens for change in selected item of the list
+        levels.getSelectionModel().selectedItemProperty().addListener(_ -> addDetails(rightBox, levels));
         super.getChildren().add(rootBox);
     }
 

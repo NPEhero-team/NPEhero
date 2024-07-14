@@ -62,8 +62,8 @@ public class GameOver extends Pane
         nameLabel.getStyleClass().add("t3");
 
         TextField name = new TextField();
-        name.getStyleClass().remove("text-feild");
-        name.getStyleClass().add("button");
+//        name.getStyleClass().remove("text-filed");
+//        name.getStyleClass().add("button");
         name.setText("name");
 
         Button save = new Button();

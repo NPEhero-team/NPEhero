@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -86,30 +85,16 @@ public class SongPlayer extends Pane {
 	 * Establishes what the chart for the song is going to look like
 	 * @throws FileNotFoundException
 	 */
-	public void loadSong(File notes) throws FileNotFoundException {
-		Scanner scan = new Scanner(new File(notes.getPath()));	//file reader for reading in the notes from a notes.txt file
-		try{
-			while (scan.hasNext()) {
-				String input = scan.next();
-				if (input.charAt(0) == 'd') {
-					dSends.add(new NoteInfo(Double.parseDouble(input.substring(1))));
-				}
-				else if (input.charAt(0) == 'f') {
-					fSends.add(new NoteInfo(Double.parseDouble(input.substring(1))));
-				}
-				else if (input.charAt(0) == 's') {
-					spaceSends.add(new NoteInfo(Double.parseDouble(input.substring(1))));
-				}
-				else if (input.charAt(0) == 'j') {
-					jSends.add(new NoteInfo(Double.parseDouble(input.substring(1))));
-				}
-				else if (input.charAt(0) == 'k') {
-					kSends.add(new NoteInfo(Double.parseDouble(input.substring(1))));
-				}
+	public void loadSong() throws FileNotFoundException {
+		difficulty.notes.list.forEach(e -> {
+			switch (e.lane) {
+				case 0 -> dSends.add(new NoteInfo(e.time.get() * (difficulty.bpm / 60)));
+				case 1 -> fSends.add(new NoteInfo(e.time.get() * (difficulty.bpm / 60)));
+				case 2 -> spaceSends.add(new NoteInfo(e.time.get() * (difficulty.bpm / 60)));
+				case 3 -> jSends.add(new NoteInfo(e.time.get() * (difficulty.bpm / 60)));
+				case 4 -> kSends.add(new NoteInfo(e.time.get() * (difficulty.bpm / 60)));
 			}
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
+		});
 	}
 
 	public SongPlayer(Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
@@ -131,7 +116,7 @@ public class SongPlayer extends Pane {
 		scoreCounter = cntrl;			//Uses the song's designated scoreCounter
 
 		try {
-			loadSong(d.notes);			//Calls the file loading from the song's notes.txt file
+			loadSong();			//Calls the file loading from the song's notes.txt file
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

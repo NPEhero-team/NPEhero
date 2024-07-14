@@ -4,18 +4,13 @@ import java.io.File;
 
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
@@ -32,11 +27,14 @@ public class LevelEditor extends Pane
      * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
      * style classes are defined in the style.css file.
      */
-    public LevelEditor(Level level)
+    public LevelEditor(Level level, Pane prev)
     {
         Text folderNameLabel = new Text("Folder name");
-        TextField folderName = new TextField(level.thisDir.getName());
-        folderName.setDisable(true);
+        TextField folderName = new TextField();
+        if (level.thisDir != null) {
+            folderName.setText(level.thisDir.getName());
+            folderName.setDisable(true);
+        }
 
         Text titleLabel = new Text("Title");
         TextField title = new TextField(level.getTitle());
@@ -47,12 +45,22 @@ public class LevelEditor extends Pane
         Text descLabel = new Text("Description");
         TextField desc = new TextField(level.desc);
 
-        Text colorsLabel = new Text("Colors (Left to right)");
-        ColorPicker c1 = new ColorPicker(level.colors[0]);
-        ColorPicker c2 = new ColorPicker(level.colors[1]);
-        ColorPicker c3 = new ColorPicker(level.colors[2]);
-        ColorPicker c4 = new ColorPicker(level.colors[3]);
-        ColorPicker c5 = new ColorPicker(level.colors[4]);
+        Text colorsLabel = new Text("Colors");
+
+        ColorPicker[] colorsPickers = new ColorPicker[] {
+                new ColorPicker(level.colors[0]),
+                new ColorPicker(level.colors[1]),
+                new ColorPicker(level.colors[2]),
+                new ColorPicker(level.colors[3]),
+                new ColorPicker(level.colors[4])
+        };
+
+        for (ColorPicker cp : colorsPickers) {
+            cp.getStyleClass().add("button");
+        }
+
+        HBox colorPickerBox = new HBox();
+        colorPickerBox.getChildren().addAll(colorsPickers);
 
         Text filesLabel = new Text("Files");
 
@@ -73,10 +81,10 @@ public class LevelEditor extends Pane
 
         Text diffLabel = new Text("Difficulties");
 
-        TableView<Difficulty> diffList = new TableView<Difficulty>();
-        
-        TableColumn<Difficulty,String> diffCol = new TableColumn<Difficulty,String>("Difficulty");
-        TableColumn<Difficulty,Boolean> validCol = new TableColumn<Difficulty,Boolean>("Valid?");
+        TableView<Difficulty> diffList = new TableView<>();
+
+        TableColumn<Difficulty,String> diffCol = new TableColumn<>("Difficulty");
+        TableColumn<Difficulty,Boolean> validCol = new TableColumn<>("Valid?");
 
         diffList.getColumns().add(diffCol);
         diffList.getColumns().add(validCol);
@@ -85,22 +93,17 @@ public class LevelEditor extends Pane
         validCol.setCellValueFactory(data -> new ReadOnlyBooleanWrapper(data.getValue().isValid));
 
         diffList.setItems(level.getDiffList());
-        
 
-        Button edit = new Button("Edit");
-        edit.setOnAction(e -> Driver.setMenu(new DiffEditor(diffList.getSelectionModel().getSelectedItem())));
-
-        Button remove = new Button("Delete");
-        remove.setOnAction(e -> level.removeDiff(diffList.getSelectionModel().getSelectedItem()));
-
-        Button refresh = new Button("Refresh");
-        refresh.setOnAction(e -> {
-            level.readData();
-            diffList.setItems(level.getDiffList());
+        diffList.setRowFactory( _ -> {
+            TableRow<Difficulty> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    Difficulty rowData = row.getItem();
+                    Driver.setMenu(new DiffEditor(rowData, this));
+                }
+            });
+            return row ;
         });
-
-        HBox buttons = new HBox();
-        buttons.getChildren().addAll(edit,remove,refresh);
 
         TextField newDiff = new TextField("new");
         Button newDiffButton = new Button("add");
@@ -108,16 +111,21 @@ public class LevelEditor extends Pane
         HBox newDiffBox = new HBox();
         newDiffBox.getChildren().addAll(newDiff,newDiffButton);
 
+        Button newDiffs = new Button("Edit difficulties");
+        newDiffs.setOnAction(_ -> Driver.setMenu(new DiffList(level, this)));
+
+        diffList.setSelectionModel(null);
+
         Button save = new Button("Save");
-        save.setOnAction(e -> { //asigns feilds to values
+        save.setOnAction(e -> { //assigns fields to values
             level.setTitle(title.getText());
             level.setArtist(artist.getText());
             level.desc = desc.getText();
-            level.colors[0] = c1.getValue();
-            level.colors[1] = c2.getValue();
-            level.colors[2] = c3.getValue();
-            level.colors[3] = c4.getValue();
-            level.colors[4] = c5.getValue();
+            level.colors[0] = colorsPickers[0].getValue();
+            level.colors[1] = colorsPickers[1].getValue();
+            level.colors[2] = colorsPickers[2].getValue();
+            level.colors[3] = colorsPickers[3].getValue();
+            level.colors[4] = colorsPickers[4].getValue();
             if (selectedBackground != null && selectedBackground.exists())
             {
                 level.addFile(selectedBackground,"background.png");
@@ -135,14 +143,36 @@ public class LevelEditor extends Pane
 
         VBox options = new VBox();
         options.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,artistLabel,artist,descLabel,desc,colorsLabel,
-            c1,c2,c3,c4,c5,filesLabel,previewButton,backgroundButton,songButton,save);
+            colorPickerBox,filesLabel,previewButton,backgroundButton,songButton,save);
+        options.setSpacing(10);
 
         VBox diffBox = new VBox();
-        diffBox.getChildren().addAll(diffLabel,diffList,buttons,newDiffBox);
+        diffBox.getChildren().addAll(diffLabel,diffList,/*buttons,newDiffBox,*/ newDiffs);
+        diffBox.setSpacing(10);
 
         HBox mainBox = new HBox();
         mainBox.getChildren().addAll(options,diffBox);
+        mainBox.setSpacing(30);
 
-        super.getChildren().add(mainBox);
+        Button exit = new Button();
+        exit.setText("Back");
+        exit.setOnAction(e -> {
+            Driver.soundController.playSfx("backward");
+            Driver.setMenu(prev);
+        });
+
+        VBox centerBox = new VBox();
+        centerBox.setAlignment(Pos.CENTER);
+        centerBox.setSpacing(10);
+        centerBox.getChildren().addAll(mainBox,exit);
+        centerBox.setMinWidth(400);
+
+        HBox rootBox = new HBox();
+        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
+        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
+        rootBox.getChildren().add(centerBox);
+        rootBox.setAlignment(Pos.CENTER);
+
+        super.getChildren().add(rootBox);
     }
 }

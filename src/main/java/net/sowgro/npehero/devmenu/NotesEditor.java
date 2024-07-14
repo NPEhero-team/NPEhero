@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
+import javafx.geometry.Pos;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import net.sowgro.npehero.gameplay.Timer;
 import net.sowgro.npehero.Driver;
@@ -12,18 +14,17 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import net.sowgro.npehero.main.Difficulty;
 
 public class NotesEditor extends Pane
 {
     Text help;
-    String t1 = "Press Start to begin recording. Use the same keys. Note: existing notes will be overwitten.";
+    String t1 = "Press Start to begin recording. Use the same keys. Note: existing notes will be overwritten.";
     String t2 = "Now recording. Press Stop or ESC to finish";
     Difficulty diff;
     Timer timer;
     PrintWriter writer;
-    public NotesEditor(Difficulty diff) throws FileNotFoundException, UnsupportedEncodingException
+    public NotesEditor(Difficulty diff, Pane prev) throws FileNotFoundException, UnsupportedEncodingException
     {
         this.diff = diff;
 
@@ -41,9 +42,28 @@ public class NotesEditor extends Pane
         VBox main = new VBox();
         main.getChildren().addAll(help,cur,start,stop);
 
-        super.getChildren().add(main);
+        Button exit = new Button();
+        exit.setText("Back");
+        exit.setOnAction(e -> {
+            Driver.soundController.playSfx("backward");
+            Driver.setMenu(prev);
+        });
 
-        writer = new PrintWriter(diff.notes, "UTF-8");
+        VBox centerBox = new VBox();
+        centerBox.setAlignment(Pos.CENTER);
+        centerBox.setSpacing(10);
+        centerBox.getChildren().addAll(main,exit);
+        centerBox.setMinWidth(400);
+
+        HBox rootBox = new HBox();
+        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
+        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
+        rootBox.getChildren().add(centerBox);
+        rootBox.setAlignment(Pos.CENTER);
+
+        super.getChildren().add(rootBox);
+
+        writer = new PrintWriter(diff.notes.getFile(), "UTF-8");
 
         Scene scene = Driver.primaryStage.getScene();
         scene.setOnKeyPressed(e -> {

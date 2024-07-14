@@ -15,17 +15,15 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import net.sowgro.npehero.devmenu.DebugMenu;
 import net.sowgro.npehero.gui.MainMenu;
 import net.sowgro.npehero.main.LevelController;
 import net.sowgro.npehero.main.SettingsController;
 import net.sowgro.npehero.main.SoundController;
 
 import java.net.URL;
-import java.util.Objects;
 
 
-public class Driver extends Application 
+public class Driver extends Application
 {
 
     public static Stage primaryStage;

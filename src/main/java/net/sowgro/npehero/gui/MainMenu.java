@@ -53,7 +53,8 @@ public class MainMenu extends Pane
 
         Button exit = new Button();
         exit.setText("Quit");
-        exit.setOnAction(e -> {Driver.quit();
+        exit.setOnAction(e -> {
+            Driver.quit();
             Driver.soundController.playSfx("backward");
         });
 

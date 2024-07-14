@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,7 +17,7 @@ public class Difficulty implements Comparable<Difficulty>
     public File thisDir;
     public String title = "Unnamed";
     private ObservableList<LeaderboardEntry> leaderboard = FXCollections.observableArrayList();
-    public File notes;
+    public Notes notes;
     public Double bpm = 0.0;
     public int numBeats;
     public Level level;
@@ -62,9 +63,10 @@ public class Difficulty implements Comparable<Difficulty>
             isValid1 = false;
         }
 
-        if (new File(thisDir, "notes.txt").exists())
+        File notesFile = new File(thisDir, "notes.txt");
+        if (notesFile.exists())
         {
-            notes = new File(thisDir, "notes.txt");
+            notes = new Notes(notesFile, this);
         }
         else
         {

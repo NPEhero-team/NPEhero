@@ -11,7 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.devmenu.LevelList;
 
 public class Settings extends Pane
 {
@@ -58,8 +57,6 @@ public class Settings extends Pane
 
         Button fullscreen = new Button();
         fullscreen.setText("Toggle (F11)");
-        fullscreen.getStyleClass().remove("toggle-button");
-        fullscreen.getStyleClass().add("button");
         fullscreen.setOnAction(e -> {
             Driver.soundController.playSfx("forward");
             Driver.primaryStage.setFullScreen(!Driver.primaryStage.isFullScreen());
@@ -89,8 +86,6 @@ public class Settings extends Pane
         devBox.setPadding(new Insets(10));
 
         ToggleButton advanced = new ToggleButton("Advanced");
-        advanced.getStyleClass().remove("toggle-button");
-        advanced.getStyleClass().add("button");
         advanced.selectedProperty().bindBidirectional(devBox.managedProperty());
         advanced.selectedProperty().bindBidirectional(devBox.visibleProperty());
 
