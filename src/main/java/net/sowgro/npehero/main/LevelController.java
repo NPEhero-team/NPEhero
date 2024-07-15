@@ -11,22 +11,14 @@ import javafx.collections.ObservableList;
 
 public class LevelController
 {
-    File thisDir = new File("levels");
+    private static File thisDir = new File("levels");
     private static ObservableList<Level> levelList;
     private static ObservableList<Level> validLevelList;
 
     /**
-     * Creates a levelController, which holds all the levels
-     */
-    public LevelController()
-    {
-        readData();
-    }
-
-    /**
      * Reads contents of folder and creates cooresponding levels
      */
-    public void readData()
+    public static void readData()
     {
         levelList = FXCollections.observableArrayList();
         validLevelList = FXCollections.observableArrayList();
@@ -46,7 +38,7 @@ public class LevelController
      * Adds a level to the list by creating a directory and required files
      * @param text: the name of the directory and default title
      */
-    public void addLevel(String text) 
+    public static void addLevel(String text)
     {
         File levelDir = new File(thisDir,text);
         levelDir.mkdirs();
@@ -69,7 +61,7 @@ public class LevelController
      * Removes level from the filesystem then reloads this levelController
      * @param level: the level to be removed
      */
-    public void removeLevel(Level level)
+    public static void removeLevel(Level level)
     {
         File hold = level.thisDir;
         levelList.remove(level);

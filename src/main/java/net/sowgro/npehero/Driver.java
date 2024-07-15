@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
@@ -25,14 +26,8 @@ import java.net.URL;
 
 public class Driver extends Application
 {
-
     public static Stage primaryStage;
-    static Pane primaryPane = new Pane();
-
-    public static SettingsController settingsController = new SettingsController();
-    public static SoundController soundController = new SoundController();
-    public static LevelController levelController = new LevelController();
-//    public static DebugMenu debug = new DebugMenu();
+    static ScrollPane primaryPane = new ScrollPane();
 
     /*
      * starts javafx
@@ -49,6 +44,9 @@ public class Driver extends Application
     @Override
     public void start(Stage newPrimaryStage)
     {
+        SettingsController.read();
+        LevelController.readData();
+
         primaryStage = newPrimaryStage;
 
         Scene primaryScene = new Scene(primaryPane, 800,600);
@@ -58,9 +56,12 @@ public class Driver extends Application
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("NPE Hero");
 
+        primaryPane.getStyleClass().remove("scroll-pane");
         
         setMenu(new MainMenu());
         setMenuBackground();
+
+        SoundController.playSong(SoundController.MENUSONG);
 
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> { //full screen stuff
             if (KeyCode.F11.equals(event.getCode())) {
@@ -78,11 +79,7 @@ public class Driver extends Application
      */
     public static void setMenu(Pane pane)
     {
-        if (! primaryPane.getChildren().isEmpty())
-        {
-            primaryPane.getChildren().remove(0);
-        }
-        primaryPane.getChildren().add(pane);
+        primaryPane.setContent(pane);
         pane.prefWidthProperty().bind(primaryPane.widthProperty()); //makes pane fill the window
         pane.prefHeightProperty().bind(primaryPane.heightProperty());
         primaryPane.requestFocus(); //make the pane itself focused by the keyboard naviagtion so no button is highlighted by default
@@ -92,7 +89,7 @@ public class Driver extends Application
      * @return the current pane in primaryPane
      */
     public static Pane getMenu(){
-        return (Pane) primaryPane.getChildren().get(0);
+        return (Pane) primaryPane.getContent();
     }
 
     /**
@@ -113,14 +110,6 @@ public class Driver extends Application
     public static void setMenuBackground()
     {
         setBackground(new Image(Driver.class.getResource("mountains.png").toExternalForm()));
-    }
-
-    /**
-     * quits the application
-     */
-    public static void quit()
-    {
-        Platform.exit();
     }
 
     public static URL getResource(String fileName) {

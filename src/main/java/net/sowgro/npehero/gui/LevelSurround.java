@@ -14,6 +14,7 @@ import javafx.scene.text.Text;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.main.ScoreController;
+import net.sowgro.npehero.main.SoundController;
 
 public class LevelSurround extends Pane
 {   
@@ -31,7 +32,7 @@ public class LevelSurround extends Pane
         exit.setText("Back");
         exit.setOnAction(e -> {
             Driver.setMenu(prev);
-            Driver.soundController.playSfx("backward");
+            SoundController.playSfx(SoundController.BACKWARD);
             game.cancel();
         });
 

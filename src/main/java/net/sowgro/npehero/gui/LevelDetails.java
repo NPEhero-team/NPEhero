@@ -17,6 +17,7 @@ import javafx.scene.text.TextFlow;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
+import net.sowgro.npehero.main.SoundController;
 
 public class LevelDetails extends VBox
 {
@@ -97,13 +98,13 @@ public class LevelDetails extends VBox
             }
             play.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull()); //disables play button when no difficulty is selected
             play.setOnAction(e -> {
-                Driver.soundController.playSfx("forward");
+                SoundController.playSfx(SoundController.FORWARD);
                 Driver.setMenu(new LevelSurround(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
             });
 
             leaderboard.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull());
             leaderboard.setOnAction(e -> {
-                Driver.soundController.playSfx("forward");
+                SoundController.playSfx(SoundController.FORWARD);
                 Driver.setMenu(new Leaderboard(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
             });
 

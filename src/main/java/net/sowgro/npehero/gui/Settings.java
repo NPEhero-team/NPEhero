@@ -11,6 +11,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
+import net.sowgro.npehero.main.SettingsController;
+import net.sowgro.npehero.main.SoundController;
 
 public class Settings extends Pane
 {
@@ -26,7 +28,7 @@ public class Settings extends Pane
         musicText.getStyleClass().add("t3");
 
         Slider musicSlider = new Slider();
-        musicSlider.valueProperty().bindBidirectional(Driver.settingsController.musicVol);
+        musicSlider.valueProperty().bindBidirectional(SettingsController.musicVol);
         musicSlider.setMin(0.0);
         musicSlider.setMax(1.0);
 
@@ -41,7 +43,7 @@ public class Settings extends Pane
         SFXText.getStyleClass().add("t3");
 
         Slider SFXSlider = new Slider();
-        SFXSlider.valueProperty().bindBidirectional(Driver.settingsController.effectsVol);
+        SFXSlider.valueProperty().bindBidirectional(SettingsController.effectsVol);
         SFXSlider.setMin(0.0);
         SFXSlider.setMax(1.0);
 
@@ -58,7 +60,7 @@ public class Settings extends Pane
         Button fullscreen = new Button();
         fullscreen.setText("Toggle (F11)");
         fullscreen.setOnAction(e -> {
-            Driver.soundController.playSfx("forward");
+            SoundController.playSfx(SoundController.FORWARD);
             Driver.primaryStage.setFullScreen(!Driver.primaryStage.isFullScreen());
         });
 
@@ -74,7 +76,7 @@ public class Settings extends Pane
         Button devMenu = new Button();
         devMenu.setText("Debug Menu");
         devMenu.setOnAction(e -> {
-            Driver.soundController.playSfx("forward");
+            SoundController.playSfx(SoundController.FORWARD);
 //            Driver.debug.show();
         });
 
@@ -92,8 +94,8 @@ public class Settings extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Driver.settingsController.write();
-            Driver.soundController.playSfx("backward");
+            SettingsController.write();
+            SoundController.playSfx(SoundController.BACKWARD);
             Driver.setMenu(new MainMenu());
         });
 

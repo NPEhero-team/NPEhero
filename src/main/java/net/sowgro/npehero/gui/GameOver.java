@@ -14,6 +14,7 @@ import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
+import net.sowgro.npehero.main.SoundController;
 
 public class GameOver extends Pane
 {
@@ -71,7 +72,7 @@ public class GameOver extends Pane
         save.setOnAction(new EventHandler<ActionEvent>() { //this is the same as the "e ->" thing but it allows more than one line to be added 
             @Override
             public void handle(ActionEvent event) {
-                Driver.soundController.playSfx("forward");
+                SoundController.playSfx(SoundController.FORWARD);
                 save.setDisable(true);
                 name.setDisable(true);
                 diff.addToLeaderboard(name.getText(), score2);
@@ -92,14 +93,14 @@ public class GameOver extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Driver.soundController.playSfx("backward");
+            SoundController.playSfx(SoundController.BACKWARD);
             Driver.setMenu(lastMenu);
         });
 
         Button replay = new Button();
         replay.setText("Replay");
         replay.setOnAction(e -> {
-            Driver.soundController.playSfx("forward");
+            SoundController.playSfx(SoundController.FORWARD);
             Driver.setMenu(new LevelSurround(level, diff, lastMenu));
         });
 

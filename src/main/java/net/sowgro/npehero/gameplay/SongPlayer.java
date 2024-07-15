@@ -10,6 +10,7 @@ import java.util.Queue;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import javafx.scene.media.Media;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gui.GameOver;
 import javafx.geometry.Pos;
@@ -25,7 +26,7 @@ import javafx.util.*;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.main.ScoreController;
-
+import net.sowgro.npehero.main.SoundController;
 
 
 //hi aidan here are some objects you can use
@@ -98,7 +99,7 @@ public class SongPlayer extends Pane {
 	}
 
 	public SongPlayer(Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
-		Driver.soundController.endSong();
+		SoundController.endSong();
 		song = lvl.song;
 
 		if (lvl.background != null) {
@@ -146,7 +147,7 @@ public class SongPlayer extends Pane {
 				if (e.getCode() == KeyCode.F) {
 					checkNote(fLane, fButton);
 				}
-				if (e.getCode() == KeyCode.SPACE) {
+				if (e.getCode() == KeyCode.G) {
 					checkNote(spaceLane, sButton);
 				}
 				if (e.getCode() == KeyCode.J) {
@@ -252,7 +253,7 @@ public class SongPlayer extends Pane {
 			}
 			if (!songIsPlaying && timer.time() > 0.0) {
 				songIsPlaying = true;
-				Driver.soundController.playSong(song);
+				SoundController.playSong(new Media(song.toURI().toString()));
 			}
 		}
 	};
@@ -271,8 +272,8 @@ public class SongPlayer extends Pane {
 	 */
 	public void cancel() {
 		missMute = true;
-		Driver.soundController.endSong();
-		Driver.soundController.playMenuSong();
+		SoundController.endSong();
+		SoundController.playSong(SoundController.MENUSONG);
 		Driver.setMenuBackground();
 		gameLoop.stop();
 	}

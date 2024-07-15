@@ -1,3 +1,15 @@
+# NPE Hero v2.0
+One-year anniversary update!
+
+Goals:
+- [x] New integrated level editor
+- [ ] Custom keybindings
+- [ ] Installer / Linux package
+- [ ] Code cleanup
+
+### Notes:
+TEMOPORARY: USE G KEY INSTEAD OF SPACE KEY
+
 # Installation
 1. Install Java 17 or newer
 1. Go to Deployments > Releases.

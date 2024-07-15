@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.main.LevelController;
+import net.sowgro.npehero.main.SoundController;
 
 public class LevelSelector extends Pane
 {   
@@ -44,7 +45,7 @@ public class LevelSelector extends Pane
         exit.setText("Back");
         exit.setOnAction(e -> {
             Driver.setMenu(new MainMenu());
-            Driver.soundController.playSfx("backward");
+            SoundController.playSfx(SoundController.BACKWARD);
         });
 
         VBox leftBox = new VBox();

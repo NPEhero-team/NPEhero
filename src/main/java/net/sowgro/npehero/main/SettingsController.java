@@ -8,21 +8,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import javafx.beans.property.SimpleDoubleProperty;
 
-public class SettingsController 
+public class SettingsController
 {
-	public SimpleDoubleProperty effectsVol = new SimpleDoubleProperty(1);
-	public SimpleDoubleProperty musicVol = new SimpleDoubleProperty(1);
-	private File file = new File("settings.json");
+	public static SimpleDoubleProperty effectsVol = new SimpleDoubleProperty(1);
+	public static SimpleDoubleProperty musicVol = new SimpleDoubleProperty(1);
+	private static File file = new File("settings.json");
 
-	public SettingsController()
-	{
-		read();
-	}
-	
 	/**
 	 * reads json data from settings.json
 	 */
-	public void read()
+	public static void read()
 	{
 		JSONParser jsonParser = new JSONParser(); //parser to read the file
 		try(FileReader reader = new FileReader(file))
@@ -43,7 +38,7 @@ public class SettingsController
 	/**
 	 * writes json data to settings.json
 	 */
-	public void write()
+	public static void write()
 	{
 		FileWriter fileWriter;
 		try

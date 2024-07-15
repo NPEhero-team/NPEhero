@@ -13,6 +13,7 @@ import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.LeaderboardEntry;
 import net.sowgro.npehero.main.Level;
+import net.sowgro.npehero.main.SoundController;
 
 public class Leaderboard extends Pane
 {
@@ -51,7 +52,7 @@ public class Leaderboard extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Driver.soundController.playSfx("backward");
+            SoundController.playSfx(SoundController.BACKWARD);
             Driver.setMenu(prev);
         });
 

@@ -1,81 +1,43 @@
 package net.sowgro.npehero.main;
 
 import java.io.File;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 
+import javafx.scene.media.AudioClip;
 import net.sowgro.npehero.Driver;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 public class SoundController 
 {
-    public MediaPlayer songMediaPlayer;
-    public MediaPlayer sfxMediaPlayer;
-    private final HashMap<String,MediaPlayer> effects = new HashMap<>();
-    private final File mainMenuSong;
+    public static MediaPlayer songMediaPlayer;
 
-    {
-        try {
-            mainMenuSong = new File(Driver.getResource("fairyfountain.wav").toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static final Media MENUSONG = new Media(Driver.getResource("fairyfountain.wav").toString());
 
-
-    /**
-     * creates a new sound controller and starts playing the main menu music
-     */
-    public SoundController() 
-    {
-        effects.put("hit", new MediaPlayer(new Media(Driver.getResource("hit.wav").toString())));
-        effects.put("miss", new MediaPlayer(new Media(Driver.getResource("miss.wav").toString())));
-        effects.put("forward", new MediaPlayer(new Media(Driver.getResource("forward.wav").toString())));
-        effects.put("backward", new MediaPlayer(new Media(Driver.getResource("backward.wav").toString())));
-        effects.forEach((key,value) -> {
-            value.volumeProperty().bind(Driver.settingsController.effectsVol);
-        });
-        playMenuSong();
-    }
+    public static final AudioClip HIT      = new AudioClip(Driver.getResource("hit.wav").toString());
+    public static final AudioClip MISS     = new AudioClip(Driver.getResource("miss.wav").toString());
+    public static final AudioClip FORWARD  = new AudioClip(Driver.getResource("forward.wav").toString());
+    public static final AudioClip BACKWARD = new AudioClip(Driver.getResource("backward.wav").toString());
 
     /**
      * plays the song that is passed in.
-     * @param songFile: the song
+     * @param song the song to play
      */
-    public void playSong(File songFile)
+    public static void playSong(Media song)
     {
         if (songMediaPlayer != null)
         {
             songMediaPlayer.stop();
         }
-        Media song = new Media(songFile.toURI().toString());
         songMediaPlayer = new MediaPlayer(song);
-        songMediaPlayer.volumeProperty().bind(Driver.settingsController.musicVol);
-        songMediaPlayer.play();
-    }
-
-    /**
-     * plays the main menu song
-     */
-    public void playMenuSong()
-    {
-        if (!mainMenuSong.exists()) {
-            System.out.println("NOT EXIST " + mainMenuSong.getAbsolutePath());
-            return;
-        }
-        playSong(mainMenuSong);
-        songMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        songMediaPlayer.volumeProperty().bind(SettingsController.musicVol);
         songMediaPlayer.play();
     }
 
     /**
      * stops the currently playing song
      */
-    public void endSong()
+    public static void endSong()
     {
         if (songMediaPlayer != null)
         {
@@ -85,13 +47,11 @@ public class SoundController
 
     /**
      * plays a sound effect
-     * for the volume slider to take effect each mediaplayer needs to be preloaded.
-     * this rewinds and played the proper mediaplayer for the sound
-     * @param preset: a string of the name of the sound. possible sounds assigned in the constructor
+     * @param clip the sound to play
      */
-    public void playSfx(String preset)
+    public static void playSfx(AudioClip clip)
     {
-        effects.get(preset).seek(new Duration(0));
-        effects.get(preset).play();
+        clip.volumeProperty().bind(SettingsController.effectsVol);
+        clip.play();
     }
 }

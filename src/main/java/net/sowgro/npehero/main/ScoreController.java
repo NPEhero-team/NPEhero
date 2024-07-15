@@ -39,7 +39,7 @@ public class ScoreController{
      */
     public void miss(boolean muted) {
         if (!muted) {
-            Driver.soundController.playSfx("miss");
+            SoundController.playSfx(SoundController.MISS);
         }
         combo = 0;
         comboMultiplier = 1;
@@ -52,7 +52,7 @@ public class ScoreController{
      * Increments the combo by one
      */
     private void combo() {
-        Driver.soundController.playSfx("hit");
+        SoundController.playSfx(SoundController.HIT);
         combo++;
         
         if (combo == 2) {

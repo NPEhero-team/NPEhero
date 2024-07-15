@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Note;
+import net.sowgro.npehero.main.SoundController;
 
 public class DiffEditor extends Pane
 {
@@ -102,7 +103,7 @@ public class DiffEditor extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Driver.soundController.playSfx("backward");
+            SoundController.playSfx(SoundController.BACKWARD);
             Driver.setMenu(prev);
         });
 

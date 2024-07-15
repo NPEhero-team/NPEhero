@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import net.sowgro.npehero.gui.MainMenu;
 import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.main.LevelController;
+import net.sowgro.npehero.main.SoundController;
 
 public class LevelList extends Pane
 {
@@ -60,13 +61,13 @@ public class LevelList extends Pane
         edit.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
 
         Button remove = new Button("Delete");
-        remove.setOnAction(e -> Driver.levelController.removeLevel(levels.getSelectionModel().getSelectedItem()));
+        remove.setOnAction(e -> LevelController.removeLevel(levels.getSelectionModel().getSelectedItem()));
         remove.setDisable(true);
         remove.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
 
         Button refresh = new Button("Refresh");
         refresh.setOnAction(e -> {
-            Driver.levelController.readData();
+            LevelController.readData();
             levels.setItems(LevelController.getLevelList());
         });
 
@@ -95,7 +96,7 @@ public class LevelList extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Driver.soundController.playSfx("backward");
+            SoundController.playSfx(SoundController.BACKWARD);
             Driver.setMenu(new MainMenu());
         });
 
@@ -121,7 +122,7 @@ public class LevelList extends Pane
         });
 
         newLevelButton.setOnAction(_ -> {
-            Driver.levelController.addLevel(newLevelEntry.getText());
+            LevelController.addLevel(newLevelEntry.getText());
             newLevelEntry.clear();
             refresh.fire();
             sidebar.getChildren().clear();

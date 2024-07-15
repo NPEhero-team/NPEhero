@@ -15,6 +15,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
+import net.sowgro.npehero.main.SoundController;
 
 public class LevelEditor extends Pane
 { 
@@ -157,7 +158,7 @@ public class LevelEditor extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Driver.soundController.playSfx("backward");
+            SoundController.playSfx(SoundController.BACKWARD);
             Driver.setMenu(prev);
         });
 

@@ -23,6 +23,7 @@ import net.sowgro.npehero.gameplay.Block;
 import net.sowgro.npehero.gameplay.Target;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Note;
+import net.sowgro.npehero.main.SoundController;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,14 +42,15 @@ public class NotesEditor2 extends Pane {
         noteList = diff.notes.deepCopyList();
 
         m = new MediaPlayer(new Media(diff.level.song.toURI().toString()));
+        SoundController.endSong();
 
         // Buttons
         VBox actionBox = new VBox();
         actionBox.setSpacing(10);
 
-        Label noteLabel = new Label("Notes");
+        Label noteLabel       = new Label("Notes");
         ToggleButton addNote  = new ToggleButton("Add");
-        Button delNote  = new Button("Delete");
+        Button delNote        = new Button("Delete");
         ToggleButton moveNote = new ToggleButton("Move");
         actionBox.getChildren().addAll(noteLabel, addNote, delNote, moveNote);
 
@@ -79,7 +81,6 @@ public class NotesEditor2 extends Pane {
         Block sizer = drawBlock(new Note(0, 0));
         for (Pane lane : lanes) {
             lane.prefWidthProperty().bind(sizer.widthProperty());
-            lane.prefHeightProperty().bind(sizer.heightProperty());
         }
         Pane rulerLane = new Pane();
         Pane playheadLane = new Pane();
@@ -135,16 +136,20 @@ public class NotesEditor2 extends Pane {
         Button exit = new Button();
         exit.setText("Cancel");
         exit.setOnAction(_ -> {
-            Driver.soundController.playSfx("backward");
+            m.stop();
+            SoundController.playSfx(SoundController.BACKWARD);
             Driver.setMenu(prev);
+            SoundController.playSong(SoundController.MENUSONG);
         });
 
         Button save = new Button();
         save.setText("Done");
         save.setOnAction(_ -> {
             diff.notes.list = noteList;
-            Driver.soundController.playSfx("backward");
+            m.stop();
+            SoundController.playSfx(SoundController.BACKWARD);
             Driver.setMenu(new DiffEditor(diff, prev.prev));
+            SoundController.playSong(SoundController.MENUSONG);
         });
 
         HBox buttons = new HBox(save, exit);
@@ -153,7 +158,7 @@ public class NotesEditor2 extends Pane {
 
         // Draw notes
         noteList.forEach(n -> lanes[n.lane].getChildren().add(drawBlock(n)));
-        noteList.addListener((ListChangeListener<? super Note>) e -> {
+        noteList.addListener((ListChangeListener<? super Note>) _ -> {
             // TODO
             for (Pane lane : lanes) {
                 lane.getChildren().clear();

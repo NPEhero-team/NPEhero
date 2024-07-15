@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
 import net.sowgro.npehero.gameplay.Timer;
 import net.sowgro.npehero.Driver;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.main.Difficulty;
+import net.sowgro.npehero.main.SoundController;
 
 public class NotesEditor extends Pane
 {
@@ -45,7 +47,7 @@ public class NotesEditor extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Driver.soundController.playSfx("backward");
+            SoundController.playSfx(SoundController.BACKWARD);
             Driver.setMenu(prev);
         });
 
@@ -98,7 +100,7 @@ public class NotesEditor extends Pane
 
     private void start()
     {
-        Driver.soundController.playSong(diff.level.song);
+        SoundController.playSong(new Media(diff.level.song.toString()));
         timer = new Timer(diff.bpm);
         help.setText(t2);
     }
@@ -107,7 +109,7 @@ public class NotesEditor extends Pane
     {
         try 
         {
-            Driver.soundController.endSong();
+            SoundController.endSong();
             diff.numBeats = (int)Double.parseDouble(timer.toString());
             timer = null;
             writer.close();
