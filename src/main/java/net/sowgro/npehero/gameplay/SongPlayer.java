@@ -10,12 +10,13 @@ import java.util.Queue;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import net.sowgro.npehero.Driver;
+import net.sowgro.npehero.main.Control;
 import net.sowgro.npehero.gui.GameOver;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -62,23 +63,23 @@ public class SongPlayer extends Pane {
 	HBox buttonBox = new HBox();	//used to align the buttons horizontally
 	VBox place = new VBox();		//used to place the buttons within the frame
 
-	Target dButton = new Target(Color.RED, 50, 50, 5, 'd');	//Initializes the button, each parameter is a placeholder that is changed later
+	Target dButton = new Target(Color.RED, 50, 50, 5, Control.LANE0.targetString());	//Initializes the button, each parameter is a placeholder that is changed later
 	Queue<NoteInfo> dSends = new LinkedList<NoteInfo>(); 		//Queue that dictates when to send the notes
 	ArrayList<Block> dLane = new ArrayList<Block>(); 			//Array list containing all the notes currently on the field for that lane
 																//process is repeated for the following four buttons
-	Target fButton = new Target(Color.BLUE, 50, 50, 5, 'f');
+	Target fButton = new Target(Color.BLUE, 50, 50, 5, Control.LANE1.targetString());
 	Queue<NoteInfo> fSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> fLane = new ArrayList<Block>();
 
-	Target sButton = new Target(Color.GREEN, 50, 50, 5, '_');
+	Target sButton = new Target(Color.GREEN, 50, 50, 5, Control.LANE2.targetString());
 	Queue<NoteInfo> spaceSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> spaceLane = new ArrayList<Block>();
 
-	Target jButton = new Target(Color.PURPLE, 50, 50, 5, 'j');
+	Target jButton = new Target(Color.PURPLE, 50, 50, 5, Control.LANE3.targetString());
 	Queue<NoteInfo> jSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> jLane = new ArrayList<Block>();
 
-	Target kButton = new Target(Color.YELLOW, 50, 50, 5, 'k');
+	Target kButton = new Target(Color.YELLOW, 50, 50, 5, Control.LANE4.targetString());
 	Queue<NoteInfo> kSends = new LinkedList<NoteInfo>();
 	ArrayList<Block> kLane = new ArrayList<Block>();
 
@@ -132,34 +133,35 @@ public class SongPlayer extends Pane {
 		genButton(sButton);
 		genButton(jButton);
 		genButton(kButton);
-		
-		Driver.primaryStage.getScene().setOnKeyPressed(e -> {
+
+		Driver.primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
 			/**
 			 * The keyboard detection for the game: when a key is pressed it
 			 * calls the checkNote() method for the corresponding lane
 			 */
-			//System.out.println(timer.time());
-			if (super.isVisible())
-			{
-				if (e.getCode() == KeyCode.D) {
+			System.out.println(e.getCode());
+//			if (super.isVisible())
+//			{
+				if (e.getCode() == Control.LANE0.getKey()) {
 					checkNote(dLane, dButton);
 				}
-				if (e.getCode() == KeyCode.F) {
+				if (e.getCode() == Control.LANE1.getKey()) {
 					checkNote(fLane, fButton);
 				}
-				if (e.getCode() == KeyCode.G) {
+				if (e.getCode() == Control.LANE2.getKey()) {
 					checkNote(spaceLane, sButton);
 				}
-				if (e.getCode() == KeyCode.J) {
+				if (e.getCode() == Control.LANE3.getKey()) {
 					checkNote(jLane, jButton);
 				}
-				if (e.getCode() == KeyCode.K) {
+				if (e.getCode() == Control.LANE4.getKey()) {
 					checkNote(kLane, kButton);
 				}
-				if (e.getCode() == KeyCode.Q) {
+				if (e.getCode() == Control.LEGACY_PRINT.getKey()) {
 					System.out.println("" + timer.time());
 				}
-			}
+//			}
+			e.consume();
 			//prints the user's current score and combo, for debugging purposes
 			//System.out.println("Score: " + scoreCounter.getScore() + "\nCombo: " + scoreCounter.getCombo() + "\n");
 		});

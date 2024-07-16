@@ -3,12 +3,17 @@ One-year anniversary update!
 
 Goals:
 - [x] New integrated level editor
-- [ ] Custom keybindings
-- [ ] Installer / Linux package
+- [X] Custom keybindings
+- [ ] UI improvements
 - [ ] Code cleanup
+- [ ] Installer / Linux package
 
-### Notes:
-TEMOPORARY: USE G KEY INSTEAD OF SPACE KEY
+Notes:
+- Level creation flow is incomplete
+  - no way to set lastbeat
+  - notes editor does not write to file
+  - no validation
+- Everything else in this readme is outdated
 
 # Installation
 1. Install Java 17 or newer

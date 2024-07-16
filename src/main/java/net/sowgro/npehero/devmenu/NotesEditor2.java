@@ -8,6 +8,8 @@ import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -24,6 +26,7 @@ import net.sowgro.npehero.gameplay.Target;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Note;
 import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Control;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -146,6 +149,7 @@ public class NotesEditor2 extends Pane {
         save.setText("Done");
         save.setOnAction(_ -> {
             diff.notes.list = noteList;
+            diff.notes.writeFile();
             m.stop();
             SoundController.playSfx(SoundController.BACKWARD);
             Driver.setMenu(new DiffEditor(diff, prev.prev));
@@ -192,18 +196,21 @@ public class NotesEditor2 extends Pane {
         rootBox.setAlignment(Pos.CENTER);
 
         // write notes on key press
-        rootBox.setOnKeyPressed(e -> {
-            switch (e.getCode()) {
-                case D  -> WriteNote(0);
-                case F  -> WriteNote(1);
-                case G  -> WriteNote(2); // Problem with space to select
-                case J  -> WriteNote(3);
-                case K  -> WriteNote(4);
-                case EQUALS -> activeNotes.forEach(n -> n.note.time.setValue(n.note.time.get() - 0.01));
-                case MINUS -> activeNotes.forEach(n -> n.note.time.setValue(n.note.time.get() + 0.01));
-                case DELETE -> delNote.fire();
-                case ESCAPE -> clearSelect.fire();
-            };
+        rootBox.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            KeyCode k = e.getCode();
+            if (k == Control.LANE0.getKey()) WriteNote(0);
+            if (k == Control.LANE1.getKey()) WriteNote(1);
+            if (k == Control.LANE2.getKey()) WriteNote(2);
+            if (k == Control.LANE3.getKey()) WriteNote(3);
+            if (k == Control.LANE4.getKey()) WriteNote(4);
+            if (k == Control.NOTE_DOWN.getKey()) MoveNoteDown();
+            if (k == Control.NOTE_UP.getKey()) MoveNoteUp();
+            if (k == Control.DELETE_NOTE.getKey()) delNote.fire();
+            if (k == Control.CLEAR_SELECTION.getKey()) clearSelect.fire();
+            if (k == Control.SCROLL_LOCK.getKey()) scrollLock.fire();
+            if (k == Control.PLAY_PAUSE.getKey()) play.fire();
+            if (k == Control.SELECT_ALL.getKey()) selectAll.fire();
+            e.consume();
         });
 
         m.currentTimeProperty().addListener(_ -> {
@@ -343,14 +350,22 @@ public class NotesEditor2 extends Pane {
         noteList.add(tmp);
     }
 
+    private void MoveNoteUp() {
+        activeNotes.forEach(n -> n.note.time.setValue(n.note.time.get() + 0.01));
+    }
+
+    private void MoveNoteDown() {
+        activeNotes.forEach(n -> n.note.time.setValue(n.note.time.get() - 0.01));
+    }
+
     private Pane addHelp() {
         Label l1 = new Label("Use the following keys");
         HBox hb = new HBox(
-                new Target(diff.level.colors[0], 40, 40, 10, 'd'),
-                new Target(diff.level.colors[1], 40, 40, 10, 'f'),
-                new Target(diff.level.colors[2], 40, 40, 10, 'g'),
-                new Target(diff.level.colors[3], 40, 40, 10, 'j'),
-                new Target(diff.level.colors[4], 40, 40, 10, 'k')
+                new Target(diff.level.colors[0], 40, 40, 10, Control.LANE0.targetString()),
+                new Target(diff.level.colors[1], 40, 40, 10, Control.LANE1.targetString()),
+                new Target(diff.level.colors[2], 40, 40, 10, Control.LANE2.targetString()),
+                new Target(diff.level.colors[3], 40, 40, 10, Control.LANE3.targetString()),
+                new Target(diff.level.colors[4], 40, 40, 10, Control.LANE4.targetString())
         );
         hb.setSpacing(10);
         hb.setAlignment(Pos.CENTER_LEFT);
@@ -364,7 +379,7 @@ public class NotesEditor2 extends Pane {
 
     private Pane moveHelp() {
         Label l1 = new Label("Use the");
-        HBox hb = new HBox(new Target(Color.BLACK, 40, 40, 10, '+'), new Label("and"), new Target(Color.BLACK, 40, 40, 10, '-'), new Label("keys"));
+        HBox hb = new HBox(new Target(Color.BLACK, 40, 40, 10, Control.NOTE_UP.targetString()), new Label("and"), new Target(Color.BLACK, 40, 40, 10, Control.NOTE_DOWN.targetString()), new Label("keys"));
         hb.setSpacing(10);
         hb.setAlignment(Pos.CENTER_LEFT);
         Label l2 = new Label("to move the selected \nnote(s) up and down.");

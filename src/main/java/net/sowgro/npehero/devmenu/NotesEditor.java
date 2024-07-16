@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 import javafx.geometry.Pos;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -12,9 +13,9 @@ import net.sowgro.npehero.gameplay.Timer;
 import net.sowgro.npehero.Driver;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import net.sowgro.npehero.main.Control;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.SoundController;
 
@@ -22,7 +23,7 @@ public class NotesEditor extends Pane
 {
     Text help;
     String t1 = "Press Start to begin recording. Use the same keys. Note: existing notes will be overwritten.";
-    String t2 = "Now recording. Press Stop or ESC to finish";
+    String t2 = "Now recording. Press Stop or " + Control.LEGACY_STOP.getKey().toString() + " to finish";
     Difficulty diff;
     Timer timer;
     PrintWriter writer;
@@ -68,31 +69,32 @@ public class NotesEditor extends Pane
         writer = new PrintWriter(diff.notes.getFile(), "UTF-8");
 
         Scene scene = Driver.primaryStage.getScene();
-        scene.setOnKeyPressed(e -> {
-			if (e.getCode() == KeyCode.D) {
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+			if (e.getCode() == Control.LANE0.getKey()) {
 				writer.println("d"+timer);
                 cur.setText("d"+timer);
 			}
-			if (e.getCode() == KeyCode.F) {
+			if (e.getCode() == Control.LANE1.getKey()) {
 				writer.println("f"+timer);
                 cur.setText("f"+timer);
 			}
-			if (e.getCode() == KeyCode.SPACE) {
+			if (e.getCode() == Control.LANE2.getKey()) {
 				writer.println("s"+timer);
                 cur.setText("s"+timer);
 			}
-			if (e.getCode() == KeyCode.J) {
+			if (e.getCode() == Control.LANE3.getKey()) {
 				writer.println("j"+timer);
                 cur.setText("j"+timer);
 			}
-			if (e.getCode() == KeyCode.K) {
+			if (e.getCode() == Control.LANE4.getKey()) {
 				writer.println("k"+timer);
                 cur.setText("k"+timer);
 			}
-            if (e.getCode() == KeyCode.ESCAPE)
+            if (e.getCode() == Control.LEGACY_STOP.getKey())
             {
                 stop();
             }
+            e.consume();
 		});
 
         Driver.primaryStage.setOnCloseRequest(e -> stop());

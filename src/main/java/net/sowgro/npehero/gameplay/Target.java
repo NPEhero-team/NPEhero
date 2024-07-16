@@ -13,9 +13,9 @@ public class Target extends StackPane
     private Color fill;
     private Text label;
     public Rectangle rect = new Rectangle();
-    public Target(Color c, double a, double b, int r, char key)
+    public Target(Color c, double a, double b, int r, String key)
     {
-        label = new Text(key+"");
+        label = new Text(key);
         label.getStyleClass().add("t3");
         label.scaleXProperty().bind(super.widthProperty().divide(50));
         label.scaleYProperty().bind(label.scaleXProperty());

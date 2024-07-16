@@ -1,7 +1,6 @@
 package net.sowgro.npehero;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -16,6 +15,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import net.sowgro.npehero.main.Control;
 import net.sowgro.npehero.gui.MainMenu;
 import net.sowgro.npehero.main.LevelController;
 import net.sowgro.npehero.main.SettingsController;
@@ -46,6 +46,7 @@ public class Driver extends Application
     {
         SettingsController.read();
         LevelController.readData();
+        Control.readFromFile();
 
         primaryStage = newPrimaryStage;
 

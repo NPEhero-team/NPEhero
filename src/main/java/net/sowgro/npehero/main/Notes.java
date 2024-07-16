@@ -72,7 +72,9 @@ public class Notes {
                 }
 
                 writer.println(lane + note.time.get());
-
+                writer.flush();
+                writer.close();
+                // still not working
             }
         }
         catch (IOException e) {
