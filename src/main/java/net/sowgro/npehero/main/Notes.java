@@ -71,10 +71,7 @@ public class Notes {
                     // TODO handle error
                 }
 
-                writer.println(lane + note.time.get());
-                writer.flush();
-                writer.close();
-                // still not working
+                writer.println(lane + "" + note.time.get());
             }
         }
         catch (IOException e) {

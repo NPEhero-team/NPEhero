@@ -233,6 +233,10 @@ Slider:focused .thumb{
     -fx-text-fill: white;
 }
 
+.gray {
+    -fx-text-fill: #a8a8a8;
+}
+
 /* debug */
 
 .debug {

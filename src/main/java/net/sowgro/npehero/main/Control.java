@@ -7,27 +7,36 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.*;
+import java.util.*;
+
+import static java.util.Map.entry;
 
 public enum Control {
 
-    LANE0           ("Lane 0", KeyCode.D),
-    LANE1           ("Lane 1", KeyCode.F),
-    LANE2           ("Lane 2", KeyCode.SPACE),
-    LANE3           ("Lane 3", KeyCode.J),
-    LANE4           ("Lane 4", KeyCode.K),
-    DELETE_NOTE     ("Delete note", KeyCode.DELETE),
-    NOTE_UP         ("Move note up", KeyCode.EQUALS),
-    NOTE_DOWN       ("Move note down", KeyCode.MINUS),
-    SCROLL_LOCK     ("Scroll lock", KeyCode.L),
+    LANE0           ("Lane 1", KeyCode.D),
+    LANE1           ("Lane 2", KeyCode.F),
+    LANE2           ("Lane 3", KeyCode.SPACE),
+    LANE3           ("Lane 4", KeyCode.J),
+    LANE4           ("Lane 5", KeyCode.K),
+    DELETE_NOTE     ("Delete Note", KeyCode.DELETE),
+    NOTE_UP         ("Move Note Up", KeyCode.EQUALS),
+    NOTE_DOWN       ("Move Note Down", KeyCode.MINUS),
+    SCROLL_LOCK     ("Scroll Lock", KeyCode.L),
     PLAY_PAUSE      ("Play / Pause", KeyCode.P),
-    CLEAR_SELECTION ("Clear selection", KeyCode.ESCAPE),
+    CLEAR_SELECTION ("Clear Selection", KeyCode.ESCAPE),
     SELECT_ALL      ("Select All", KeyCode.S),
-    LEGACY_PRINT    ("Print time (Legacy)", KeyCode.Q),
-    LEGACY_STOP     ("Stop edit (Legacy)", KeyCode.ESCAPE);
+    LEGACY_PRINT    ("Print Time", KeyCode.Q),
+    LEGACY_STOP     ("Stop Edit", KeyCode.ESCAPE);
 
     public final String label;
     public final KeyCode defaultKey;
     public final ObjectProperty<KeyCode> keyProperty = new SimpleObjectProperty<>();
+
+    public static final List<Map.Entry<String, List<Control>>> sections = List.of(
+                entry("Gameplay",      List.of(LANE0, LANE1, LANE2, LANE3, LANE4)),
+                entry("Editor",        List.of(DELETE_NOTE, NOTE_UP, NOTE_DOWN, SCROLL_LOCK, PLAY_PAUSE, CLEAR_SELECTION, SELECT_ALL)),
+                entry("Legacy Editor", List.of(LEGACY_PRINT, LEGACY_STOP))
+            );
 
     private static final String fileName = "controls.json";
 
@@ -72,7 +81,7 @@ public enum Control {
 
     public static void writeToFile() {
         try {
-            File file = new File("controls.json");
+            File file = new File(fileName);
             FileWriter fileWriter = new FileWriter(file);
             JSONObject jsonObject = new JSONObject();
             for (Control control : Control.values()) {
@@ -87,7 +96,7 @@ public enum Control {
     }
 
     public static void readFromFile() {
-        File file = new File("controls.json");
+        File file = new File(fileName);
         JSONParser jsonParser = new JSONParser();
 
         try {
