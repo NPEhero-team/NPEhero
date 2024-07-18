@@ -10,8 +10,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.LevelController;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Levels;
+import net.sowgro.npehero.main.Sound;
 
 public class LevelSelector extends Pane
 {   
@@ -31,10 +31,10 @@ public class LevelSelector extends Pane
         levels.getColumns().add(titleCol);
         levels.getColumns().add(artistCol);
 
-        titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getTitle()));
-        artistCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getArtist()));
+        titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
+        artistCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().artist));
 
-        levels.setItems(LevelController.getValidLevelList());
+        levels.setItems(Levels.validList);
 
         levels.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
         levels.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
@@ -45,7 +45,7 @@ public class LevelSelector extends Pane
         exit.setText("Back");
         exit.setOnAction(e -> {
             Driver.setMenu(new MainMenu());
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
         });
 
         VBox leftBox = new VBox();

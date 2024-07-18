@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Sound;
 
 public class DiffList extends Pane
 {
@@ -31,10 +31,10 @@ public class DiffList extends Pane
         diffs.getColumns().add(titleCol);
         diffs.getColumns().add(validCol);
 
-        titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getTitle()));
-        validCol.setCellValueFactory(data -> new ReadOnlyBooleanWrapper(data.getValue().isValid()));
+        titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
+        validCol.setCellValueFactory(data -> new ReadOnlyBooleanWrapper(data.getValue().isValid));
 
-        diffs.setItems(level.getDiffList());
+        diffs.setItems(level.difficulties.list);
 
         diffs.setRowFactory( _ -> {
             TableRow<Difficulty> row = new TableRow<>();
@@ -57,14 +57,14 @@ public class DiffList extends Pane
         edit.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
 
         Button remove = new Button("Delete");
-        remove.setOnAction(e -> level.removeDiff(diffs.getSelectionModel().getSelectedItem()));
+        remove.setOnAction(e -> level.difficulties.remove(diffs.getSelectionModel().getSelectedItem()));
         remove.setDisable(true);
         remove.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
 
         Button refresh = new Button("Refresh");
         refresh.setOnAction(e -> {
             level.readData();
-            diffs.setItems(level.getDiffList());
+            diffs.setItems(level.difficulties.list);
         });
 
         ToggleButton create = new ToggleButton("Create");
@@ -92,7 +92,7 @@ public class DiffList extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
         });
 
@@ -117,7 +117,7 @@ public class DiffList extends Pane
         });
 
         newLevelButton.setOnAction(_ -> {
-            level.addDiff(newLevelEntry.getText());
+            level.difficulties.add(newLevelEntry.getText());
             newLevelEntry.clear();
             refresh.fire();
             sidebar.getChildren().clear();

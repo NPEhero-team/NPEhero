@@ -15,6 +15,11 @@ public class Notes {
     public ListProperty<Note> list = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     public Notes(File f, Difficulty diff) {
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         this.file = f;
         this.diff = diff;
         readFile();

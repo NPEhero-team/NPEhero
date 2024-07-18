@@ -25,7 +25,7 @@ import net.sowgro.npehero.gameplay.Block;
 import net.sowgro.npehero.gameplay.Target;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Note;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Sound;
 import net.sowgro.npehero.main.Control;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,7 +45,7 @@ public class NotesEditor2 extends Pane {
         noteList = diff.notes.deepCopyList();
 
         m = new MediaPlayer(new Media(diff.level.song.toURI().toString()));
-        SoundController.endSong();
+        Sound.stopSong();
 
         // Buttons
         VBox actionBox = new VBox();
@@ -140,9 +140,9 @@ public class NotesEditor2 extends Pane {
         exit.setText("Cancel");
         exit.setOnAction(_ -> {
             m.stop();
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
-            SoundController.playSong(SoundController.MENUSONG);
+            Sound.playSong(Sound.MENU_SONG);
         });
 
         Button save = new Button();
@@ -151,9 +151,9 @@ public class NotesEditor2 extends Pane {
             diff.notes.list = noteList;
             diff.notes.writeFile();
             m.stop();
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(new DiffEditor(diff, prev.prev));
-            SoundController.playSong(SoundController.MENUSONG);
+            Sound.playSong(Sound.MENU_SONG);
         });
 
         HBox buttons = new HBox(save, exit);

@@ -4,6 +4,7 @@ One-year anniversary update!
 Goals:
 - [x] New integrated level editor
 - [X] Custom keybindings
+- [ ] Accept mp3 song files
 - [ ] UI improvements
 - [ ] Code cleanup
 - [ ] Installer / Linux package
@@ -12,7 +13,6 @@ Notes:
 - Level creation flow is incomplete
   - no way to set lastbeat
   - no validation
-- Everything else in this readme is outdated
 
 # Installation
 Coming soon.

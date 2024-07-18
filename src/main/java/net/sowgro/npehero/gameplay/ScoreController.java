@@ -1,8 +1,8 @@
-package net.sowgro.npehero.main;
+package net.sowgro.npehero.gameplay;
 
-import net.sowgro.npehero.Driver;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import net.sowgro.npehero.main.Sound;
 
 public class ScoreController{
 
@@ -39,7 +39,7 @@ public class ScoreController{
      */
     public void miss(boolean muted) {
         if (!muted) {
-            SoundController.playSfx(SoundController.MISS);
+            Sound.playSfx(Sound.MISS);
         }
         combo = 0;
         comboMultiplier = 1;
@@ -52,7 +52,7 @@ public class ScoreController{
      * Increments the combo by one
      */
     private void combo() {
-        SoundController.playSfx(SoundController.HIT);
+        Sound.playSfx(Sound.HIT);
         combo++;
         
         if (combo == 2) {

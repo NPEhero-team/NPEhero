@@ -17,7 +17,7 @@ import javafx.scene.text.TextFlow;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Sound;
 
 public class LevelDetails extends VBox
 {
@@ -66,11 +66,11 @@ public class LevelDetails extends VBox
             detailsScroll.getStyleClass().remove("scroll-pane");
 
             Text title = new Text();
-            title.setText(level.getTitle());
+            title.setText(level.title);
             title.getStyleClass().add("t1");
 
             Text artist = new Text();
-            artist.setText(level.getArtist());
+            artist.setText(level.artist);
             artist.getStyleClass().add("t2");
 
             Text desc = new Text();
@@ -86,26 +86,26 @@ public class LevelDetails extends VBox
             FlowPane diffSelector = new FlowPane();
             diffSelector.setAlignment(Pos.CENTER);
             ToggleGroup diffToggleGroup = new ToggleGroup(); //allows only one to be selected at a time
-            for (Difficulty diff : level.getValidDiffList()) //adds a button for each diff
+            for (Difficulty diff : level.difficulties.validList) //adds a button for each diff
             {
                 RadioButton temp = new RadioButton();
                 temp.getStyleClass().remove("radio-button"); //makes the buttons not look like a radio button and instead a normal button
                 temp.getStyleClass().add("button");
                 temp.setText(diff.title);
-                temp.setUserData(diff); //allows the data and text to be seperate
+                temp.setUserData(diff); //allows the data and text to be separate
                 diffToggleGroup.getToggles().add(temp);
                 diffSelector.getChildren().add(temp);
             }
             play.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull()); //disables play button when no difficulty is selected
             play.setOnAction(e -> {
-                SoundController.playSfx(SoundController.FORWARD);
+                Sound.playSfx(Sound.FORWARD);
                 Driver.setMenu(new LevelSurround(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
             });
 
             leaderboard.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull());
             leaderboard.setOnAction(e -> {
-                SoundController.playSfx(SoundController.FORWARD);
-                Driver.setMenu(new Leaderboard(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
+                Sound.playSfx(Sound.FORWARD);
+                Driver.setMenu(new LeaderboardView(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
             });
 
 

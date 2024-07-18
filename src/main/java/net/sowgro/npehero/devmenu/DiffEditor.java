@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Note;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Sound;
 
 public class DiffEditor extends Pane
 {
@@ -58,7 +58,7 @@ public class DiffEditor extends Pane
         });
 
         Button editScores = new Button("Clear leaderboard");
-        editScores.setOnAction(e -> diff.getLeaderboard().clear());
+        editScores.setOnAction(e -> diff.leaderboard.entries.clear());
 
         Button playLevel = new Button("Play level");
         playLevel.setOnAction(e -> Driver.setMenu(new LevelSurround(diff.level, diff, this)));
@@ -69,7 +69,7 @@ public class DiffEditor extends Pane
 //            diff.bpm = Double.parseDouble(bpm.getText());
 //            diff.numBeats = Integer.parseInt(numBeats.getText());
             diff.priority = Integer.parseInt(priority.getText());
-            diff.writeMetadata();
+            diff.write();
         });
 
         HBox content = new HBox();
@@ -103,7 +103,7 @@ public class DiffEditor extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
         });
 

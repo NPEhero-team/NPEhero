@@ -15,7 +15,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Sound;
 
 public class LevelEditor extends Pane
 { 
@@ -32,16 +32,16 @@ public class LevelEditor extends Pane
     {
         Text folderNameLabel = new Text("Folder name");
         TextField folderName = new TextField();
-        if (level.thisDir != null) {
-            folderName.setText(level.thisDir.getName());
+        if (level.dir != null) {
+            folderName.setText(level.dir.getName());
             folderName.setDisable(true);
         }
 
         Text titleLabel = new Text("Title");
-        TextField title = new TextField(level.getTitle());
+        TextField title = new TextField(level.title);
 
         Text artistLabel = new Text("Artist");
-        TextField artist = new TextField(level.getArtist());
+        TextField artist = new TextField(level.title);
 
         Text descLabel = new Text("Description");
         TextField desc = new TextField(level.desc);
@@ -93,7 +93,7 @@ public class LevelEditor extends Pane
         diffCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
         validCol.setCellValueFactory(data -> new ReadOnlyBooleanWrapper(data.getValue().isValid));
 
-        diffList.setItems(level.getDiffList());
+        diffList.setItems(level.difficulties.list);
 
         diffList.setRowFactory( _ -> {
             TableRow<Difficulty> row = new TableRow<>();
@@ -106,12 +106,6 @@ public class LevelEditor extends Pane
             return row ;
         });
 
-        TextField newDiff = new TextField("new");
-        Button newDiffButton = new Button("add");
-        newDiffButton.setOnAction(e -> level.addDiff(newDiff.getText()));
-        HBox newDiffBox = new HBox();
-        newDiffBox.getChildren().addAll(newDiff,newDiffButton);
-
         Button newDiffs = new Button("Edit difficulties");
         newDiffs.setOnAction(_ -> Driver.setMenu(new DiffList(level, this)));
 
@@ -119,8 +113,8 @@ public class LevelEditor extends Pane
 
         Button save = new Button("Save");
         save.setOnAction(e -> { //assigns fields to values
-            level.setTitle(title.getText());
-            level.setArtist(artist.getText());
+            level.title = title.getText();
+            level.artist = artist.getText();
             level.desc = desc.getText();
             level.colors[0] = colorsPickers[0].getValue();
             level.colors[1] = colorsPickers[1].getValue();
@@ -158,7 +152,7 @@ public class LevelEditor extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
         });
 

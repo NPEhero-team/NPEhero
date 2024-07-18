@@ -3,8 +3,6 @@ package net.sowgro.npehero.main;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.input.KeyCode;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.util.*;
@@ -38,7 +36,7 @@ public enum Control {
                 entry("Legacy Editor", List.of(LEGACY_PRINT, LEGACY_STOP))
             );
 
-    private static final String fileName = "controls.json";
+    private static final JSONFile jsonFile = new JSONFile(new File("controls.json"));
 
     Control(String label, KeyCode key) {
         this.label = label;
@@ -80,37 +78,30 @@ public enum Control {
     }
 
     public static void writeToFile() {
+        for (Control control : Control.values()) {
+            jsonFile.set(control.toString(), control.getKey().toString());
+        }
+        
         try {
-            File file = new File(fileName);
-            FileWriter fileWriter = new FileWriter(file);
-            JSONObject jsonObject = new JSONObject();
-            for (Control control : Control.values()) {
-                jsonObject.put(control.toString(), control.getKey().toString());
-            }
-            jsonObject.writeJSONString(fileWriter);
-            fileWriter.flush();
+            jsonFile.write();
         }
         catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error writing to controls.json");
         }
     }
 
     public static void readFromFile() {
-        File file = new File(fileName);
-        JSONParser jsonParser = new JSONParser();
-
         try {
-            FileReader reader = new FileReader(file);
-            Object obj = jsonParser.parse(reader);
-            JSONObject jsonObject = (JSONObject)(obj);
-            for (Control control : Control.values()) {
-                if (jsonObject.containsKey(control.toString())) {
-                    control.setKey(KeyCode.valueOf((String) jsonObject.get(control.toString())));
-                }
-            }
+            jsonFile.read();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error reading from controls.json");
+        }
+        
+        for (Control control : Control.values()) {
+            if (jsonFile.containsKey(control.toString())) {
+                control.setKey(KeyCode.valueOf(jsonFile.getString(control.toString(), null)));
+            }
         }
     }
 

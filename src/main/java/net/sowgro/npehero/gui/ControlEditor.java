@@ -1,24 +1,15 @@
 package net.sowgro.npehero.gui;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Control;
-import net.sowgro.npehero.main.SoundController;
-import org.w3c.dom.events.Event;
+import net.sowgro.npehero.main.Sound;
 
 import java.util.List;
 import java.util.Map;
@@ -36,15 +27,34 @@ public class ControlEditor extends Pane {
         controls.setHgap(40);
 
 
-        scrollPane.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.35));
-        scrollPane.setMinWidth(400);
+//        Pane dummy1 = new Pane();
+//        Pane dummy2 = new Pane();
+//        Pane dummy3 = new Pane();
+//        controls.add(dummy1, 0, 0);
+//        controls.add(dummy2, 1, 0);
+//        controls.add(dummy3, 2, 0);
+//
+//        Runnable r = () -> {
+//            var vpw = scrollPane.getViewportBounds().getWidth();
+//            var itemswidth = dummy1.getWidth() + dummy2.getWidth() + dummy3.getWidth();
+//            var out = ((vpw - itemswidth) / 2) -10;
+//            if (out < 10) {
+//                controls.setHgap(10);
+//            }
+//            else {
+//                controls.setHgap(out);
+//            }
+//        };
+//        scrollPane.viewportBoundsProperty().addListener((_, _, _) -> r.run());
+
+        scrollPane.setPrefWidth(700);
         scrollPane.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
 
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            SoundController.playSfx(SoundController.BACKWARD);
-            Driver.setMenu(new Settings());
+            Sound.playSfx(Sound.BACKWARD);
+            Driver.setMenu(new SettingsEditor());
         });
 
         VBox centerBox = new VBox();

@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.main.Control;
 import net.sowgro.npehero.main.Difficulty;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Sound;
 
 public class NotesEditor extends Pane
 {
@@ -48,7 +48,7 @@ public class NotesEditor extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
         });
 
@@ -102,7 +102,7 @@ public class NotesEditor extends Pane
 
     private void start()
     {
-        SoundController.playSong(new Media(diff.level.song.toString()));
+        Sound.playSong(new Media(diff.level.song.toString()));
         timer = new Timer(diff.bpm);
         help.setText(t2);
     }
@@ -111,7 +111,7 @@ public class NotesEditor extends Pane
     {
         try 
         {
-            SoundController.endSong();
+            Sound.stopSong();
             diff.numBeats = (int)Double.parseDouble(timer.toString());
             timer = null;
             writer.close();

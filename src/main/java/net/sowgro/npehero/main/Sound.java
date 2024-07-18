@@ -1,18 +1,15 @@
 package net.sowgro.npehero.main;
 
-import java.io.File;
-import java.util.HashMap;
-
 import javafx.scene.media.AudioClip;
 import net.sowgro.npehero.Driver;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class SoundController 
+public class Sound
 {
     public static MediaPlayer songMediaPlayer;
 
-    public static final Media MENUSONG = new Media(Driver.getResource("fairyfountain.wav").toString());
+    public static final Media MENU_SONG = new Media(Driver.getResource("fairyfountain.wav").toString());
 
     public static final AudioClip HIT      = new AudioClip(Driver.getResource("hit.wav").toString());
     public static final AudioClip MISS     = new AudioClip(Driver.getResource("miss.wav").toString());
@@ -21,23 +18,25 @@ public class SoundController
 
     /**
      * plays the song that is passed in.
-     * @param song the song to play
+     * @param song The song to play.
      */
     public static void playSong(Media song)
     {
-        if (songMediaPlayer != null)
-        {
+        if (songMediaPlayer != null) {
             songMediaPlayer.stop();
         }
         songMediaPlayer = new MediaPlayer(song);
-        songMediaPlayer.volumeProperty().bind(SettingsController.musicVol);
+        if (song == MENU_SONG) {
+            songMediaPlayer.muteProperty().bind(Settings.enableMenuMusic.not());
+        }
+        songMediaPlayer.volumeProperty().bind(Settings.musicVol);
         songMediaPlayer.play();
     }
 
     /**
-     * stops the currently playing song
+     * Stops the currently playing song.
      */
-    public static void endSong()
+    public static void stopSong()
     {
         if (songMediaPlayer != null)
         {
@@ -46,12 +45,12 @@ public class SoundController
     }
 
     /**
-     * plays a sound effect
-     * @param clip the sound to play
+     * Plays a sound effect.
+     * @param clip The sound effect to play.
      */
     public static void playSfx(AudioClip clip)
     {
-        clip.volumeProperty().bind(SettingsController.effectsVol);
+        clip.volumeProperty().bind(Settings.effectsVol);
         clip.play();
     }
 }

@@ -1,9 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 
 /* global */
 
-.root{
+.root {
     -fx-font-family: "space mono";
+    -fx-font-weight: 400;
     -fx-font-size: 20;
 }
 
@@ -16,6 +19,7 @@ Button, TextField, RadioButton, ToggleButton, ColorPicker {
     -fx-border-radius: 5;
     -fx-font-size: 25;
     -fx-background-radius: 5;
+    /*-fx-font-weight: 800;*/
 }
 
 Button:hover, TextField:hover, RadioButton:hover, ToggleButton:hover, ColorPicker:hover {
@@ -235,6 +239,15 @@ Slider:focused .thumb{
 
 .gray {
     -fx-text-fill: #a8a8a8;
+}
+
+CheckBox {
+    -fx-text-fill: white;
+}
+
+CheckBox:selected > .box {
+    -fx-background-color: white;
+    -fx-text-fill: black;
 }
 
 /* debug */

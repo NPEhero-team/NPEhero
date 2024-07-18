@@ -3,6 +3,7 @@ package net.sowgro.npehero.gui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -10,29 +11,32 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.main.SettingsController;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Settings;
+import net.sowgro.npehero.main.Sound;
 
-public class Settings extends Pane
+public class SettingsEditor extends Pane
 {
     /*
      * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
      * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
      * style classes are defined in the style.css file.
      */
-    public Settings()
+    public SettingsEditor()
     {
         Text musicText = new Text();
         musicText.setText("Music Volume");
         musicText.getStyleClass().add("t3");
 
         Slider musicSlider = new Slider();
-        musicSlider.valueProperty().bindBidirectional(SettingsController.musicVol);
+        musicSlider.valueProperty().bindBidirectional(Settings.musicVol);
         musicSlider.setMin(0.0);
         musicSlider.setMax(1.0);
 
+        CheckBox enableMenuMusic = new CheckBox("Enable Menu Music");
+        enableMenuMusic.selectedProperty().bindBidirectional(Settings.enableMenuMusic);
+
         VBox musicBox = new VBox();
-        musicBox.getChildren().addAll(musicText, musicSlider);
+        musicBox.getChildren().addAll(musicText, musicSlider, enableMenuMusic);
         musicBox.getStyleClass().add("box");
         musicBox.setPadding(new Insets(10));
 
@@ -42,7 +46,7 @@ public class Settings extends Pane
         SFXText.getStyleClass().add("t3");
 
         Slider SFXSlider = new Slider();
-        SFXSlider.valueProperty().bindBidirectional(SettingsController.effectsVol);
+        SFXSlider.valueProperty().bindBidirectional(Settings.effectsVol);
         SFXSlider.setMin(0.0);
         SFXSlider.setMax(1.0);
 
@@ -59,7 +63,7 @@ public class Settings extends Pane
         Button fullscreen = new Button();
         fullscreen.setText("Toggle (F11)");
         fullscreen.setOnAction(e -> {
-            SoundController.playSfx(SoundController.FORWARD);
+            Sound.playSfx(Sound.FORWARD);
             Driver.primaryStage.setFullScreen(!Driver.primaryStage.isFullScreen());
         });
 
@@ -75,7 +79,7 @@ public class Settings extends Pane
         Button controlsButton = new Button();
         controlsButton.setText("Edit");
         controlsButton.setOnAction(_ -> {
-            SoundController.playSfx(SoundController.FORWARD);
+            Sound.playSfx(Sound.FORWARD);
             Driver.setMenu(new ControlEditor());
         });
 
@@ -87,8 +91,8 @@ public class Settings extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            SettingsController.write();
-            SoundController.playSfx(SoundController.BACKWARD);
+            Settings.save();
+            Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(new MainMenu());
         });
 

@@ -13,8 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.ScoreController;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.gameplay.ScoreController;
+import net.sowgro.npehero.main.Sound;
 
 public class LevelSurround extends Pane
 {   
@@ -32,7 +32,7 @@ public class LevelSurround extends Pane
         exit.setText("Back");
         exit.setOnAction(e -> {
             Driver.setMenu(prev);
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
             game.cancel();
         });
 
@@ -42,11 +42,11 @@ public class LevelSurround extends Pane
         buttonBox.setSpacing(10);
 
         Text title = new Text();
-        title.setText(level.getTitle());
+        title.setText(level.title);
         title.getStyleClass().add("t2");
 
         Text artist = new Text();
-        artist.setText(level.getArtist()+" - "+difficulty.title);
+        artist.setText(level.artist+" - "+difficulty.title);
         artist.getStyleClass().add("t3");
 
         VBox titleTextBox = new VBox();
@@ -124,27 +124,6 @@ public class LevelSurround extends Pane
         super.getChildren().add(root);
         root.prefWidthProperty().bind(super.prefWidthProperty());
         root.prefHeightProperty().bind(super.prefHeightProperty());
-
-        //for debug menu
-        Button addScore = new Button();
-        addScore.setText(level.getTitle() + " addscore");
-        addScore.setOnAction(e -> sc.setScore(sc.getScore()+1));
-//        Driver.debug.addButton(addScore);
-
-        Button addCombo = new Button();
-        addCombo.setText(level.getTitle() + " addcombo");
-        addCombo.setOnAction(e -> sc.setCombo(sc.getCombo()+1));
-//        Driver.debug.addButton(addCombo);
-
-        Button printD = new Button();
-        printD.setText(level.getTitle() + " print debug");
-        printD.setOnAction(e -> sc.print());
-//        Driver.debug.addButton(printD);
-
-        Button testfinish = new Button();
-        testfinish.setText(level.getTitle() + "launch game end");
-        testfinish.setOnAction(e -> Driver.setMenu(new GameOver(level, difficulty, prev, sc.getScore())));
-//        Driver.debug.addButton(testfinish);
 
         game.start();
     }

@@ -10,6 +10,7 @@ import java.util.Queue;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import net.sowgro.npehero.Driver;
@@ -26,8 +27,7 @@ import javafx.animation.*;
 import javafx.util.*;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.ScoreController;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Sound;
 
 
 //hi aidan here are some objects you can use
@@ -46,6 +46,8 @@ import net.sowgro.npehero.main.SoundController;
 public class SongPlayer extends Pane {
 	private Double bpm;		//initializes the bpm of the song, to be read in from a metadata file later
 	private int songLength; //initializes the length of the song in terms of the song's bpm, to be read in later
+
+	private EventHandler<KeyEvent> eventHandler;
 
 	private File song;
 	private boolean songIsPlaying = false;
@@ -100,7 +102,7 @@ public class SongPlayer extends Pane {
 	}
 
 	public SongPlayer(Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
-		SoundController.endSong();
+		Sound.stopSong();
 		song = lvl.song;
 
 		if (lvl.background != null) {
@@ -134,7 +136,7 @@ public class SongPlayer extends Pane {
 		genButton(jButton);
 		genButton(kButton);
 
-		Driver.primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+		eventHandler = e -> {
 			/**
 			 * The keyboard detection for the game: when a key is pressed it
 			 * calls the checkNote() method for the corresponding lane
@@ -164,7 +166,8 @@ public class SongPlayer extends Pane {
 			e.consume();
 			//prints the user's current score and combo, for debugging purposes
 			//System.out.println("Score: " + scoreCounter.getScore() + "\nCombo: " + scoreCounter.getCombo() + "\n");
-		});
+		};
+		Driver.primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
 
 		buttonBox.setAlignment(Pos.CENTER);		//puts the buttons in the center of the screen
 		buttonBox.getChildren().addAll(dButton, fButton, sButton, jButton, kButton);	//places the buttons in the correct row order
@@ -255,7 +258,7 @@ public class SongPlayer extends Pane {
 			}
 			if (!songIsPlaying && timer.time() > 0.0) {
 				songIsPlaying = true;
-				SoundController.playSong(new Media(song.toURI().toString()));
+				Sound.playSong(new Media(song.toURI().toString()));
 			}
 		}
 	};
@@ -273,9 +276,10 @@ public class SongPlayer extends Pane {
 	 * @throws UnsupportedAudioFileException
 	 */
 	public void cancel() {
+		Driver.primaryStage.removeEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
 		missMute = true;
-		SoundController.endSong();
-		SoundController.playSong(SoundController.MENUSONG);
+		Sound.stopSong();
+		Sound.playSong(Sound.MENU_SONG);
 		Driver.setMenuBackground();
 		gameLoop.stop();
 	}

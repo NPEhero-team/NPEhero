@@ -1,7 +1,5 @@
 package net.sowgro.npehero.gui;
 
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlurType;
@@ -12,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.devmenu.LevelList;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Sound;
 
 
 public class MainMenu extends Pane
@@ -38,26 +36,26 @@ public class MainMenu extends Pane
         play.setText("Play");
         play.setOnAction(e -> {
             Driver.setMenu(new LevelSelector());
-            SoundController.playSfx(SoundController.FORWARD);
+            Sound.playSfx(Sound.FORWARD);
         });
 
         Button settings = new Button();
         settings.setText("Settings");
         settings.setOnAction(_ -> {
-            Driver.setMenu(new Settings());
-            SoundController.playSfx(SoundController.FORWARD);
+            Driver.setMenu(new SettingsEditor());
+            Sound.playSfx(Sound.FORWARD);
         });
 
         Button levelEdit = new Button("Level Editor");
         levelEdit.setOnAction(e -> {
-            SoundController.playSfx(SoundController.FORWARD);
+            Sound.playSfx(Sound.FORWARD);
             Driver.setMenu(new LevelList());
         });
 
         Button exit = new Button();
         exit.setText("Quit");
         exit.setOnAction(e -> {
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
 //            Driver.quit();
 //            Platform.exit();
             System.exit(0);

@@ -11,8 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.sowgro.npehero.gui.MainMenu;
 import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.LevelController;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Levels;
+import net.sowgro.npehero.main.Sound;
 
 public class LevelList extends Pane
 {
@@ -34,11 +34,11 @@ public class LevelList extends Pane
         levels.getColumns().add(artistCol);
         levels.getColumns().add(validCol);
 
-        titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getTitle()));
-        artistCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getArtist()));
-        validCol.setCellValueFactory(data -> new ReadOnlyBooleanWrapper(data.getValue().isValid()));
+        titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
+        artistCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().artist));
+        validCol.setCellValueFactory(data -> new ReadOnlyBooleanWrapper(data.getValue().isValid));
 
-        levels.setItems(LevelController.getLevelList());
+        levels.setItems(Levels.list);
 
         levels.setRowFactory( _ -> {
             TableRow<Level> row = new TableRow<>();
@@ -50,9 +50,7 @@ public class LevelList extends Pane
             });
             return row ;
         });
-
-        levels.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.35));
-        levels.setMinWidth(400);
+        levels.setPrefWidth(600);
         levels.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
 
         Button edit = new Button("Edit");
@@ -61,14 +59,14 @@ public class LevelList extends Pane
         edit.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
 
         Button remove = new Button("Delete");
-        remove.setOnAction(e -> LevelController.removeLevel(levels.getSelectionModel().getSelectedItem()));
+        remove.setOnAction(e -> Levels.remove(levels.getSelectionModel().getSelectedItem()));
         remove.setDisable(true);
         remove.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
 
         Button refresh = new Button("Refresh");
         refresh.setOnAction(e -> {
-            LevelController.readData();
-            levels.setItems(LevelController.getLevelList());
+            Levels.readData();
+            levels.setItems(Levels.list);
         });
 
         ToggleButton create = new ToggleButton("Create");
@@ -96,7 +94,7 @@ public class LevelList extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(new MainMenu());
         });
 
@@ -122,7 +120,7 @@ public class LevelList extends Pane
         });
 
         newLevelButton.setOnAction(_ -> {
-            LevelController.addLevel(newLevelEntry.getText());
+            Levels.add(newLevelEntry.getText());
             newLevelEntry.clear();
             refresh.fire();
             sidebar.getChildren().clear();

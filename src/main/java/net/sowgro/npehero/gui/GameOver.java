@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Sound;
 
 public class GameOver extends Pane
 {
@@ -30,11 +30,11 @@ public class GameOver extends Pane
         topText.getStyleClass().add("t11");
 
         Text levelName = new Text();
-        levelName.setText(level.getTitle());
+        levelName.setText(level.title);
         levelName.getStyleClass().add("t2");
 
         Text levelArtist = new Text();
-        levelArtist.setText(level.getArtist()+" - "+diff.title);
+        levelArtist.setText(level.artist+" - "+diff.title);
         levelArtist.getStyleClass().add("t3");
 
         VBox levelDetailsBox = new VBox();
@@ -72,10 +72,10 @@ public class GameOver extends Pane
         save.setOnAction(new EventHandler<ActionEvent>() { //this is the same as the "e ->" thing but it allows more than one line to be added 
             @Override
             public void handle(ActionEvent event) {
-                SoundController.playSfx(SoundController.FORWARD);
+                Sound.playSfx(Sound.FORWARD);
                 save.setDisable(true);
                 name.setDisable(true);
-                diff.addToLeaderboard(name.getText(), score2);
+                diff.leaderboard.add(name.getText(), score2);
             }
         });
 
@@ -93,14 +93,14 @@ public class GameOver extends Pane
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            SoundController.playSfx(SoundController.BACKWARD);
+            Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(lastMenu);
         });
 
         Button replay = new Button();
         replay.setText("Replay");
         replay.setOnAction(e -> {
-            SoundController.playSfx(SoundController.FORWARD);
+            Sound.playSfx(Sound.FORWARD);
             Driver.setMenu(new LevelSurround(level, diff, lastMenu));
         });
 

@@ -1,33 +1,34 @@
 package net.sowgro.npehero;
 
+import javafx.animation.*;
 import javafx.application.Application;
-import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import net.sowgro.npehero.main.Control;
 import net.sowgro.npehero.gui.MainMenu;
-import net.sowgro.npehero.main.LevelController;
-import net.sowgro.npehero.main.SettingsController;
-import net.sowgro.npehero.main.SoundController;
+import net.sowgro.npehero.main.Levels;
+import net.sowgro.npehero.main.Settings;
+import net.sowgro.npehero.main.Sound;
 
 import java.net.URL;
 
 
 public class Driver extends Application
 {
+    public static final Image MENU_BACKGROUND = new Image(Driver.class.getResource("mountains.png").toExternalForm());;
+
     public static Stage primaryStage;
     static ScrollPane primaryPane = new ScrollPane();
+    static ImageView backgroundImage = new ImageView();
+    static ImageView backgroundImage2 = new ImageView();
 
     /*
      * starts javafx
@@ -44,13 +45,20 @@ public class Driver extends Application
     @Override
     public void start(Stage newPrimaryStage)
     {
-        SettingsController.read();
-        LevelController.readData();
+        Settings.read();
+        Levels.readData();
         Control.readFromFile();
 
         primaryStage = newPrimaryStage;
 
-        Scene primaryScene = new Scene(primaryPane, 800,600);
+        StackPane root = new StackPane(backgroundImage2, backgroundImage, primaryPane);
+        Scene primaryScene = new Scene(root, 800,600);
+
+//        Cant figure out how to center this
+        backgroundImage.fitHeightProperty().bind(primaryScene.heightProperty());
+        backgroundImage2.fitHeightProperty().bind(primaryScene.heightProperty());
+        backgroundImage.setPreserveRatio(true);
+        backgroundImage2.setPreserveRatio(true);
 
         primaryScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 
@@ -62,7 +70,7 @@ public class Driver extends Application
         setMenu(new MainMenu());
         setMenuBackground();
 
-        SoundController.playSong(SoundController.MENUSONG);
+        Sound.playSong(Sound.MENU_SONG);
 
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> { //full screen stuff
             if (KeyCode.F11.equals(event.getCode())) {
@@ -94,23 +102,38 @@ public class Driver extends Application
     }
 
     /**
-     * replaces the background image with a new one
-     * @param image   the url of the image to set
+     * Replaces the background image with a new one.
+     * @param image The image to set.
      */
     public static void setBackground(Image image) //replaces background with a new one
     {
-        primaryPane.setBackground(new Background(
-            new BackgroundImage(
-                    image,
-                    BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
-                    new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
-                    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
-            )));
+        // TODO center on screen
+        if (image == backgroundImage.getImage()) {
+            return;
+        }
+        backgroundImage2.setImage(image);
+        FadeTransition ft = new FadeTransition(Duration.seconds(0.2), backgroundImage);
+        ft.setInterpolator(Interpolator.EASE_BOTH);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
+        ft.setOnFinished(_ -> {
+            backgroundImage.setImage(image);
+        });
+
+        ScaleTransition st = new ScaleTransition(Duration.seconds(0.2), backgroundImage2);
+        st.setInterpolator(Interpolator.EASE_BOTH);
+        st.setFromX(1.05);
+        st.setFromY(1.05);
+        st.setToX(1.0);
+        st.setToY(1.0);
+
+        ParallelTransition pt = new ParallelTransition(ft, st);
+        pt.play();
     }
 
     public static void setMenuBackground()
     {
-        setBackground(new Image(Driver.class.getResource("mountains.png").toExternalForm()));
+        setBackground(MENU_BACKGROUND);
     }
 
     public static URL getResource(String fileName) {
