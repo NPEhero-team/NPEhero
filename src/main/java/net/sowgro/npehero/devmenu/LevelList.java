@@ -14,13 +14,11 @@ import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.main.Levels;
 import net.sowgro.npehero.main.Sound;
 
+import java.time.Year;
+
 public class LevelList extends Pane
 {
-    /*
-     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
-     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
-     * style classes are defined in the style.css file.
-     */
+
     public LevelList()
     {
         //sets up table view: requires special getters, setters and constructors to work
@@ -28,7 +26,7 @@ public class LevelList extends Pane
 
         TableColumn<Level,String> titleCol = new TableColumn<>("Title");
         TableColumn<Level,String> artistCol = new TableColumn<>("Artist");
-        TableColumn<Level,Boolean> validCol = new TableColumn<>("Valid?");
+        TableColumn<Level,String> validCol = new TableColumn<>("Valid?");
 
         levels.getColumns().add(titleCol);
         levels.getColumns().add(artistCol);
@@ -36,7 +34,14 @@ public class LevelList extends Pane
 
         titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
         artistCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().artist));
-        validCol.setCellValueFactory(data -> new ReadOnlyBooleanWrapper(data.getValue().isValid));
+        validCol.setCellValueFactory(data -> {
+            if (data.getValue().isValid) {
+                return new ReadOnlyStringWrapper("Yes");
+            }
+            else {
+                return new ReadOnlyStringWrapper("No");
+            }
+        });
 
         levels.setItems(Levels.list);
 

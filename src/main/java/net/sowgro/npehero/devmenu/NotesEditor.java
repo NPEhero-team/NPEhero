@@ -27,7 +27,7 @@ public class NotesEditor extends Pane
     Difficulty diff;
     Timer timer;
     PrintWriter writer;
-    public NotesEditor(Difficulty diff, Pane prev) throws FileNotFoundException, UnsupportedEncodingException
+    public NotesEditor(Difficulty diff, Pane prev)
     {
         this.diff = diff;
 
@@ -66,7 +66,11 @@ public class NotesEditor extends Pane
 
         super.getChildren().add(rootBox);
 
-        writer = new PrintWriter(diff.notes.getFile(), "UTF-8");
+        try {
+            writer = new PrintWriter(diff.notes.getFile(), "UTF-8");
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
 
         Scene scene = Driver.primaryStage.getScene();
         scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {

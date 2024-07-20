@@ -2,6 +2,7 @@ package net.sowgro.npehero.devmenu;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -16,6 +17,7 @@ import javafx.scene.text.Text;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Note;
 import net.sowgro.npehero.main.Sound;
+import net.sowgro.npehero.main.ValidIndicator;
 
 public class DiffEditor extends Pane
 {
@@ -23,11 +25,7 @@ public class DiffEditor extends Pane
     ScrollPane scroll;
 
     public Pane prev;
-    /*
-     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
-     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
-     * style classes are defined in the style.css file.
-     */
+
     public DiffEditor(Difficulty diff, Pane prev)
     {
         this.diff = diff;
@@ -45,23 +43,35 @@ public class DiffEditor extends Pane
 
         Button editNotes = new Button("Edit notes");
         editNotes.setOnAction(e -> {
-            Driver.setMenu(new NotesEditor2(diff, this));
+            if (diff.level.song == null) {
+                Driver.setMenu(new ErrorDisplay("You must import a song file before editing the notes!", this));
+            }
+            else {
+                Driver.setMenu(new NotesEditor2(diff, this));
+            }
         });
 
         Button oldEditNotes = new Button("Edit notes (legacy)");
         oldEditNotes.setOnAction(_ -> {
-            try {
-                Driver.setMenu(new NotesEditor(diff, this));
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            Driver.setMenu(new ErrorDisplay(
+                    "Warning: \nThe legacy editor will overwrite all existing notes!",
+                    this,
+                    new NotesEditor(diff, this))
+            );
         });
 
         Button editScores = new Button("Clear leaderboard");
         editScores.setOnAction(e -> diff.leaderboard.entries.clear());
 
         Button playLevel = new Button("Play level");
-        playLevel.setOnAction(e -> Driver.setMenu(new LevelSurround(diff.level, diff, this)));
+        playLevel.setOnAction(e -> {
+            if (diff.isValid && diff.level.isValid) {
+                Driver.setMenu(new LevelSurround(diff.level, diff, this));
+            }
+            else {
+                Driver.setMenu(new ErrorDisplay("This Level is not valid!\nCheck that all required fields\nare populated.", this));
+            }
+        });
 
         Button save = new Button("Save");
         save.setOnAction(e -> { //assigns text fields to values
@@ -88,8 +98,14 @@ public class DiffEditor extends Pane
 
         diff.notes.list.forEach(n -> lanes[n.lane].getChildren().add(drawNote(n)));
 
-        VBox notePreview = new VBox(scroll);
-        notePreview.getChildren().addAll(editNotes,oldEditNotes);
+        VBox notePreview = new VBox();
+
+        ValidIndicator validNotes = new ValidIndicator();
+        if (diff.notes.list.isEmpty()) {
+            validNotes.setInvalid("This difficulty does not contain any notes!");
+        }
+        HBox notesLabel = new HBox(new Label("Notes"), validNotes);
+        notePreview.getChildren().addAll(notesLabel, scroll, editNotes, oldEditNotes);
         notePreview.setSpacing(10);
 
         VBox left = new VBox();
