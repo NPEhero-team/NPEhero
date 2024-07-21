@@ -1,10 +1,8 @@
 package net.sowgro.npehero.main;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.FileReader;
@@ -35,62 +33,62 @@ public class Leaderboard {
     /**
      * Writes leaderboard to json file
      */
-    public void save()
-    {
-        FileWriter fileWriter;
-        try
-        {
-            fileWriter = new FileWriter(file);
-            //write the settings JSONObject instance to the file
-            JSONArray jsonArray = new JSONArray();
-            for (LeaderboardEntry cur: entries)
-            {
-                JSONObject obj = new JSONObject();
-                obj.put("name", cur.getName());
-                obj.put("score", cur.getScore());
-                obj.put("date",cur.getDate());
-                jsonArray.add(obj);
-            }
-            jsonArray.writeJSONString(fileWriter);
-            fileWriter.flush();
-
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Reads in json leaderboard and assigns populates list with leaderboardEntries
-     */
-    public boolean parseLeaderboard()
-    {
-        boolean isValid = true;
-        JSONParser jsonParser = new JSONParser(); //parser to read the file
-
-        try(FileReader reader = new FileReader(file))
-        {
-            Object obj = jsonParser.parse(reader);
-
-            JSONArray leaderboardStuff = (JSONArray)(obj); //converts read object to a JSONArray
-
-            for (Object cur: leaderboardStuff)
-            {
-                JSONObject cur2 = (JSONObject) cur;
-
-                String name = (String) cur2.get("name");
-                int score = Integer.parseInt(""+cur2.get("score"));
-                String date = (String) cur2.get("date");
-                entries.add(new LeaderboardEntry(name, score, date));
-            }
-        }
-        catch (Exception e)
-        {
-            isValid = false;
-            e.printStackTrace();
-        }
-        return isValid;
-    }
+//    public void save()
+//    {
+//        FileWriter fileWriter;
+//        try
+//        {
+//            fileWriter = new FileWriter(file);
+//            //write the settings JSONObject instance to the file
+//            JSONArray jsonArray = new JSONArray();
+//            for (LeaderboardEntry cur: entries)
+//            {
+//                JsonNode obj = new ;
+//                obj.put("name", cur.getName());
+//                obj.put("score", cur.getScore());
+//                obj.put("date",cur.getDate());
+//                jsonArray.add(obj);
+//            }
+//            jsonArray.writeJSONString(fileWriter);
+//            fileWriter.flush();
+//
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    /**
+//     * Reads in json leaderboard and assigns populates list with leaderboardEntries
+//     */
+//    public boolean parseLeaderboard()
+//    {
+//        boolean isValid = true;
+//        JSONParser jsonParser = new JSONParser(); //parser to read the file
+//
+//        try(FileReader reader = new FileReader(file))
+//        {
+//            Object obj = jsonParser.parse(reader);
+//
+//            JSONArray leaderboardStuff = (JSONArray)(obj); //converts read object to a JSONArray
+//
+//            for (Object cur: leaderboardStuff)
+//            {
+//                JSONObject cur2 = (JSONObject) cur;
+//
+//                String name = (String) cur2.get("name");
+//                int score = Integer.parseInt(""+cur2.get("score"));
+//                String date = (String) cur2.get("date");
+//                entries.add(new LeaderboardEntry(name, score, date));
+//            }
+//        }
+//        catch (Exception e)
+//        {
+//            isValid = false;
+//            e.printStackTrace();
+//        }
+//        return isValid;
+//    }
 
 
 }

@@ -34,7 +34,7 @@ public class LevelEditor extends Pane
         TextField title = new TextField(level.title);
 
         Text artistLabel = new Text("Artist");
-        TextField artist = new TextField(level.title);
+        TextField artist = new TextField(level.artist);
 
         Text descLabel = new Text("Description");
         TextField desc = new TextField(level.desc);

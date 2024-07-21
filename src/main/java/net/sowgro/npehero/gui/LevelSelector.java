@@ -15,11 +15,7 @@ import net.sowgro.npehero.main.Sound;
 
 public class LevelSelector extends Pane
 {   
-    /*
-     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
-     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
-     * style classes are defined in the style.css file.
-     */
+
     public LevelSelector()
     {
         //sets up table view: requires special getters, setters and constructors to work

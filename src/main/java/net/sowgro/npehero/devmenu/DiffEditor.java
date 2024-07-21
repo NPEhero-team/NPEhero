@@ -84,10 +84,12 @@ public class DiffEditor extends Pane
 
         HBox content = new HBox();
         ScrollPane scroll = new ScrollPane(content);
+        scroll.setFitToWidth(true);
         this.scroll = scroll;
         scroll.getStyleClass().remove("scroll-pane");
         scroll.getStyleClass().add("box");
-        scroll.setPrefHeight(400);
+//        scroll.setPrefHeight(400);
+        scroll.prefWidthProperty().bind(scroll.heightProperty().multiply(0.66));
 
         Pane[] lanes = new Pane[5];
         for (int i = 0; i < lanes.length; i++) {
@@ -95,6 +97,8 @@ public class DiffEditor extends Pane
         }
 
         content.getChildren().addAll(lanes);
+        content.setSpacing(5);
+        content.setAlignment(Pos.CENTER);
 
         diff.notes.list.forEach(n -> lanes[n.lane].getChildren().add(drawNote(n)));
 
@@ -105,7 +109,10 @@ public class DiffEditor extends Pane
             validNotes.setInvalid("This difficulty does not contain any notes!");
         }
         HBox notesLabel = new HBox(new Label("Notes"), validNotes);
-        notePreview.getChildren().addAll(notesLabel, scroll, editNotes, oldEditNotes);
+        Pane scrollHolder = new Pane(scroll);
+        scroll.prefHeightProperty().bind(scrollHolder.heightProperty());
+        scrollHolder.setPrefHeight(400);
+        notePreview.getChildren().addAll(notesLabel, scrollHolder, editNotes, oldEditNotes);
         notePreview.setSpacing(10);
 
         VBox left = new VBox();

@@ -1,11 +1,7 @@
 package net.sowgro.npehero.main;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.security.spec.ECField;
-
-import org.json.simple.JSONObject;
 
 public class Difficulty implements Comparable<Difficulty>
 {
@@ -55,15 +51,13 @@ public class Difficulty implements Comparable<Difficulty>
     }
 
     public void validate() {
-        isValid = true;
-
         if (notes.list.isEmpty()) {
             isValid = false;
         }
 
-        if (numBeats == 0) {
-            isValid = false;
-        }
+//        if (numBeats == 0) {
+//            isValid = false;
+//        }
     }
 
     /**
@@ -86,4 +80,6 @@ public class Difficulty implements Comparable<Difficulty>
     public int compareTo(Difficulty d) {
         return priority - d.priority;
     }
+
+
 }

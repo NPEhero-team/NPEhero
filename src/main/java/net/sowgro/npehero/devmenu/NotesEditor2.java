@@ -23,14 +23,12 @@ import javafx.util.Duration;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gameplay.Block;
 import net.sowgro.npehero.gameplay.Target;
-import net.sowgro.npehero.main.Difficulty;
-import net.sowgro.npehero.main.Note;
-import net.sowgro.npehero.main.Sound;
+import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.main.Control;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class NotesEditor2 extends Pane {
+public class NotesEditor2 extends Page {
     Difficulty diff;
     ScrollPane scroll = new ScrollPane();
     Pane[] lanes;
@@ -38,15 +36,17 @@ public class NotesEditor2 extends Pane {
     Polygon playhead;
     ListProperty<Block> activeNotes = new SimpleListProperty<>(FXCollections.observableArrayList());
     ListProperty<Note> noteList;
+    DiffEditor prev;
 
     public NotesEditor2(Difficulty diff, DiffEditor prev) {
-
         this.diff = diff;
         noteList = diff.notes.deepCopyList();
-
         m = new MediaPlayer(new Media(diff.level.song.toURI().toString()));
-        Sound.stopSong();
+        this.prev = prev;
+    }
 
+    @Override
+    public Pane getContent() {
         // Buttons
         VBox actionBox = new VBox();
         actionBox.setSpacing(10);
@@ -86,6 +86,7 @@ public class NotesEditor2 extends Pane {
             lane.prefWidthProperty().bind(sizer.widthProperty());
         }
         Pane rulerLane = new Pane();
+        rulerLane.setManaged(false);
         Pane playheadLane = new Pane();
         playheadLane.setOnMouseClicked(e -> {
             m.seek(new Duration(screenPosToSecond(e.getY()) * 1000));
@@ -123,9 +124,9 @@ public class NotesEditor2 extends Pane {
         stackPane.getChildren().addAll(content, contentOverlay);
 
         scroll.setContent(stackPane);
-        scroll.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.35));
+//        scroll.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.35));
         scroll.setMinWidth(400);
-        scroll.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
+//        scroll.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
         scroll.getStyleClass().remove("scroll-pane");
         scroll.getStyleClass().add("box");
         scroll.setPadding(new Insets(5));
@@ -139,10 +140,8 @@ public class NotesEditor2 extends Pane {
         Button exit = new Button();
         exit.setText("Cancel");
         exit.setOnAction(_ -> {
-            m.stop();
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
-            Sound.playSong(Sound.MENU_SONG);
         });
 
         Button save = new Button();
@@ -150,10 +149,8 @@ public class NotesEditor2 extends Pane {
         save.setOnAction(_ -> {
             diff.notes.list = noteList;
             diff.notes.writeFile();
-            m.stop();
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(new DiffEditor(diff, prev.prev));
-            Sound.playSong(Sound.MENU_SONG);
         });
 
         HBox buttons = new HBox(save, exit);
@@ -190,26 +187,26 @@ public class NotesEditor2 extends Pane {
         centerBox.setMinWidth(400);
 
         HBox rootBox = new HBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
+//        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
+//        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
         rootBox.getChildren().add(centerBox);
         rootBox.setAlignment(Pos.CENTER);
 
         // write notes on key press
         rootBox.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             KeyCode k = e.getCode();
-            if (k == Control.LANE0.getKey()) WriteNote(0);
-            if (k == Control.LANE1.getKey()) WriteNote(1);
-            if (k == Control.LANE2.getKey()) WriteNote(2);
-            if (k == Control.LANE3.getKey()) WriteNote(3);
-            if (k == Control.LANE4.getKey()) WriteNote(4);
-            if (k == Control.NOTE_DOWN.getKey()) MoveNoteDown();
-            if (k == Control.NOTE_UP.getKey()) MoveNoteUp();
-            if (k == Control.DELETE_NOTE.getKey()) delNote.fire();
-            if (k == Control.CLEAR_SELECTION.getKey()) clearSelect.fire();
-            if (k == Control.SCROLL_LOCK.getKey()) scrollLock.fire();
-            if (k == Control.PLAY_PAUSE.getKey()) play.fire();
-            if (k == Control.SELECT_ALL.getKey()) selectAll.fire();
+            if (k == Control.LANE0.getKey())           { WriteNote(0); }
+            if (k == Control.LANE1.getKey())           { WriteNote(1); }
+            if (k == Control.LANE2.getKey())           { WriteNote(2); }
+            if (k == Control.LANE3.getKey())           { WriteNote(3); }
+            if (k == Control.LANE4.getKey())           { WriteNote(4); }
+            if (k == Control.NOTE_DOWN.getKey())       { MoveNoteDown(); }
+            if (k == Control.NOTE_UP.getKey())         { MoveNoteUp(); }
+            if (k == Control.DELETE_NOTE.getKey())     { delNote.fire(); }
+            if (k == Control.CLEAR_SELECTION.getKey()) { clearSelect.fire(); }
+            if (k == Control.SCROLL_LOCK.getKey())     { scrollLock.fire(); }
+            if (k == Control.PLAY_PAUSE.getKey())      { play.fire(); }
+            if (k == Control.SELECT_ALL.getKey())      { selectAll.fire(); }
             e.consume();
         });
 
@@ -293,7 +290,18 @@ public class NotesEditor2 extends Pane {
             }
         });
 
-        super.getChildren().add(rootBox);
+        return rootBox;
+    }
+
+    @Override
+    public void onView() {
+        Sound.stopSong();
+    }
+
+    @Override
+    public void onLeave() {
+        m.stop();
+        Sound.playSong(Sound.MENU_SONG);
     }
 
     private Block drawBlock(Note n) {

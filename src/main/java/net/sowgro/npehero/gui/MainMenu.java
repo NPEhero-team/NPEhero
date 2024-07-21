@@ -10,18 +10,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.devmenu.LevelList;
+import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
 
-public class MainMenu extends Pane
-{
-    /*
-     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
-     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
-     * style classes are defined in the style.css file.
-     */
-    public MainMenu()
-    {
+public class MainMenu extends Page {
+
+    @Override
+    public Pane getContent() {
+
         DropShadow dropShadow = new DropShadow();
         dropShadow.setRadius(50.0);
         dropShadow.setColor(Color.WHITE);
@@ -34,7 +31,7 @@ public class MainMenu extends Pane
 
         Button play = new Button();
         play.setText("Play");
-        play.setOnAction(e -> {
+        play.setOnAction(_ -> {
             Driver.setMenu(new LevelSelector());
             Sound.playSfx(Sound.FORWARD);
         });
@@ -47,14 +44,14 @@ public class MainMenu extends Pane
         });
 
         Button levelEdit = new Button("Level Editor");
-        levelEdit.setOnAction(e -> {
+        levelEdit.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
             Driver.setMenu(new LevelList());
         });
 
         Button exit = new Button();
         exit.setText("Quit");
-        exit.setOnAction(e -> {
+        exit.setOnAction(_ -> {
             Sound.playSfx(Sound.BACKWARD);
 //            Driver.quit();
 //            Platform.exit();
@@ -72,11 +69,9 @@ public class MainMenu extends Pane
         centerBox.setSpacing(10);
 
         VBox rootBox = new VBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty()); 
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
         rootBox.setAlignment(Pos.CENTER);
         rootBox.getChildren().add(centerBox);
 
-        super.getChildren().add(rootBox);
+        return rootBox;
     }
 }

@@ -1,8 +1,10 @@
 package net.sowgro.npehero.main;
 
-import net.sowgro.npehero.Driver;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.*;
 
@@ -12,7 +14,9 @@ import java.io.*;
 public class JSONFile {
 
     private final File file;
-    private JSONObject jsonObject = new JSONObject();
+    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectNode writeNode = objectMapper.createObjectNode();
+    JsonNode readNode;
 
     public JSONFile(File file) {
         try {
@@ -24,18 +28,18 @@ public class JSONFile {
     }
 
     public String getString(String key, String def) {
-        if (!jsonObject.containsKey(key)) {
+        if (!readNode.has(key)) {
             return def;
         }
-        return jsonObject.get(key).toString();
+        return readNode.get(key).asText();
     }
 
     public int getInt(String key, int def) {
-        if (!jsonObject.containsKey(key)) {
+        if (!readNode.has(key)) {
             return def;
         }
         try {
-            return Integer.parseInt(jsonObject.get(key).toString());
+            return Integer.parseInt(readNode.get(key).asText());
         }
         catch (NumberFormatException e) {
             return def;
@@ -43,59 +47,62 @@ public class JSONFile {
     }
 
     public double getDouble(String key, double def) {
-        if (jsonObject.containsKey(key)) {
-            try {
-                return Double.parseDouble(jsonObject.get(key).toString());
-            }
-            catch (NumberFormatException e) {
-                return def;
-            }
-        }
-        else {
-            return def;
-        }
-    }
-
-    public boolean getBoolean(String key, boolean def) {
-        if (!jsonObject.containsKey(key)) {
+        if (!readNode.has(key)) {
             return def;
         }
         try {
-            return Boolean.parseBoolean(jsonObject.get(key).toString());
+            return Double.parseDouble(readNode.get(key).asText());
         }
         catch (NumberFormatException e) {
             return def;
         }
     }
 
-    public void set(String key, Object value) {
+    public boolean getBoolean(String key, boolean def) {
+        if (!readNode.has(key)) {
+            return def;
+        }
+        try {
+            return Boolean.parseBoolean(readNode.get(key).asText());
+        }
+        catch (NumberFormatException e) {
+            return def;
+        }
+    }
+
+    public void set(String key, String value) {
         if (value == null) {
             return;
         }
-        jsonObject.put(key, value);
+        writeNode.put(key, value);
+    }
+
+    public void set(String key, int value) {
+        writeNode.put(key, value);
+    }
+
+    public void set(String key, double value) {
+        writeNode.put(key, value);
+    }
+
+    public void set(String key, boolean value) {
+        writeNode.put(key, value);
     }
 
     public boolean containsKey(String key) {
-        return jsonObject.containsKey(key);
+        return writeNode.has(key);
     }
 
     public void read() throws Exception {
-        try {
-            if (file.length() == 0) {
-                return;
-            }
-            FileReader fileReader = new FileReader(file);
-            jsonObject = (JSONObject) new JSONParser().parse(fileReader);
+        if (file.length() == 0) {
+            readNode = objectMapper.createObjectNode();
+            return;
         }
-        catch (Exception e) {
-            throw e;
-        }
+        readNode = objectMapper.readTree(file);
     }
 
     public void write() throws IOException {
-        FileWriter fileWriter = new FileWriter(file);
-        jsonObject.writeJSONString(fileWriter);
-        fileWriter.close();
+        objectMapper.writeValue(file, writeNode);
     }
 
 }

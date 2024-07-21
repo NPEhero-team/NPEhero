@@ -12,11 +12,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import net.sowgro.npehero.main.Control;
+import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.gui.MainMenu;
-import net.sowgro.npehero.main.Levels;
-import net.sowgro.npehero.main.Settings;
-import net.sowgro.npehero.main.Sound;
 
 import java.net.URL;
 
@@ -29,6 +26,8 @@ public class Driver extends Application
     static ScrollPane primaryPane = new ScrollPane();
     static ImageView backgroundImage = new ImageView();
     static ImageView backgroundImage2 = new ImageView();
+
+    static Page currentPage = null;
 
     /*
      * starts javafx
@@ -99,6 +98,15 @@ public class Driver extends Application
      */
     public static Pane getMenu(){
         return (Pane) primaryPane.getContent();
+    }
+
+    public static void setMenu(Page p) {
+        if (currentPage != null) {
+            currentPage.onLeave();
+        }
+        currentPage = p;
+        setMenu(currentPage.getContent());
+        currentPage.onView();
     }
 
     /**
