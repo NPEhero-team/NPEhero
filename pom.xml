@@ -78,6 +78,7 @@
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
                             <jmodsPath>/home/sowgro/Code/jdk-22_windows-x64_bin/jdk-22.0.2</jmodsPath>
+                            <options>-Dprism.forceGPU=true</options>
                         </configuration>
                     </execution>
                 </executions>
