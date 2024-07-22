@@ -23,7 +23,7 @@ public class Driver extends Application
     public static final Image MENU_BACKGROUND = new Image(Driver.class.getResource("mountains.png").toExternalForm());;
 
     public static Stage primaryStage;
-    static ScrollPane primaryPane = new ScrollPane();
+    public static ScrollPane primaryPane = new ScrollPane();
     static ImageView backgroundImage = new ImageView();
     static ImageView backgroundImage2 = new ImageView();
 
@@ -49,6 +49,8 @@ public class Driver extends Application
         Control.readFromFile();
 
         primaryStage = newPrimaryStage;
+
+        primaryPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         StackPane root = new StackPane(backgroundImage2, backgroundImage, primaryPane);
         Scene primaryScene = new Scene(root, 800,600);
@@ -85,7 +87,7 @@ public class Driver extends Application
      * Replaces/adds a new pane to the primaryPane
      * @param pane  the new pane
      */
-    public static void setMenu(Pane pane)
+    private static void setMenu(Pane pane)
     {
         primaryPane.setContent(pane);
         pane.prefWidthProperty().bind(primaryPane.widthProperty()); //makes pane fill the window
@@ -96,8 +98,8 @@ public class Driver extends Application
     /**
      * @return the current pane in primaryPane
      */
-    public static Pane getMenu(){
-        return (Pane) primaryPane.getContent();
+    public static Page getMenu(){
+        return currentPage;
     }
 
     public static void setMenu(Page p) {
@@ -120,23 +122,30 @@ public class Driver extends Application
             return;
         }
         backgroundImage2.setImage(image);
+
         FadeTransition ft = new FadeTransition(Duration.seconds(0.2), backgroundImage);
         ft.setInterpolator(Interpolator.EASE_BOTH);
         ft.setFromValue(1.0);
         ft.setToValue(0.0);
-        ft.setOnFinished(_ -> {
-            backgroundImage.setImage(image);
-        });
+
+        ScaleTransition st2 = new ScaleTransition(Duration.seconds(0.2), backgroundImage);
+        st2.setInterpolator(Interpolator.LINEAR);
+        st2.setFromX(1);
+        st2.setFromY(1);
+        st2.setToX(1.05);
+        st2.setToY(1.05);
 
         ScaleTransition st = new ScaleTransition(Duration.seconds(0.2), backgroundImage2);
-        st.setInterpolator(Interpolator.EASE_BOTH);
+        st.setInterpolator(Interpolator.LINEAR);
         st.setFromX(1.05);
         st.setFromY(1.05);
         st.setToX(1.0);
         st.setToY(1.0);
 
-        ParallelTransition pt = new ParallelTransition(ft, st);
+        ParallelTransition pt = new ParallelTransition(ft, st, st2);
+        pt.setDelay(Duration.seconds(0.1));
         pt.play();
+        st.setOnFinished(_ -> backgroundImage.setImage(image));
     }
 
     public static void setMenuBackground()

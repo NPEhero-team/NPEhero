@@ -1,6 +1,5 @@
 package net.sowgro.npehero.devmenu;
 
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,12 +11,12 @@ import javafx.scene.layout.VBox;
 import net.sowgro.npehero.gui.MainMenu;
 import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.main.Levels;
+import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
-import java.time.Year;
-
-public class LevelList extends Pane
+public class LevelList extends Page
 {
+    private HBox content = new HBox();
 
     public LevelList()
     {
@@ -56,7 +55,7 @@ public class LevelList extends Pane
             return row ;
         });
         levels.setPrefWidth(600);
-        levels.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
+        levels.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
 
         Button edit = new Button("Edit");
         edit.setOnAction(e -> Driver.setMenu(new LevelEditor(levels.getSelectionModel().getSelectedItem(), this)));
@@ -104,16 +103,12 @@ public class LevelList extends Pane
         });
 
         VBox centerBox = new VBox();
-        centerBox.setAlignment(Pos.CENTER);
+        centerBox.getChildren().addAll(main, exit);
         centerBox.setSpacing(10);
-        centerBox.getChildren().addAll(main,exit);
-        centerBox.setMinWidth(400);
+        centerBox.setAlignment(Pos.CENTER);
 
-        HBox rootBox = new HBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
-        rootBox.getChildren().add(centerBox);
-        rootBox.setAlignment(Pos.CENTER);
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
 
         create.setOnAction(_ -> {
             if (create.isSelected()) {
@@ -131,7 +126,10 @@ public class LevelList extends Pane
             sidebar.getChildren().clear();
             create.setSelected(false);
         });
+    }
 
-        super.getChildren().add(rootBox);
+    @Override
+    public Pane getContent() {
+        return content;
     }
 }

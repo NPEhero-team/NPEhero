@@ -14,12 +14,14 @@ import javafx.scene.text.Text;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.gameplay.ScoreController;
+import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
-public class LevelSurround extends Pane
-{   
+public class LevelSurround extends Page
+{
+    private final HBox content = new HBox();
 
-    public LevelSurround(Level level, Difficulty difficulty, Pane prev)
+    public LevelSurround(Level level, Difficulty difficulty, Page prev)
     {
         ScoreController sc = new ScoreController();
         SongPlayer game = new SongPlayer(level, difficulty, prev, sc);
@@ -102,13 +104,13 @@ public class LevelSurround extends Pane
         comboBox.setBottomAnchor(comboTextBox, 0.0);
         comboBox.setPadding(new Insets(10));
 
-        game.minWidthProperty().bind(super.prefHeightProperty().multiply(0.66));
-        game.minHeightProperty().bind(super.prefHeightProperty());
+        game.minWidthProperty().bind(content.heightProperty().multiply(0.66));
+        game.minHeightProperty().bind(content.heightProperty());
         game.getStyleClass().add("box");
 
 
-        comboBox.minWidthProperty().bind(super.prefWidthProperty().subtract(game.minWidthProperty()).divide(2));
-        scoreBox.minWidthProperty().bind(super.prefWidthProperty().subtract(game.minWidthProperty()).divide(2));
+        comboBox.minWidthProperty().bind(Driver.primaryPane.widthProperty().subtract(game.minWidthProperty()).divide(2));
+        scoreBox.minWidthProperty().bind(Driver.primaryPane.widthProperty().subtract(game.minWidthProperty()).divide(2));
 
         HBox centerBox = new HBox();
         centerBox.getChildren().addAll(comboBox, game, scoreBox);
@@ -117,10 +119,13 @@ public class LevelSurround extends Pane
         StackPane root = new StackPane();
         root.getChildren().addAll(centerBox, topBar);
 
-        super.getChildren().add(root);
-        root.prefWidthProperty().bind(super.prefWidthProperty());
-        root.prefHeightProperty().bind(super.prefHeightProperty());
+        content.getChildren().add(root);
 
         game.start();
+    }
+
+    @Override
+    public Pane getContent() {
+        return content;
     }
 }

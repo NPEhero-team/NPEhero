@@ -10,22 +10,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.main.Difficulty;
-import net.sowgro.npehero.main.LeaderboardEntry;
-import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.Sound;
+import net.sowgro.npehero.main.*;
 
-public class LeaderboardView extends Pane
+public class LeaderboardView extends Page
 {
+    private HBox content = new HBox();
 
-    public LeaderboardView(Level level, Difficulty diff, Pane prev)
+    public LeaderboardView(Difficulty diff, Page prev)
     {
         //sets up table view: requires java bean getters, setters and constructors to work
-        TableView<LeaderboardEntry> scores = new TableView<LeaderboardEntry>();
+        TableView<LeaderboardEntry> scores = new TableView<>();
 
-        TableColumn<LeaderboardEntry, String> nameCol = new TableColumn<LeaderboardEntry, String>("Name");
-        TableColumn<LeaderboardEntry, String> scoreCol = new TableColumn<LeaderboardEntry, String>("Score");
-        TableColumn<LeaderboardEntry, String> dateCol = new TableColumn<LeaderboardEntry, String>("Date");
+        TableColumn<LeaderboardEntry, String> nameCol = new TableColumn<>("Name");
+        TableColumn<LeaderboardEntry, String> scoreCol = new TableColumn<>("Score");
+        TableColumn<LeaderboardEntry, String> dateCol = new TableColumn<>("Date");
 
         scores.getColumns().add(nameCol);
         scores.getColumns().add(scoreCol);
@@ -39,8 +37,8 @@ public class LeaderboardView extends Pane
 
         scores.getStyleClass().add("unselectable");
 
-        scores.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
-        scores.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
+        scores.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.25));
+        scores.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
 
         scoreCol.setSortType(SortType.DESCENDING);
         scores.getSortOrder().add(scoreCol);
@@ -53,17 +51,16 @@ public class LeaderboardView extends Pane
         });
 
         VBox centerBox = new VBox();
-        centerBox.setAlignment(Pos.CENTER);
+        centerBox.getChildren().addAll(scores, exit);
         centerBox.setSpacing(10);
-        centerBox.getChildren().addAll(scores,exit);
-        centerBox.setMinWidth(400);
+        centerBox.setAlignment(Pos.CENTER);
 
-        HBox rootBox = new HBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty()); 
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
-        rootBox.getChildren().add(centerBox);
-        rootBox.setAlignment(Pos.CENTER);
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
+    }
 
-        super.getChildren().add(rootBox);
+    @Override
+    public Pane getContent() {
+        return content;
     }
 }

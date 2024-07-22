@@ -38,15 +38,14 @@ public class NotesEditor2 extends Page {
     ListProperty<Note> noteList;
     DiffEditor prev;
 
+    private HBox content = new HBox();
+
     public NotesEditor2(Difficulty diff, DiffEditor prev) {
         this.diff = diff;
         noteList = diff.notes.deepCopyList();
         m = new MediaPlayer(new Media(diff.level.song.toURI().toString()));
         this.prev = prev;
-    }
 
-    @Override
-    public Pane getContent() {
         // Buttons
         VBox actionBox = new VBox();
         actionBox.setSpacing(10);
@@ -103,11 +102,11 @@ public class NotesEditor2 extends Page {
         playhead.setFill(Color.WHITE);
         playheadLane.getChildren().add(playhead);
 
-        HBox content = new HBox();
-        content.setAlignment(Pos.CENTER);
-        content.setSpacing(10);
-        content.getChildren().addAll(playheadLane, rulerLane);
-        content.getChildren().addAll(lanes);
+        HBox scrollContent = new HBox();
+        scrollContent.setAlignment(Pos.CENTER);
+        scrollContent.setSpacing(10);
+        scrollContent.getChildren().addAll(playheadLane, rulerLane);
+        scrollContent.getChildren().addAll(lanes);
 
         Line playheadLine = new Line();
         playheadLine.setStartX(0);
@@ -121,7 +120,7 @@ public class NotesEditor2 extends Page {
         contentOverlay.setPickOnBounds(false);
 
         StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(content, contentOverlay);
+        stackPane.getChildren().addAll(scrollContent, contentOverlay);
 
         scroll.setContent(stackPane);
 //        scroll.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.35));
@@ -169,8 +168,8 @@ public class NotesEditor2 extends Page {
 
         // Draw and update ruler
         AtomicInteger lastRuler = new AtomicInteger(-1);
-        content.heightProperty().addListener(_ -> {
-            int ruler1 = (int) screenPosToSecond(content.getHeight());
+        scrollContent.heightProperty().addListener(_ -> {
+            int ruler1 = (int) screenPosToSecond(scrollContent.getHeight());
             for (int i = lastRuler.get() + 1; i <= ruler1; i++) {
                 Label l = new Label(toMinAndSec(i)+" -");
                 l.layoutYProperty().bind(secondToScreenPos(i));
@@ -181,19 +180,15 @@ public class NotesEditor2 extends Page {
         });
 
         VBox centerBox = new VBox();
-        centerBox.setAlignment(Pos.CENTER);
+        centerBox.getChildren().addAll(main, exit);
         centerBox.setSpacing(10);
-        centerBox.getChildren().addAll(main, buttons);
-        centerBox.setMinWidth(400);
+        centerBox.setAlignment(Pos.CENTER);
 
-        HBox rootBox = new HBox();
-//        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
-//        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
-        rootBox.getChildren().add(centerBox);
-        rootBox.setAlignment(Pos.CENTER);
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
 
         // write notes on key press
-        rootBox.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+        content.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             KeyCode k = e.getCode();
             if (k == Control.LANE0.getKey())           { WriteNote(0); }
             if (k == Control.LANE1.getKey())           { WriteNote(1); }
@@ -228,7 +223,7 @@ public class NotesEditor2 extends Page {
         scrollLock.setOnAction(_ -> {
             if (scrollLock.isSelected()) {
                 // vvalue takes in a value between 0 and 1 NOT a pixel value
-                scroll.vvalueProperty().bind(playhead.layoutYProperty().subtract(scroll.heightProperty().divide(2)).divide(content.heightProperty().subtract(scroll.heightProperty())));
+                scroll.vvalueProperty().bind(playhead.layoutYProperty().subtract(scroll.heightProperty().divide(2)).divide(scrollContent.heightProperty().subtract(scroll.heightProperty())));
             }
             else {
                 scroll.vvalueProperty().unbind();
@@ -289,8 +284,11 @@ public class NotesEditor2 extends Page {
                 helpBox.getChildren().clear();
             }
         });
+    }
 
-        return rootBox;
+    @Override
+    public Pane getContent() {
+        return content;
     }
 
     @Override

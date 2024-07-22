@@ -28,7 +28,7 @@ public class LevelDetails extends VBox
      * 
      * @param level: the selected level on the right side
      */
-    public LevelDetails(Level level)
+    public LevelDetails(Level level, LevelSelector ls)
     {
         VBox rightBox = new VBox();
         rightBox.prefWidthProperty().bind(super.prefWidthProperty());
@@ -99,13 +99,13 @@ public class LevelDetails extends VBox
             play.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull()); //disables play button when no difficulty is selected
             play.setOnAction(e -> {
                 Sound.playSfx(Sound.FORWARD);
-                Driver.setMenu(new LevelSurround(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
+                Driver.setMenu(new LevelSurround(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), ls));
             });
 
             leaderboard.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull());
             leaderboard.setOnAction(e -> {
                 Sound.playSfx(Sound.FORWARD);
-                Driver.setMenu(new LeaderboardView(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
+                Driver.setMenu(new LeaderboardView((Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
             });
 
 

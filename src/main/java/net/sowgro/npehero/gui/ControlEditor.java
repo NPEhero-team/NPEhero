@@ -9,12 +9,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Control;
+import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
 import java.util.List;
 import java.util.Map;
 
-public class ControlEditor extends Pane {
+public class ControlEditor extends Page {
+
+    private final HBox content = new HBox();
+
     public ControlEditor() {
 
         GridPane controls = new GridPane();
@@ -26,29 +30,8 @@ public class ControlEditor extends Pane {
         controls.setVgap(20);
         controls.setHgap(40);
 
-
-//        Pane dummy1 = new Pane();
-//        Pane dummy2 = new Pane();
-//        Pane dummy3 = new Pane();
-//        controls.add(dummy1, 0, 0);
-//        controls.add(dummy2, 1, 0);
-//        controls.add(dummy3, 2, 0);
-//
-//        Runnable r = () -> {
-//            var vpw = scrollPane.getViewportBounds().getWidth();
-//            var itemswidth = dummy1.getWidth() + dummy2.getWidth() + dummy3.getWidth();
-//            var out = ((vpw - itemswidth) / 2) -10;
-//            if (out < 10) {
-//                controls.setHgap(10);
-//            }
-//            else {
-//                controls.setHgap(out);
-//            }
-//        };
-//        scrollPane.viewportBoundsProperty().addListener((_, _, _) -> r.run());
-
         scrollPane.setPrefWidth(700);
-        scrollPane.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
+        scrollPane.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
 
         Button exit = new Button();
         exit.setText("Back");
@@ -58,16 +41,12 @@ public class ControlEditor extends Pane {
         });
 
         VBox centerBox = new VBox();
-        centerBox.setAlignment(Pos.CENTER);
+        centerBox.getChildren().addAll(scrollPane, exit);
         centerBox.setSpacing(10);
-        centerBox.getChildren().addAll(scrollPane,exit);
-        centerBox.setMinWidth(400);
+        centerBox.setAlignment(Pos.CENTER);
 
-        HBox rootBox = new HBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
-        rootBox.getChildren().add(centerBox);
-        rootBox.setAlignment(Pos.CENTER);
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
 
         ToggleGroup tg = new ToggleGroup();
         int i = 0;
@@ -98,15 +77,15 @@ public class ControlEditor extends Pane {
                         @Override
                         public void handle(KeyEvent k) {
                             control.keyProperty.set(k.getCode());
-                            rootBox.removeEventFilter(KeyEvent.KEY_PRESSED, this);
+                            content.removeEventFilter(KeyEvent.KEY_PRESSED, this);
                             controlButton.setSelected(false);
                             k.consume();
                         }
                     };
                     if (controlButton.isSelected()) {
-                        rootBox.addEventFilter(KeyEvent.KEY_PRESSED, keyListener);
+                        content.addEventFilter(KeyEvent.KEY_PRESSED, keyListener);
                     } else {
-                        rootBox.removeEventFilter(KeyEvent.KEY_PRESSED, keyListener);
+                        content.removeEventFilter(KeyEvent.KEY_PRESSED, keyListener);
                     }
                 });
                 tg.getToggles().add(controlButton);
@@ -122,8 +101,11 @@ public class ControlEditor extends Pane {
             }
 
         }
+    }
 
-        super.getChildren().add(rootBox);
+    @Override
+    public Pane getContent() {
+        return content;
     }
 
     public String keyToString(KeyCode key) {

@@ -14,20 +14,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import net.sowgro.npehero.main.Difficulty;
-import net.sowgro.npehero.main.Note;
-import net.sowgro.npehero.main.Sound;
-import net.sowgro.npehero.main.ValidIndicator;
+import net.sowgro.npehero.main.*;
 
-public class DiffEditor extends Pane
+public class DiffEditor extends Page
 {
     Difficulty diff;
     ScrollPane scroll;
 
-    public Pane prev;
+    HBox content = new HBox();
 
-    public DiffEditor(Difficulty diff, Pane prev)
-    {
+    public Page prev;
+
+    public DiffEditor(Difficulty diff, Page prev) {
         this.diff = diff;
         this.prev = prev;
 
@@ -42,7 +40,7 @@ public class DiffEditor extends Pane
         TextField priority = new TextField(diff.priority+"");
 
         Button editNotes = new Button("Edit notes");
-        editNotes.setOnAction(e -> {
+        editNotes.setOnAction(_ -> {
             if (diff.level.song == null) {
                 Driver.setMenu(new ErrorDisplay("You must import a song file before editing the notes!", this));
             }
@@ -52,19 +50,17 @@ public class DiffEditor extends Pane
         });
 
         Button oldEditNotes = new Button("Edit notes (legacy)");
-        oldEditNotes.setOnAction(_ -> {
-            Driver.setMenu(new ErrorDisplay(
-                    "Warning: \nThe legacy editor will overwrite all existing notes!",
-                    this,
-                    new NotesEditor(diff, this))
-            );
-        });
+        oldEditNotes.setOnAction(_ -> Driver.setMenu(new ErrorDisplay(
+                "Warning: \nThe legacy editor will overwrite all existing notes!",
+                this,
+                new NotesEditor(diff, this))
+        ));
 
         Button editScores = new Button("Clear leaderboard");
-        editScores.setOnAction(e -> diff.leaderboard.entries.clear());
+        editScores.setOnAction(_ -> diff.leaderboard.entries.clear());
 
         Button playLevel = new Button("Play level");
-        playLevel.setOnAction(e -> {
+        playLevel.setOnAction(_ -> {
             if (diff.isValid && diff.level.isValid) {
                 Driver.setMenu(new LevelSurround(diff.level, diff, this));
             }
@@ -74,7 +70,7 @@ public class DiffEditor extends Pane
         });
 
         Button save = new Button("Save");
-        save.setOnAction(e -> { //assigns text fields to values
+        save.setOnAction(_ -> { //assigns text fields to values
             diff.title = title.getText();
 //            diff.bpm = Double.parseDouble(bpm.getText());
 //            diff.numBeats = Integer.parseInt(numBeats.getText());
@@ -82,8 +78,8 @@ public class DiffEditor extends Pane
             diff.write();
         });
 
-        HBox content = new HBox();
-        ScrollPane scroll = new ScrollPane(content);
+        HBox scrollContent = new HBox();
+        ScrollPane scroll = new ScrollPane(scrollContent);
         scroll.setFitToWidth(true);
         this.scroll = scroll;
         scroll.getStyleClass().remove("scroll-pane");
@@ -96,9 +92,9 @@ public class DiffEditor extends Pane
             lanes[i] = new Pane();
         }
 
-        content.getChildren().addAll(lanes);
-        content.setSpacing(5);
-        content.setAlignment(Pos.CENTER);
+        scrollContent.getChildren().addAll(lanes);
+        scrollContent.setSpacing(5);
+        scrollContent.setAlignment(Pos.CENTER);
 
         diff.notes.list.forEach(n -> lanes[n.lane].getChildren().add(drawNote(n)));
 
@@ -131,18 +127,17 @@ public class DiffEditor extends Pane
         });
 
         VBox centerBox = new VBox();
-        centerBox.setAlignment(Pos.CENTER);
+        centerBox.getChildren().addAll(main, exit);
         centerBox.setSpacing(10);
-        centerBox.getChildren().addAll(main,exit);
-        centerBox.setMinWidth(400);
+        centerBox.setAlignment(Pos.CENTER);
 
-        HBox rootBox = new HBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
-        rootBox.getChildren().add(centerBox);
-        rootBox.setAlignment(Pos.CENTER);
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
+    }
 
-        super.getChildren().add(rootBox);
+    @Override
+    public Pane getContent() {
+        return content;
     }
 
     // Duplicates of NotesEditor2 methods, should be made generic and combined

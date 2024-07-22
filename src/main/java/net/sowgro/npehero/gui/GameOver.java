@@ -1,7 +1,5 @@
 package net.sowgro.npehero.gui;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -14,12 +12,14 @@ import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
+import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
-public class GameOver extends Pane
+public class GameOver extends Page
 {
+    HBox content = new HBox();
 
-    public GameOver(Level level, Difficulty diff, Pane lastMenu, int score2)
+    public GameOver(Level level, Difficulty diff, Page prev, int score2)
     {
         Text topText = new Text();
         topText.setText("Level Complete");
@@ -59,20 +59,15 @@ public class GameOver extends Pane
         nameLabel.getStyleClass().add("t3");
 
         TextField name = new TextField();
-//        name.getStyleClass().remove("text-filed");
-//        name.getStyleClass().add("button");
         name.setText("name");
 
         Button save = new Button();
         save.setText("Add");
-        save.setOnAction(new EventHandler<ActionEvent>() { //this is the same as the "e ->" thing but it allows more than one line to be added 
-            @Override
-            public void handle(ActionEvent event) {
-                Sound.playSfx(Sound.FORWARD);
-                save.setDisable(true);
-                name.setDisable(true);
-                diff.leaderboard.add(name.getText(), score2);
-            }
+        save.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            save.setDisable(true);
+            name.setDisable(true);
+            diff.leaderboard.add(name.getText(), score2);
         });
 
         BorderPane b = new BorderPane();
@@ -90,32 +85,31 @@ public class GameOver extends Pane
         exit.setText("Back");
         exit.setOnAction(e -> {
             Sound.playSfx(Sound.BACKWARD);
-            Driver.setMenu(lastMenu);
+            Driver.setMenu(prev);
         });
 
         Button replay = new Button();
         replay.setText("Replay");
         replay.setOnAction(e -> {
             Sound.playSfx(Sound.FORWARD);
-            Driver.setMenu(new LevelSurround(level, diff, lastMenu));
+            Driver.setMenu(new LevelSurround(level, diff, prev));
         });
 
         BorderPane buttonBox = new BorderPane();
         buttonBox.setLeft(exit);
         buttonBox.setRight(replay);
 
-
         VBox centerBox = new VBox();
         centerBox.getChildren().addAll(topText,levelDetailsBox,scoreBox,nameBox,buttonBox);
         centerBox.setSpacing(10);
         centerBox.setAlignment(Pos.CENTER);
 
-        HBox rootBox = new HBox();
-        rootBox.getChildren().add(centerBox);
-        rootBox.setAlignment(Pos.CENTER);
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty()); 
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
+    }
 
-        super.getChildren().add(rootBox);
+    @Override
+    public Pane getContent() {
+        return content;
     }
 }

@@ -11,11 +11,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
+import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Settings;
 import net.sowgro.npehero.main.Sound;
 
-public class SettingsEditor extends Pane
+public class SettingsEditor extends Page
 {
+    private final HBox content = new HBox();
 
     public SettingsEditor()
     {
@@ -99,16 +101,17 @@ public class SettingsEditor extends Pane
         options.setSpacing(10);
         options.setAlignment(Pos.CENTER);
         options.getChildren().addAll(musicBox,SFXBox,fullBox,controlsBox,buttonBox);
-        options.maxWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
+        options.maxWidthProperty().bind(content.prefWidthProperty().multiply(0.25));
         options.setMinWidth(400);
-        options.prefHeightProperty().bind(super.prefHeightProperty());
+        options.prefHeightProperty().bind(content.prefHeightProperty());
 
-        HBox rootBox = new HBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty()); 
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
-        rootBox.getChildren().add(options);
-        rootBox.setAlignment(Pos.CENTER);
-        super.getChildren().add(rootBox);
+        content.getChildren().add(options);
+        content.setAlignment(Pos.CENTER);
+    }
+
+    @Override
+    public Pane getContent() {
+        return content;
     }
 }
 

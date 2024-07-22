@@ -11,10 +11,12 @@ import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.main.Levels;
+import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
-public class LevelSelector extends Pane
-{   
+public class LevelSelector extends Page
+{
+    private final HBox content = new HBox();
 
     public LevelSelector()
     {
@@ -32,8 +34,8 @@ public class LevelSelector extends Pane
 
         levels.setItems(Levels.validList);
 
-        levels.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.25)); 
-        levels.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
+        levels.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.25));
+        levels.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
         levels.setMinWidth(300);
 
 
@@ -52,18 +54,18 @@ public class LevelSelector extends Pane
         Pane rightBox = new Pane();
         addDetails(rightBox, levels);
 
-
-        HBox rootBox = new HBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty()); 
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
-        rootBox.getChildren().addAll(leftBox, rightBox);
-        rootBox.setAlignment(Pos.CENTER);
-        rootBox.setSpacing(10);
+        content.getChildren().addAll(leftBox, rightBox);
+        content.setSpacing(10);
+        content.setAlignment(Pos.CENTER);
 
         levels.getStyleClass().remove("list-view");
         //listens for change in selected item of the list
         levels.getSelectionModel().selectedItemProperty().addListener(_ -> addDetails(rightBox, levels));
-        super.getChildren().add(rootBox);
+    }
+
+    @Override
+    public Pane getContent() {
+        return content;
     }
 
     /**
@@ -73,16 +75,16 @@ public class LevelSelector extends Pane
      */
     private void addDetails(Pane rightBox, TableView<Level> levels)
     {
-        VBox details = new LevelDetails(levels.getSelectionModel().getSelectedItem());
+        VBox details = new LevelDetails(levels.getSelectionModel().getSelectedItem(), this);
         if (! rightBox.getChildren().isEmpty())
         {
             rightBox.getChildren().remove(0);
         }
         rightBox.getChildren().add(details);
-        details.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.37)); 
-        details.prefHeightProperty().bind(super.prefHeightProperty());
-        details.maxWidthProperty().bind(super.prefWidthProperty().multiply(0.37)); 
-        details.maxHeightProperty().bind(super.prefHeightProperty());
+        details.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.37));
+        details.prefHeightProperty().bind(content.prefHeightProperty());
+        details.maxWidthProperty().bind(content.prefWidthProperty().multiply(0.37));
+        details.maxHeightProperty().bind(content.prefHeightProperty());
     }
 
 }

@@ -10,18 +10,17 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.main.Difficulty;
-import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.Sound;
-import net.sowgro.npehero.main.ValidIndicator;
+import net.sowgro.npehero.main.*;
 
-public class LevelEditor extends Pane
-{ 
+public class LevelEditor extends Page
+{
+    private HBox content = new HBox();
+
     private File selectedSong = null;
     private File selectedPreview = null;
     private File selectedBackground = null;
 
-    public LevelEditor(Level level, Pane prev)
+    public LevelEditor(Level level, Page prev)
     {
         Text folderNameLabel = new Text("Folder name");
         TextField folderName = new TextField();
@@ -175,17 +174,16 @@ public class LevelEditor extends Pane
         bottom.setSpacing(10);
 
         VBox centerBox = new VBox();
-        centerBox.setAlignment(Pos.CENTER);
+        centerBox.getChildren().addAll(mainBox, bottom);
         centerBox.setSpacing(10);
-        centerBox.getChildren().addAll(mainBox,bottom);
-        centerBox.setMinWidth(400);
+        centerBox.setAlignment(Pos.CENTER);
 
-        HBox rootBox = new HBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
-        rootBox.getChildren().add(centerBox);
-        rootBox.setAlignment(Pos.CENTER);
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
+    }
 
-        super.getChildren().add(rootBox);
+    @Override
+    public Pane getContent() {
+        return content;
     }
 }

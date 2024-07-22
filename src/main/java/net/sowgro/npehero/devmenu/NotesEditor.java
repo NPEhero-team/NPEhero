@@ -17,9 +17,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.main.Control;
 import net.sowgro.npehero.main.Difficulty;
+import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
-public class NotesEditor extends Pane
+public class NotesEditor extends Page
 {
     Text help;
     String t1 = "Press Start to begin recording. Use the same keys. Note: existing notes will be overwritten.";
@@ -27,7 +28,10 @@ public class NotesEditor extends Pane
     Difficulty diff;
     Timer timer;
     PrintWriter writer;
-    public NotesEditor(Difficulty diff, Pane prev)
+
+    private HBox content = new HBox();
+
+    public NotesEditor(Difficulty diff, Page prev)
     {
         this.diff = diff;
 
@@ -53,18 +57,12 @@ public class NotesEditor extends Pane
         });
 
         VBox centerBox = new VBox();
-        centerBox.setAlignment(Pos.CENTER);
+        centerBox.getChildren().addAll(main, exit);
         centerBox.setSpacing(10);
-        centerBox.getChildren().addAll(main,exit);
-        centerBox.setMinWidth(400);
+        centerBox.setAlignment(Pos.CENTER);
 
-        HBox rootBox = new HBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
-        rootBox.getChildren().add(centerBox);
-        rootBox.setAlignment(Pos.CENTER);
-
-        super.getChildren().add(rootBox);
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
 
         try {
             writer = new PrintWriter(diff.notes.getFile(), "UTF-8");
@@ -102,6 +100,11 @@ public class NotesEditor extends Pane
 		});
 
         Driver.primaryStage.setOnCloseRequest(e -> stop());
+    }
+
+    @Override
+    public Pane getContent() {
+        return content;
     }
 
     private void start()

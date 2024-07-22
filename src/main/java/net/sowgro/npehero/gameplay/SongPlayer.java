@@ -14,7 +14,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.main.Control;
+import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.gui.GameOver;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
@@ -25,9 +25,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.animation.*;
 import javafx.util.*;
-import net.sowgro.npehero.main.Difficulty;
-import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.Sound;
 
 
 //hi aidan here are some objects you can use
@@ -55,7 +52,7 @@ public class SongPlayer extends Pane {
 
 	private Level level;
 	private Difficulty difficulty;
-	private Pane pane;
+	private Page pane;
 
 	Timer timer;			//the timer that determines when notes will fall, counted in terms of the song's bpm
 	final int TIME = 1000;  //delay for notes falling down the screen
@@ -101,7 +98,7 @@ public class SongPlayer extends Pane {
 		});
 	}
 
-	public SongPlayer(Level lvl, Difficulty d, Pane p, ScoreController cntrl) {
+	public SongPlayer(Level lvl, Difficulty d, Page p, ScoreController cntrl) {
 		Sound.stopSong();
 		song = lvl.song;
 

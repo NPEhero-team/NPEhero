@@ -1,6 +1,5 @@
 package net.sowgro.npehero.devmenu;
 
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,12 +10,14 @@ import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
+import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
-public class DiffList extends Pane
+public class DiffList extends Page
 {
+    private HBox content = new HBox();
 
-    public DiffList(Level level, Pane prev)
+    public DiffList(Level level, Page prev)
     {
         //sets up table view: requires special getters, setters and constructors to work
         TableView<Difficulty> diffs = new TableView<>();
@@ -50,9 +51,8 @@ public class DiffList extends Pane
             return row ;
         });
 
-//        diffs.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.35));
         diffs.setPrefWidth(400);
-        diffs.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.67));
+        diffs.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.67));
 
         Button edit = new Button("Edit");
         edit.setOnAction(e -> Driver.setMenu(new DiffEditor(diffs.getSelectionModel().getSelectedItem(), this)));
@@ -99,17 +99,6 @@ public class DiffList extends Pane
             Driver.setMenu(prev);
         });
 
-        VBox centerBox = new VBox();
-        centerBox.setAlignment(Pos.CENTER);
-        centerBox.setSpacing(10);
-        centerBox.getChildren().addAll(main,exit);
-
-        HBox rootBox = new HBox();
-        rootBox.prefWidthProperty().bind(super.prefWidthProperty());
-        rootBox.prefHeightProperty().bind(super.prefHeightProperty());
-        rootBox.getChildren().add(centerBox);
-        rootBox.setAlignment(Pos.CENTER);
-
         create.setOnAction(_ -> {
             if (create.isSelected()) {
                 sidebar.getChildren().add(newLevelBox);
@@ -127,7 +116,17 @@ public class DiffList extends Pane
             create.setSelected(false);
         });
 
-        super.getChildren().add(rootBox);
+        VBox centerBox = new VBox();
+        centerBox.getChildren().addAll(main, exit);
+        centerBox.setSpacing(10);
+        centerBox.setAlignment(Pos.CENTER);
+
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
     }
 
+    @Override
+    public Pane getContent() {
+        return content;
+    }
 }

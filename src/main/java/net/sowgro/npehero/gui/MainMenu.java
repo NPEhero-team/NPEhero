@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -16,9 +17,9 @@ import net.sowgro.npehero.main.Sound;
 
 public class MainMenu extends Page {
 
-    @Override
-    public Pane getContent() {
+    private final HBox content = new HBox();
 
+    public MainMenu() {
         DropShadow dropShadow = new DropShadow();
         dropShadow.setRadius(50.0);
         dropShadow.setColor(Color.WHITE);
@@ -68,10 +69,12 @@ public class MainMenu extends Page {
         centerBox.getChildren().addAll(title, buttonBox);
         centerBox.setSpacing(10);
 
-        VBox rootBox = new VBox();
-        rootBox.setAlignment(Pos.CENTER);
-        rootBox.getChildren().add(centerBox);
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
+    }
 
-        return rootBox;
+    @Override
+    public Pane getContent() {
+        return content;
     }
 }
