@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-public class Level 
-{
+public class Level implements Comparable<Level>{
+
     public File dir;
 
     public String title = "Unnamed";
@@ -25,12 +25,10 @@ public class Level
 
     public Difficulties difficulties;
 
-    public boolean isValid = true;
-
     private JSONFile metadataJson;
 
     /**
-     * Creates a new level and gives it a file path
+     * Creates a new level
      * @param newDir: The path of the Level
      */
     public Level(File newDir)
@@ -42,14 +40,16 @@ public class Level
         readData();
     }
 
+    /**
+     * Check for a song file, background file and preview image file
+     * Parse metadata.json
+     */
     public void readData() {
 
         var fileList = dir.listFiles();
         if (fileList == null) {
             return;
         }
-
-        // support any file extension (maybe a bad idea)
         for (File file : fileList) {
             String fileName = file.getName();
             if (fileName.contains("song")) {
@@ -63,26 +63,6 @@ public class Level
             }
         }
 
-        parseMetadata();
-        validate();
-    }
-
-    public void validate() {
-        if (song == null) {
-            System.err.println(dir +" is missing song file");
-        }
-
-        if (difficulties.validList.isEmpty()) {
-            System.err.println(dir +" contains no valid difficulties");
-            isValid = false;
-        }
-    }
-
-    /**
-     * Reads in json metadata and assigns values to variables
-     */
-    public void parseMetadata()
-    {
         try {
             metadataJson.read();
         }
@@ -97,6 +77,24 @@ public class Level
         colors[2] = Color.web(metadataJson.getString("color3", colors[2].toString()));
         colors[3] = Color.web(metadataJson.getString("color4", colors[3].toString()));
         colors[4] = Color.web(metadataJson.getString("color5", colors[4].toString()));
+    }
+
+    /**
+     * Checks if the level is valid.
+     * A valid level has a song file and 1 or more valid difficulties
+     * @return true if the level is valid
+     */
+    public boolean isValid() {
+        if (song == null) {
+//            System.out.println(dir +" is missing song file");
+            return false;
+        }
+
+        if (difficulties.getValidList().isEmpty()) {
+//            System.out.println(dir +" contains no valid difficulties");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -125,14 +123,15 @@ public class Level
      * Copies a file into the level directory
      * @param newFile: the file to be copied
      * @param name: the new file name
+     * @throws IOException if there was an error adding the file
      */
-    public void addFile(File newFile, String name)
-    {
-        try {
-            Files.copy(newFile.toPath(), new File(dir, name).toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void addFile(File newFile, String name) throws IOException {
+        Files.copy(newFile.toPath(), new File(dir, name).toPath(), StandardCopyOption.REPLACE_EXISTING);
         readData();
+    }
+
+    @Override
+    public int compareTo(Level other) {
+        return title.compareTo(other.title);
     }
 }

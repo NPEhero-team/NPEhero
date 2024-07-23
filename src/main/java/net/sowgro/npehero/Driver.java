@@ -12,10 +12,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import net.sowgro.npehero.editor.ErrorDisplay;
 import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.gui.MainMenu;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.List;
+import java.util.Stack;
 
 
 public class Driver extends Application
@@ -42,9 +46,6 @@ public class Driver extends Application
      */
     @Override
     public void start(Stage newPrimaryStage) {
-        Settings.read();
-        Levels.readData();
-        Control.readFromFile();
 
         primaryStage = newPrimaryStage;
 
@@ -65,8 +66,7 @@ public class Driver extends Application
         primaryStage.setTitle("NPE Hero");
 
         primaryPane.getStyleClass().remove("scroll-pane");
-        
-        setMenu(new MainMenu());
+
         setMenuBackground();
 
         Sound.playSong(Sound.MENU_SONG);
@@ -79,6 +79,28 @@ public class Driver extends Application
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.setFullScreenExitHint("");
         primaryStage.show();
+
+        Stack<String> errors = new Stack<>();
+        try {
+            Settings.read();
+        } catch (Exception e) {
+            errors.push("Failed to load settings from file\n"+e);
+        }
+        try {
+            Levels.readData();
+        } catch (FileNotFoundException e) {
+            errors.push("Failed to load levels: Level folder is missing\n");
+        }
+        try {
+            Control.readFromFile();
+        } catch (Exception e) {
+            errors.push("Failed to load controls from file\n"+e);
+        }
+        Page last = new MainMenu();
+        while (!errors.empty()) {
+            last = new ErrorDisplay(errors.pop(), last);
+        }
+        Driver.setMenu(last);
     }
 
     /**

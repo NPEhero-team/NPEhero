@@ -79,27 +79,15 @@ public enum Control {
         };
     }
 
-    public static void writeToFile() {
+    public static void writeToFile() throws IOException {
         for (Control control : Control.values()) {
             jsonFile.set(control.toString(), control.getKey().toString());
         }
-        
-        try {
-            jsonFile.write();
-        }
-        catch (IOException e) {
-            System.err.println("Error writing to controls.json");
-        }
+        jsonFile.write();
     }
 
-    public static void readFromFile() {
-        try {
-            jsonFile.read();
-        }
-        catch (Exception e) {
-            System.err.println("Error reading from controls.json");
-        }
-        
+    public static void readFromFile() throws Exception {
+        jsonFile.read();
         for (Control control : Control.values()) {
             if (jsonFile.containsKey(control.toString())) {
                 control.setKey(KeyCode.valueOf(jsonFile.getString(control.toString(), null)));

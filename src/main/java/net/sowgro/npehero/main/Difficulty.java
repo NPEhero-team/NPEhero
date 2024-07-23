@@ -9,6 +9,7 @@ public class Difficulty implements Comparable<Difficulty>
 {
     public File thisDir;
     public Level level;
+    private final JSONFile metadataYaml;
 
     public String title = "Unnamed";
     public Double bpm = 0.0;
@@ -18,10 +19,6 @@ public class Difficulty implements Comparable<Difficulty>
     public Leaderboard leaderboard;
     public Notes notes;
 
-    public boolean isValid = true;
-
-    private final JSONFile metadataYaml;
-    
     /**
      * Creates a new Difficulty and gives it a file path
      * @param newDir: The file path of the Difficulty
@@ -30,6 +27,10 @@ public class Difficulty implements Comparable<Difficulty>
         thisDir = newDir;
         this.level = level;
         metadataYaml = new JSONFile(new File(thisDir, "metadata.json"));
+        notes = new Notes(new File(thisDir, "notes.txt"), this);
+        leaderboard = new Leaderboard(new File(thisDir, "leaderboard.json"));
+
+        readData();
     }
 
     public void readData() {
@@ -51,21 +52,10 @@ public class Difficulty implements Comparable<Difficulty>
         }
         order = metadataYaml.getInt("priority", order);
 
-        notes = new Notes(new File(thisDir, "notes.txt"), this);
-        leaderboard = new Leaderboard(new File(thisDir, "leaderboard.json"));
-
-        validate();
-
     }
 
-    public void validate() {
-        if (notes.list.isEmpty()) {
-            isValid = false;
-        }
-
-//        if (numBeats == 0) {
-//            isValid = false;
-//        }
+    public boolean isValid() {
+        return !notes.list.isEmpty();
     }
 
     /**

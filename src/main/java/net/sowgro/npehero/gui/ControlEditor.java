@@ -8,10 +8,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import net.sowgro.npehero.Driver;
+import net.sowgro.npehero.editor.ErrorDisplay;
 import net.sowgro.npehero.main.Control;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -70,9 +72,13 @@ public class ControlEditor extends Page {
                 controlButton.setText(keyToString(control.keyProperty.get()));
                 control.keyProperty.addListener(_ -> {
                     controlButton.setText(keyToString(control.keyProperty.get()));
-                    Control.writeToFile();
+                    try {
+                        Control.writeToFile();
+                    } catch (IOException e) {
+                        Driver.setMenu(new ErrorDisplay("An error occured while saving your controls\n"+e, this));
+                    }
                 });
-                controlButton.setOnMouseClicked(_ -> {
+                controlButton.setOnAction(_ -> {
                     EventHandler<KeyEvent> keyListener = new EventHandler<>() {
                         @Override
                         public void handle(KeyEvent k) {
@@ -93,7 +99,7 @@ public class ControlEditor extends Page {
 
                 // reset button
                 Button resetButton = new Button("Reset");
-                resetButton.setOnMouseClicked(_ -> {
+                resetButton.setOnAction(_ -> {
                     control.keyProperty.set(control.defaultKey);
                 });
                 controls.add(resetButton, 2, i);

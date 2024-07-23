@@ -14,6 +14,9 @@ import net.sowgro.npehero.main.Levels;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class LevelList extends Page
 {
     private HBox content = new HBox();
@@ -34,7 +37,7 @@ public class LevelList extends Page
         titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
         artistCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().artist));
         validCol.setCellValueFactory(data -> {
-            if (data.getValue().isValid) {
+            if (data.getValue().isValid()) {
                 return new ReadOnlyStringWrapper("Yes");
             }
             else {
@@ -63,13 +66,23 @@ public class LevelList extends Page
         edit.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
 
         Button remove = new Button("Delete");
-        remove.setOnAction(e -> Levels.remove(levels.getSelectionModel().getSelectedItem()));
+        remove.setOnAction(e -> {
+            try {
+                Levels.remove(levels.getSelectionModel().getSelectedItem());
+            } catch (IOException ex) {
+                Driver.setMenu(new ErrorDisplay("Failed to remove this level\n"+e.toString(), this));
+            }
+        });
         remove.setDisable(true);
         remove.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
 
         Button refresh = new Button("Refresh");
         refresh.setOnAction(e -> {
-            Levels.readData();
+            try {
+                Levels.readData();
+            } catch (FileNotFoundException ex) {
+                Driver.setMenu(new ErrorDisplay("Failed to load levels: Level folder is missing\n"+e.toString(), this));
+            }
             levels.setItems(Levels.list);
         });
 
@@ -120,7 +133,11 @@ public class LevelList extends Page
         });
 
         newLevelButton.setOnAction(_ -> {
-            Levels.add(newLevelEntry.getText());
+            try {
+                Levels.add(newLevelEntry.getText());
+            } catch (IOException e) {
+                Driver.setMenu(new ErrorDisplay("Failed to create this level\n"+e.toString(), this));
+            }
             newLevelEntry.clear();
             refresh.fire();
             sidebar.getChildren().clear();

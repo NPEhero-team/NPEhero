@@ -14,6 +14,7 @@ import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
+import java.io.IOException;
 import java.util.Collections;
 
 public class DiffList extends Page
@@ -33,7 +34,7 @@ public class DiffList extends Page
 
         titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
         validCol.setCellValueFactory(data -> {
-            if (data.getValue().isValid) {
+            if (data.getValue().isValid()) {
                 return new ReadOnlyStringWrapper("Yes");
             }
             else {
@@ -63,7 +64,13 @@ public class DiffList extends Page
         edit.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
 
         Button remove = new Button("Delete");
-        remove.setOnAction(e -> level.difficulties.remove(diffs.getSelectionModel().getSelectedItem()));
+        remove.setOnAction(e -> {
+            try {
+                level.difficulties.remove(diffs.getSelectionModel().getSelectedItem());
+            } catch (IOException ex) {
+                Driver.setMenu(new ErrorDisplay("Failed to remove difficulty\n"+e, this));
+            }
+        });
         remove.setDisable(true);
         remove.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
 
@@ -139,7 +146,11 @@ public class DiffList extends Page
         });
 
         newLevelButton.setOnAction(_ -> {
-            level.difficulties.add(newLevelEntry.getText());
+            try {
+                level.difficulties.add(newLevelEntry.getText());
+            } catch (IOException e) {
+                Driver.setMenu(new ErrorDisplay("Failed to add level\n"+e, this));
+            }
             newLevelEntry.clear();
             refresh.fire();
             sidebar.getChildren().clear();

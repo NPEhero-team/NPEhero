@@ -17,14 +17,8 @@ public class Settings
 	/**
 	 * Reads json data from settings.json
 	 */
-	public static void read()
-	{
-        try {
-            jsonFile.read();
-        } catch (Exception e) {
-			e.printStackTrace();
-            System.out.println("Error reading settings.json");
-        }
+	public static void read() throws Exception {
+        jsonFile.read();
         effectsVol.set(jsonFile.getDouble("effectsVol", 1));
 		musicVol.set(jsonFile.getDouble("musicVol", 1));
 		enableMenuMusic.set(jsonFile.getBoolean("enableMenuMusic", true));
@@ -33,16 +27,10 @@ public class Settings
 	/**
 	 * Writes json data to settings.json
 	 */
-	public static void save()
-	{
+	public static void save() throws IOException {
 		jsonFile.set("effectsVol", effectsVol.get());
 		jsonFile.set("musicVol", musicVol.get());
 		jsonFile.set("enableMenuMusic", enableMenuMusic.get());
-		try {
-			jsonFile.write();
-		}
-		catch (IOException e) {
-			System.out.println("Error writing settings.json");
-		}
+		jsonFile.write();
 	}
 }

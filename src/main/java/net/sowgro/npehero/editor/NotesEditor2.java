@@ -175,7 +175,7 @@ public class NotesEditor2 extends Page {
         buttons.setAlignment(Pos.CENTER);
 
         Runnable updateEndLine = () -> {
-            System.out.println("LISTENER CALLED");
+//            System.out.println("LISTENER CALLED");
             if (newEndTime.get() != 0) {
                 endLine.layoutYProperty().bind(secondToScreenPos(newEndTime.get()));
             }

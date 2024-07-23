@@ -86,7 +86,7 @@ public class LevelDetails extends VBox
             FlowPane diffSelector = new FlowPane();
             diffSelector.setAlignment(Pos.CENTER);
             ToggleGroup diffToggleGroup = new ToggleGroup(); //allows only one to be selected at a time
-            for (Difficulty diff : level.difficulties.validList) //adds a button for each diff
+            for (Difficulty diff : level.difficulties.getValidList()) //adds a button for each diff
             {
                 RadioButton temp = new RadioButton();
                 temp.getStyleClass().remove("radio-button"); //makes the buttons not look like a radio button and instead a normal button

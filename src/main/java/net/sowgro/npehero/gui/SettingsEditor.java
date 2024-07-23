@@ -11,9 +11,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
+import net.sowgro.npehero.editor.ErrorDisplay;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Settings;
 import net.sowgro.npehero.main.Sound;
+
+import java.io.IOException;
 
 public class SettingsEditor extends Page
 {
@@ -89,7 +92,11 @@ public class SettingsEditor extends Page
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
-            Settings.save();
+            try {
+                Settings.save();
+            } catch (IOException ex) {
+                Driver.setMenu(new ErrorDisplay("Failed to save settings"+e, this));
+            }
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(new MainMenu());
         });

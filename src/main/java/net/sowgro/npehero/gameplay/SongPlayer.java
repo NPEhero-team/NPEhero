@@ -143,7 +143,7 @@ public class SongPlayer extends Pane {
 			 * The keyboard detection for the game: when a key is pressed it
 			 * calls the checkNote() method for the corresponding lane
 			 */
-			System.out.println(e.getCode());
+//			System.out.println(e.getCode());
 //			if (super.isVisible())
 //			{
 				if (e.getCode() == Control.LANE0.getKey()) {

@@ -61,7 +61,7 @@ public class DiffEditor extends Page
 
         Button playLevel = new Button("Play level");
         playLevel.setOnAction(_ -> {
-            if (diff.isValid && diff.level.isValid) {
+            if (diff.isValid() && diff.level.isValid()) {
                 Driver.setMenu(new LevelSurround(diff.level, diff, this));
             }
             else {

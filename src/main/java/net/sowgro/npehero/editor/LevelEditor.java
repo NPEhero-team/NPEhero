@@ -78,7 +78,7 @@ public class LevelEditor extends Page
 
 
         ValidIndicator diffsInvalid = new ValidIndicator();
-        if (level.difficulties.validList.isEmpty()) {
+        if (level.difficulties.getValidList().isEmpty()) {
             diffsInvalid.setInvalid("This level contains no valid difficulties!");
         }
         HBox diffLabel = new HBox(new Text("Difficulties"), diffsInvalid);
@@ -95,7 +95,7 @@ public class LevelEditor extends Page
 
         diffCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
         validCol.setCellValueFactory(data -> {
-            if (data.getValue().isValid) {
+            if (data.getValue().isValid()) {
                 return new ReadOnlyStringWrapper("Yes");
             }
             else {
@@ -131,14 +131,19 @@ public class LevelEditor extends Page
             level.colors[2] = colorsPickers[2].getValue();
             level.colors[3] = colorsPickers[3].getValue();
             level.colors[4] = colorsPickers[4].getValue();
-            if (selectedBackground != null && selectedBackground.exists()) {
-                level.addFile(selectedBackground,"background." + getFileExtension(selectedBackground));
-            }   
-            if (selectedPreview != null && selectedPreview.exists()) {
-                level.addFile(selectedPreview,"preview." + getFileExtension(selectedPreview));
-            }
-            if (selectedSong != null) {
-                level.addFile(selectedSong,"song." + getFileExtension(selectedSong));
+
+            try {
+                if (selectedBackground != null && selectedBackground.exists()) {
+                    level.addFile(selectedBackground, "background." + getFileExtension(selectedBackground));
+                }
+                if (selectedPreview != null && selectedPreview.exists()) {
+                    level.addFile(selectedPreview, "preview." + getFileExtension(selectedPreview));
+                }
+                if (selectedSong != null) {
+                    level.addFile(selectedSong, "song." + getFileExtension(selectedSong));
+                }
+            } catch (Exception _) {
+                // TODO
             }
             level.writeMetadata();
         });
@@ -166,7 +171,7 @@ public class LevelEditor extends Page
             Driver.setMenu(prev);
         });
 
-        HBox bottom = new HBox(save, exit);
+        HBox bottom = new HBox(exit, save);
         bottom.setAlignment(Pos.CENTER);
         bottom.setSpacing(10);
 

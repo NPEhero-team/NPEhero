@@ -32,7 +32,7 @@ public class LevelSelector extends Page
         titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
         artistCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().artist));
 
-        levels.setItems(Levels.validList);
+        levels.setItems(Levels.getValidList());
 
         levels.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.25));
         levels.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
