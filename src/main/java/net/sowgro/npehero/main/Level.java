@@ -3,6 +3,7 @@ package net.sowgro.npehero.main;
 import java.io.File;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class Level
 
     public Image preview; //optional
     public Image background; //optional
-    public File song;
+    public Media song;
 
     public Difficulties difficulties;
 
@@ -43,16 +44,23 @@ public class Level
 
     public void readData() {
 
-        if (new File(dir, "song.wav").exists()) {
-            song = new File(dir,"song.wav");
+        var fileList = dir.listFiles();
+        if (fileList == null) {
+            return;
         }
 
-        if (new File(dir, "background.png").exists()) {
-            background = new Image(new File(dir,"background.png").toURI().toString());
-        }
-
-        if (new File(dir, "preview.png").exists()) {
-            preview = new Image(new File(dir,"preview.png").toURI().toString());
+        // support any file extension (maybe a bad idea)
+        for (File file : fileList) {
+            String fileName = file.getName();
+            if (fileName.contains("song")) {
+                song = new Media(file.toURI().toString());
+            }
+            else if (fileName.contains("background")) {
+                background = new Image(file.toURI().toString());
+            }
+            else if (fileName.contains("preview")) {
+                preview = new Image(file.toURI().toString());
+            }
         }
 
         parseMetadata();
@@ -61,7 +69,7 @@ public class Level
 
     public void validate() {
         if (song == null) {
-            System.err.println(dir +" is missing song.wav");
+            System.err.println(dir +" is missing song file");
         }
 
         if (difficulties.validList.isEmpty()) {

@@ -64,6 +64,8 @@ public enum Control {
             case LEFT  -> "←";
             case RIGHT -> "→";
             case SPACE -> "_";
+            case EQUALS -> "+";
+            case MINUS -> "-";
             case null  -> " ";
             default    -> {
                 String s = key.toString();

@@ -128,4 +128,9 @@ public class LevelSurround extends Page
     public Pane getContent() {
         return content;
     }
+
+    @Override
+    public void onLeave() {
+        Sound.playSong(Sound.MENU_SONG);
+    }
 }

@@ -40,6 +40,7 @@ public class Difficulties {
                 list.add(diff);
             }
         }
+        list.sort(Comparator.naturalOrder());
     }
 
     /**
@@ -71,6 +72,11 @@ public class Difficulties {
         Difficulty temp = new Difficulty(diffDir,level);
         temp.title = text;
         list.add(temp);
+        list.sort(Comparator.naturalOrder());
+    }
+
+    public void saveOrder() {
+        list.forEach(d -> d.order = list.indexOf(d));
     }
 
 

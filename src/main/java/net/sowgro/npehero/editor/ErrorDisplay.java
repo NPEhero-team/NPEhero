@@ -1,4 +1,4 @@
-package net.sowgro.npehero.devmenu;
+package net.sowgro.npehero.editor;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

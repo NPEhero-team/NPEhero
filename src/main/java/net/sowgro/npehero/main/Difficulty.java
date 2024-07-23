@@ -1,5 +1,7 @@
 package net.sowgro.npehero.main;
 
+import javafx.scene.media.Media;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -10,8 +12,8 @@ public class Difficulty implements Comparable<Difficulty>
 
     public String title = "Unnamed";
     public Double bpm = 0.0;
-    public int numBeats;
-    public int priority = 0;
+    public double endTime = 0;
+    public int order = 0;
 
     public Leaderboard leaderboard;
     public Notes notes;
@@ -40,8 +42,14 @@ public class Difficulty implements Comparable<Difficulty>
 
         title = metadataYaml.getString("title", title);
         bpm = metadataYaml.getDouble("bpm", bpm);
-        numBeats = metadataYaml.getInt("numBeats", numBeats);
-        priority = metadataYaml.getInt("priority", priority);
+        endTime = metadataYaml.getDouble("endTime", endTime);
+        if (endTime == 0) {
+            int tmp = metadataYaml.getInt("numBeats", 0);
+            if (tmp != 0) {
+                endTime = beatToSecond(tmp);
+            }
+        }
+        order = metadataYaml.getInt("priority", order);
 
         notes = new Notes(new File(thisDir, "notes.txt"), this);
         leaderboard = new Leaderboard(new File(thisDir, "leaderboard.json"));
@@ -65,8 +73,8 @@ public class Difficulty implements Comparable<Difficulty>
      */
     public void write() {
         metadataYaml.set("title", title);
-        metadataYaml.set("numBeats", numBeats);
-        metadataYaml.set("priority", priority);
+        metadataYaml.set("endTime", endTime);
+        metadataYaml.set("priority", order);
 
         try {
             metadataYaml.write();
@@ -78,7 +86,11 @@ public class Difficulty implements Comparable<Difficulty>
 
     @Override
     public int compareTo(Difficulty d) {
-        return priority - d.priority;
+        return order - d.order;
+    }
+
+    private double beatToSecond(double beat) {
+        return beat/(bpm/60);
     }
 
 

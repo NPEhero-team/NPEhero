@@ -1,17 +1,14 @@
-package net.sowgro.npehero.devmenu;
+package net.sowgro.npehero.editor;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gameplay.Block;
 import net.sowgro.npehero.gui.LevelSurround;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.main.*;
@@ -36,17 +33,19 @@ public class DiffEditor extends Page
         Text titleLabel = new Text("Title");
         TextField title = new TextField(diff.title);
 
-        Text priorityLabel = new Text("Order (lower first)");
-        TextField priority = new TextField(diff.priority+"");
-
         Button editNotes = new Button("Edit notes");
         editNotes.setOnAction(_ -> {
             if (diff.level.song == null) {
                 Driver.setMenu(new ErrorDisplay("You must import a song file before editing the notes!", this));
             }
-            else {
-                Driver.setMenu(new NotesEditor2(diff, this));
+            if (diff.bpm != 0.0) {
+                Driver.setMenu(new ErrorDisplay(
+                        "Note:\nThe new notes editor does not support bpm and beat based songs. If you continue the beats will be converted to seconds.",
+                        this,
+                        new NotesEditor2(diff, this)
+                ));
             }
+            Driver.setMenu(new NotesEditor2(diff, this));
         });
 
         Button oldEditNotes = new Button("Edit notes (legacy)");
@@ -56,6 +55,7 @@ public class DiffEditor extends Page
                 new NotesEditor(diff, this))
         ));
 
+        Label scoresLable = new Label("Scores");
         Button editScores = new Button("Clear leaderboard");
         editScores.setOnAction(_ -> diff.leaderboard.entries.clear());
 
@@ -74,14 +74,12 @@ public class DiffEditor extends Page
             diff.title = title.getText();
 //            diff.bpm = Double.parseDouble(bpm.getText());
 //            diff.numBeats = Integer.parseInt(numBeats.getText());
-            diff.priority = Integer.parseInt(priority.getText());
             diff.write();
         });
 
         HBox scrollContent = new HBox();
-        ScrollPane scroll = new ScrollPane(scrollContent);
+        scroll = new ScrollPane(scrollContent);
         scroll.setFitToWidth(true);
-        this.scroll = scroll;
         scroll.getStyleClass().remove("scroll-pane");
         scroll.getStyleClass().add("box");
 //        scroll.setPrefHeight(400);
@@ -112,7 +110,7 @@ public class DiffEditor extends Page
         notePreview.setSpacing(10);
 
         VBox left = new VBox();
-        left.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,priorityLabel,priority,editScores,playLevel,save);
+        left.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,scoresLable,editScores,playLevel);
         left.setSpacing(10);
 
         HBox main = new HBox();
@@ -126,8 +124,12 @@ public class DiffEditor extends Page
             Driver.setMenu(prev);
         });
 
+        HBox bottom = new HBox(exit,save);
+        bottom.setSpacing(10);
+        bottom.setAlignment(Pos.CENTER);
+
         VBox centerBox = new VBox();
-        centerBox.getChildren().addAll(main, exit);
+        centerBox.getChildren().addAll(main, bottom);
         centerBox.setSpacing(10);
         centerBox.setAlignment(Pos.CENTER);
 

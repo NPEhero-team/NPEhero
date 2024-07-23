@@ -20,7 +20,7 @@ import java.net.URL;
 
 public class Driver extends Application
 {
-    public static final Image MENU_BACKGROUND = new Image(Driver.class.getResource("mountains.png").toExternalForm());;
+    public static final Image MENU_BACKGROUND = new Image(Driver.class.getResource("mountains.png").toExternalForm());
 
     public static Stage primaryStage;
     public static ScrollPane primaryPane = new ScrollPane();
@@ -32,8 +32,7 @@ public class Driver extends Application
     /*
      * starts javafx
      */
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
         launch(args);
     }
     
@@ -42,8 +41,7 @@ public class Driver extends Application
      * (automatically called by javafx on start)
      */
     @Override
-    public void start(Stage newPrimaryStage)
-    {
+    public void start(Stage newPrimaryStage) {
         Settings.read();
         Levels.readData();
         Control.readFromFile();
@@ -87,8 +85,7 @@ public class Driver extends Application
      * Replaces/adds a new pane to the primaryPane
      * @param pane  the new pane
      */
-    private static void setMenu(Pane pane)
-    {
+    private static void setMenu(Pane pane) {
         primaryPane.setContent(pane);
         pane.prefWidthProperty().bind(primaryPane.widthProperty()); //makes pane fill the window
         pane.prefHeightProperty().bind(primaryPane.heightProperty());
@@ -98,7 +95,7 @@ public class Driver extends Application
     /**
      * @return the current pane in primaryPane
      */
-    public static Page getMenu(){
+    public static Page getMenu() {
         return currentPage;
     }
 
@@ -148,8 +145,7 @@ public class Driver extends Application
         st.setOnFinished(_ -> backgroundImage.setImage(image));
     }
 
-    public static void setMenuBackground()
-    {
+    public static void setMenuBackground() {
         setBackground(MENU_BACKGROUND);
     }
 

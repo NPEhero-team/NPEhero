@@ -1,7 +1,9 @@
-package net.sowgro.npehero.devmenu;
+package net.sowgro.npehero.editor;
 
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -37,13 +39,14 @@ public class NotesEditor2 extends Page {
     ListProperty<Block> activeNotes = new SimpleListProperty<>(FXCollections.observableArrayList());
     ListProperty<Note> noteList;
     DiffEditor prev;
+    DoubleProperty newEndTime = new SimpleDoubleProperty(0);
 
     private HBox content = new HBox();
 
     public NotesEditor2(Difficulty diff, DiffEditor prev) {
         this.diff = diff;
         noteList = diff.notes.deepCopyList();
-        m = new MediaPlayer(new Media(diff.level.song.toURI().toString()));
+        m = new MediaPlayer(diff.level.song);
         this.prev = prev;
 
         // Buttons
@@ -65,7 +68,8 @@ public class NotesEditor2 extends Page {
         ToggleButton play       = new ToggleButton("Play");
         Button reset            = new Button("Reset");
         ToggleButton scrollLock = new ToggleButton("Scroll Lock");
-        actionBox.getChildren().addAll(playbackLabel, play, reset, scrollLock);
+        Button setEnd         = new Button("End Here");
+        actionBox.getChildren().addAll(playbackLabel, play, reset, scrollLock, setEnd);
 
         delNote.disableProperty().bind(activeNotes.emptyProperty());
         moveNote.disableProperty().bind(activeNotes.emptyProperty());
@@ -85,7 +89,8 @@ public class NotesEditor2 extends Page {
             lane.prefWidthProperty().bind(sizer.widthProperty());
         }
         Pane rulerLane = new Pane();
-        rulerLane.setManaged(false);
+//        rulerLane.setManaged(false);
+
         Pane playheadLane = new Pane();
         playheadLane.setOnMouseClicked(e -> {
             m.seek(new Duration(screenPosToSecond(e.getY()) * 1000));
@@ -101,6 +106,10 @@ public class NotesEditor2 extends Page {
         );
         playhead.setFill(Color.WHITE);
         playheadLane.getChildren().add(playhead);
+//        playhead.setOnMouseDragged(e -> {
+//            scroll.get
+//            playhead.layoutYProperty().bind(secondToScreenPos());
+//        });
 
         HBox scrollContent = new HBox();
         scrollContent.setAlignment(Pos.CENTER);
@@ -116,7 +125,14 @@ public class NotesEditor2 extends Page {
         playheadLine.setStroke(Color.WHITE);
         playheadLine.layoutYProperty().bind(playhead.layoutYProperty());
 
-        Pane contentOverlay = new Pane(playheadLine);
+        Line endLine = new Line();
+        endLine.setStartX(0);
+        endLine.endXProperty().bind(scroll.widthProperty().subtract(80));
+        endLine.setStartY(0);
+        endLine.setEndY(0);
+        endLine.setStroke(Color.RED);
+
+        Pane contentOverlay = new Pane(playheadLine, endLine);
         contentOverlay.setPickOnBounds(false);
 
         StackPane stackPane = new StackPane();
@@ -124,8 +140,9 @@ public class NotesEditor2 extends Page {
 
         scroll.setContent(stackPane);
 //        scroll.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.35));
-        scroll.setMinWidth(400);
-//        scroll.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
+//        scroll.setMinWidth(400);
+        scroll.prefHeightProperty().bind(content.heightProperty().multiply(0.75));
+        scroll.prefWidthProperty().bind(scroll.prefHeightProperty().multiply(0.70));
         scroll.getStyleClass().remove("scroll-pane");
         scroll.getStyleClass().add("box");
         scroll.setPadding(new Insets(5));
@@ -144,10 +161,11 @@ public class NotesEditor2 extends Page {
         });
 
         Button save = new Button();
-        save.setText("Done");
+        save.setText("Save");
         save.setOnAction(_ -> {
             diff.notes.list = noteList;
             diff.notes.writeFile();
+            diff.endTime = newEndTime.get();
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(new DiffEditor(diff, prev.prev));
         });
@@ -155,6 +173,20 @@ public class NotesEditor2 extends Page {
         HBox buttons = new HBox(save, exit);
         buttons.setSpacing(10);
         buttons.setAlignment(Pos.CENTER);
+
+        Runnable updateEndLine = () -> {
+            System.out.println("LISTENER CALLED");
+            if (newEndTime.get() != 0) {
+                endLine.layoutYProperty().bind(secondToScreenPos(newEndTime.get()));
+            }
+            else {
+                endLine.layoutYProperty().bind(secondToScreenPos(m.getTotalDuration().toSeconds()));
+            }
+        };
+
+        newEndTime.addListener((_, _, _) -> updateEndLine.run());
+        newEndTime.set(diff.endTime);
+        updateEndLine.run();
 
         // Draw notes
         noteList.forEach(n -> lanes[n.lane].getChildren().add(drawBlock(n)));
@@ -180,7 +212,7 @@ public class NotesEditor2 extends Page {
         });
 
         VBox centerBox = new VBox();
-        centerBox.getChildren().addAll(main, exit);
+        centerBox.getChildren().addAll(main, buttons);
         centerBox.setSpacing(10);
         centerBox.setAlignment(Pos.CENTER);
 
@@ -284,6 +316,16 @@ public class NotesEditor2 extends Page {
                 helpBox.getChildren().clear();
             }
         });
+
+        setEnd.setOnAction(_ -> {
+            double tmp = screenPosToSecond(playhead.getLayoutY());
+            if (Math.round(tmp*10)/10 == Math.round(m.getTotalDuration().toSeconds() * 10)/10) {
+                newEndTime.set(0);
+            }
+            else {
+                newEndTime.set(tmp);
+            }
+        });
     }
 
     @Override
@@ -294,6 +336,9 @@ public class NotesEditor2 extends Page {
     @Override
     public void onView() {
         Sound.stopSong();
+        m.play();
+        m.pause();
+        m.seek(Duration.ZERO);
     }
 
     @Override
@@ -357,11 +402,11 @@ public class NotesEditor2 extends Page {
     }
 
     private void MoveNoteUp() {
-        activeNotes.forEach(n -> n.note.time.setValue(n.note.time.get() + 0.01));
+        activeNotes.forEach(n -> n.note.time.setValue(n.note.time.get() - 0.01));
     }
 
     private void MoveNoteDown() {
-        activeNotes.forEach(n -> n.note.time.setValue(n.note.time.get() - 0.01));
+        activeNotes.forEach(n -> n.note.time.setValue(n.note.time.get() + 0.01));
     }
 
     private Pane addHelp() {

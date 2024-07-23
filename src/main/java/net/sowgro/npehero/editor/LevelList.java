@@ -1,4 +1,4 @@
-package net.sowgro.npehero.devmenu;
+package net.sowgro.npehero.editor;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Insets;

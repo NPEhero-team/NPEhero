@@ -1,6 +1,7 @@
-package net.sowgro.npehero.devmenu;
+package net.sowgro.npehero.editor;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -12,6 +13,8 @@ import net.sowgro.npehero.main.Difficulty;
 import net.sowgro.npehero.main.Level;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
+
+import java.util.Collections;
 
 public class DiffList extends Page
 {
@@ -66,14 +69,41 @@ public class DiffList extends Page
 
         Button refresh = new Button("Refresh");
         refresh.setOnAction(e -> {
-            level.readData();
-            diffs.setItems(level.difficulties.list);
+//            level.readData();
+//            diffs.setItems(level.difficulties.list.sorted());
+            diffs.refresh();
         });
 
         ToggleButton create = new ToggleButton("Create");
 
+        Button moveUp = new Button("Move Up");
+        moveUp.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
+        moveUp.setOnAction(_ -> {
+            Difficulty diff = diffs.getSelectionModel().selectedItemProperty().get();
+            ObservableList<Difficulty> diffList = level.difficulties.list;
+            int oldIndex = diffList.indexOf(diff);
+            if (oldIndex <= 0) {
+                return;
+            }
+            Collections.swap(diffList, oldIndex, oldIndex-1);
+            level.difficulties.saveOrder();
+        });
+
+        Button moveDown = new Button("Move Down");
+        moveDown.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
+        moveDown.setOnAction(_ -> {
+            Difficulty diff = diffs.getSelectionModel().selectedItemProperty().get();
+            ObservableList<Difficulty> diffList = level.difficulties.list;
+            int oldIndex = diffList.indexOf(diff);
+            if (oldIndex >= diffList.size()-1) {
+                return;
+            }
+            Collections.swap(diffList, oldIndex, oldIndex+1);
+            level.difficulties.saveOrder();
+        });
+
         VBox buttons = new VBox();
-        buttons.getChildren().addAll(create, edit, remove, refresh);
+        buttons.getChildren().addAll(create, edit, remove, moveUp, moveDown, refresh);
         buttons.setSpacing(10);
 
         TextField newLevelEntry = new TextField();

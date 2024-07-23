@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.devmenu.LevelList;
+import net.sowgro.npehero.editor.LevelList;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 

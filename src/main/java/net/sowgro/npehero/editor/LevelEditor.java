@@ -1,4 +1,4 @@
-package net.sowgro.npehero.devmenu;
+package net.sowgro.npehero.editor;
 
 import java.io.File;
 
@@ -57,24 +57,24 @@ public class LevelEditor extends Page
 
         ValidIndicator songValid = new ValidIndicator();
         if (level.song == null) {
-            songValid.setInvalid("Missing file song.wav!");
+            songValid.setInvalid("Missing song file!");
         }
         HBox filesLabel = new HBox(new Text("Files"), songValid);
 
         FileChooser backgroundChooser = new FileChooser();
-        backgroundChooser.getExtensionFilters().add(new ExtensionFilter("PNG", "*.png"));
+        backgroundChooser.getExtensionFilters().add(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
         Button backgroundButton = new Button("Background Image");
-        backgroundButton.setOnAction(e -> {selectedBackground = backgroundChooser.showOpenDialog(Driver.primaryStage);});
+        backgroundButton.setOnAction(_ -> selectedBackground = backgroundChooser.showOpenDialog(Driver.primaryStage));
 
         FileChooser previewChooser = new FileChooser();
-        previewChooser.getExtensionFilters().add(new ExtensionFilter("PNG", "*.png"));
+        previewChooser.getExtensionFilters().add(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
         Button previewButton = new Button("Preview Image");
-        previewButton.setOnAction(e -> {selectedPreview = previewChooser.showOpenDialog(Driver.primaryStage);});
+        previewButton.setOnAction(_ -> selectedPreview = previewChooser.showOpenDialog(Driver.primaryStage));
 
         FileChooser songChooser = new FileChooser();
-        songChooser.getExtensionFilters().add(new ExtensionFilter("WAV", "*.wav"));
+        songChooser.getExtensionFilters().add(new ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"));
         Button songButton = new Button("Song file");
-        songButton.setOnAction(e -> selectedSong = songChooser.showOpenDialog(Driver.primaryStage));
+        songButton.setOnAction(_ -> selectedSong = songChooser.showOpenDialog(Driver.primaryStage));
 
 
         ValidIndicator diffsInvalid = new ValidIndicator();
@@ -131,17 +131,14 @@ public class LevelEditor extends Page
             level.colors[2] = colorsPickers[2].getValue();
             level.colors[3] = colorsPickers[3].getValue();
             level.colors[4] = colorsPickers[4].getValue();
-            if (selectedBackground != null && selectedBackground.exists())
-            {
-                level.addFile(selectedBackground,"background.png");
+            if (selectedBackground != null && selectedBackground.exists()) {
+                level.addFile(selectedBackground,"background." + getFileExtension(selectedBackground));
             }   
-            if (selectedPreview != null && selectedPreview.exists())
-            {
-                level.addFile(selectedPreview,"preview.png");
+            if (selectedPreview != null && selectedPreview.exists()) {
+                level.addFile(selectedPreview,"preview." + getFileExtension(selectedPreview));
             }
-            if (selectedSong != null)
-            {
-                level.addFile(selectedSong,"song.wav");
+            if (selectedSong != null) {
+                level.addFile(selectedSong,"song." + getFileExtension(selectedSong));
             }
             level.writeMetadata();
         });
@@ -185,5 +182,14 @@ public class LevelEditor extends Page
     @Override
     public Pane getContent() {
         return content;
+    }
+
+    /**
+     * Get the extension of a file.
+     * @param file The file to return the extension of
+     * @return The extension of the file in the format "*.ext"
+     */
+    public String getFileExtension(File file) {
+        return file.getName().substring(file.getName().lastIndexOf('.') + 1);
     }
 }

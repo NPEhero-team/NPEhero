@@ -1,4 +1,4 @@
-package net.sowgro.npehero.devmenu;
+package net.sowgro.npehero.editor;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -119,7 +119,7 @@ public class NotesEditor extends Page
         try 
         {
             Sound.stopSong();
-            diff.numBeats = (int)Double.parseDouble(timer.toString());
+//            diff.numBeats = (int)Double.parseDouble(timer.toString());
             timer = null;
             writer.close();
             help.setText(t1);
