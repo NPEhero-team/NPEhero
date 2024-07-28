@@ -1,6 +1,7 @@
 package net.sowgro.npehero.editor;
 
 import java.io.File;
+import java.io.IOException;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Pos;
@@ -10,10 +11,16 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import net.sowgro.npehero.Driver;
+import net.sowgro.npehero.levelapi.Difficulty;
+import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.main.*;
 
 public class LevelEditor extends Page
 {
+    private final ValidIndicator songValid = new ValidIndicator();
+    private final ValidIndicator diffsInvalid = new ValidIndicator();
+    Level level;
+
     private HBox content = new HBox();
 
     private File selectedSong = null;
@@ -22,6 +29,7 @@ public class LevelEditor extends Page
 
     public LevelEditor(Level level, Page prev)
     {
+        this.level = level;
         Text folderNameLabel = new Text("Folder name");
         TextField folderName = new TextField();
         if (level.dir != null) {
@@ -55,10 +63,6 @@ public class LevelEditor extends Page
         HBox colorPickerBox = new HBox();
         colorPickerBox.getChildren().addAll(colorsPickers);
 
-        ValidIndicator songValid = new ValidIndicator();
-        if (level.song == null) {
-            songValid.setInvalid("Missing song file!");
-        }
         HBox filesLabel = new HBox(new Text("Files"), songValid);
 
         FileChooser backgroundChooser = new FileChooser();
@@ -77,10 +81,6 @@ public class LevelEditor extends Page
         songButton.setOnAction(_ -> selectedSong = songChooser.showOpenDialog(Driver.primaryStage));
 
 
-        ValidIndicator diffsInvalid = new ValidIndicator();
-        if (level.difficulties.getValidList().isEmpty()) {
-            diffsInvalid.setInvalid("This level contains no valid difficulties!");
-        }
         HBox diffLabel = new HBox(new Text("Difficulties"), diffsInvalid);
         diffLabel.setSpacing(5);
 
@@ -134,18 +134,25 @@ public class LevelEditor extends Page
 
             try {
                 if (selectedBackground != null && selectedBackground.exists()) {
-                    level.addFile(selectedBackground, "background." + getFileExtension(selectedBackground));
+                    level.addFile(selectedBackground, "background");
                 }
                 if (selectedPreview != null && selectedPreview.exists()) {
-                    level.addFile(selectedPreview, "preview." + getFileExtension(selectedPreview));
+                    level.addFile(selectedPreview, "preview");
                 }
                 if (selectedSong != null) {
-                    level.addFile(selectedSong, "song." + getFileExtension(selectedSong));
+                    level.addFile(selectedSong, "song");
                 }
-            } catch (Exception _) {
+            } catch (Exception ex) {
                 // TODO
+                ex.printStackTrace();
             }
-            level.writeMetadata();
+            try {
+                level.writeMetadata();
+            } catch (IOException ex) {
+                // TODO
+                ex.printStackTrace();
+            }
+            validate();
         });
 
         VBox left = new VBox(filesLabel, songButton, previewButton, backgroundButton, colorsLabel, colorPickerBox);
@@ -189,12 +196,19 @@ public class LevelEditor extends Page
         return content;
     }
 
-    /**
-     * Get the extension of a file.
-     * @param file The file to return the extension of
-     * @return The extension of the file in the format "*.ext"
-     */
-    public String getFileExtension(File file) {
-        return file.getName().substring(file.getName().lastIndexOf('.') + 1);
+    @Override
+    public void onView() {
+        validate();
+    }
+
+    public void validate() {
+        if (level.difficulties.getValidList().isEmpty()) {
+            diffsInvalid.setInvalid("This level contains no valid difficulties!");
+        } else {
+            diffsInvalid.setValid();
+        }
+        if (level.song == null) {
+            songValid.setInvalid("Missing song file!");
+        }
     }
 }

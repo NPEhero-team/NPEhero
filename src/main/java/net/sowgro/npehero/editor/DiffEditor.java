@@ -11,7 +11,11 @@ import net.sowgro.npehero.gameplay.Block;
 import net.sowgro.npehero.gui.LevelSurround;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import net.sowgro.npehero.levelapi.Difficulty;
+import net.sowgro.npehero.levelapi.Note;
 import net.sowgro.npehero.main.*;
+
+import java.io.IOException;
 
 public class DiffEditor extends Page
 {
@@ -37,13 +41,15 @@ public class DiffEditor extends Page
         editNotes.setOnAction(_ -> {
             if (diff.level.song == null) {
                 Driver.setMenu(new ErrorDisplay("You must import a song file before editing the notes!", this));
+                return;
             }
             if (diff.bpm != 0.0) {
                 Driver.setMenu(new ErrorDisplay(
-                        "Note:\nThe new notes editor does not support bpm and beat based songs. If you continue the beats will be converted to seconds.",
+                        "Note:\nThe new notes editor does not support bpm and beat based songs. If you continue, the notes will be converted.",
                         this,
                         new NotesEditor2(diff, this)
                 ));
+                return;
             }
             Driver.setMenu(new NotesEditor2(diff, this));
         });
@@ -57,7 +63,15 @@ public class DiffEditor extends Page
 
         Label scoresLable = new Label("Scores");
         Button editScores = new Button("Clear leaderboard");
-        editScores.setOnAction(_ -> diff.leaderboard.entries.clear());
+        editScores.setOnAction(_ -> {
+            diff.leaderboard.entries.clear();
+            try {
+                diff.leaderboard.save();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Driver.setMenu(new ErrorDisplay("Failed to clear the leaderboard:\n"+e, this));
+            }
+        });
 
         Button playLevel = new Button("Play level");
         playLevel.setOnAction(_ -> {
@@ -74,7 +88,13 @@ public class DiffEditor extends Page
             diff.title = title.getText();
 //            diff.bpm = Double.parseDouble(bpm.getText());
 //            diff.numBeats = Integer.parseInt(numBeats.getText());
-            diff.write();
+            try {
+                diff.writeMetadata();
+            } catch (IOException e) {
+                e.printStackTrace();
+                //TODO
+                throw new RuntimeException(e);
+            }
         });
 
         HBox scrollContent = new HBox();

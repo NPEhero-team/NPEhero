@@ -9,13 +9,14 @@ import net.sowgro.npehero.Driver;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.sowgro.npehero.gui.MainMenu;
-import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.Levels;
+import net.sowgro.npehero.levelapi.Level;
+import net.sowgro.npehero.levelapi.Levels;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 
 public class LevelList extends Page
 {
@@ -71,6 +72,7 @@ public class LevelList extends Page
                 Levels.remove(levels.getSelectionModel().getSelectedItem());
             } catch (IOException ex) {
                 Driver.setMenu(new ErrorDisplay("Failed to remove this level\n"+e.toString(), this));
+                ex.printStackTrace();
             }
         });
         remove.setDisable(true);
@@ -80,8 +82,9 @@ public class LevelList extends Page
         refresh.setOnAction(e -> {
             try {
                 Levels.readData();
-            } catch (FileNotFoundException ex) {
+            } catch (IOException ex) {
                 Driver.setMenu(new ErrorDisplay("Failed to load levels: Level folder is missing\n"+e.toString(), this));
+                ex.printStackTrace();
             }
             levels.setItems(Levels.list);
         });
@@ -135,8 +138,12 @@ public class LevelList extends Page
         newLevelButton.setOnAction(_ -> {
             try {
                 Levels.add(newLevelEntry.getText());
+            } catch (FileAlreadyExistsException e) {
+                Driver.setMenu(new ErrorDisplay("Failed to add level\nA level already exists with the folder name " + e.getFile(), this));
+                e.printStackTrace();
             } catch (IOException e) {
                 Driver.setMenu(new ErrorDisplay("Failed to create this level\n"+e.toString(), this));
+                e.printStackTrace();
             }
             newLevelEntry.clear();
             refresh.fire();

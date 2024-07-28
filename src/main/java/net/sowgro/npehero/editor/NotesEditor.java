@@ -16,7 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.main.Control;
-import net.sowgro.npehero.main.Difficulty;
+import net.sowgro.npehero.levelapi.Difficulty;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
@@ -64,11 +64,11 @@ public class NotesEditor extends Page
         content.getChildren().add(centerBox);
         content.setAlignment(Pos.CENTER);
 
-        try {
-            writer = new PrintWriter(diff.notes.getFile(), "UTF-8");
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            writer = new PrintWriter(diff.notes.getFile(), "UTF-8");
+//        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+//            throw new RuntimeException(e);
+//        }
 
         Scene scene = Driver.primaryStage.getScene();
         scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {

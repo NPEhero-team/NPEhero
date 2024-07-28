@@ -9,8 +9,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.main.Level;
-import net.sowgro.npehero.main.Levels;
+import net.sowgro.npehero.levelapi.Level;
+import net.sowgro.npehero.levelapi.Levels;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 

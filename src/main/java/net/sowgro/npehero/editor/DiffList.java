@@ -9,12 +9,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.main.Difficulty;
-import net.sowgro.npehero.main.Level;
+import net.sowgro.npehero.levelapi.Difficulty;
+import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.util.Collections;
 
 public class DiffList extends Page
@@ -68,6 +69,7 @@ public class DiffList extends Page
             try {
                 level.difficulties.remove(diffs.getSelectionModel().getSelectedItem());
             } catch (IOException ex) {
+                ex.printStackTrace();
                 Driver.setMenu(new ErrorDisplay("Failed to remove difficulty\n"+e, this));
             }
         });
@@ -76,7 +78,11 @@ public class DiffList extends Page
 
         Button refresh = new Button("Refresh");
         refresh.setOnAction(e -> {
-//            level.readData();
+            try {
+                level.difficulties.read();
+            } catch (IOException ex) {
+                // TODO
+            }
 //            diffs.setItems(level.difficulties.list.sorted());
             diffs.refresh();
         });
@@ -93,7 +99,12 @@ public class DiffList extends Page
                 return;
             }
             Collections.swap(diffList, oldIndex, oldIndex-1);
-            level.difficulties.saveOrder();
+            try {
+                level.difficulties.saveOrder();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Driver.setMenu(new ErrorDisplay("Failed to move difficulty\n"+e,this));
+            }
         });
 
         Button moveDown = new Button("Move Down");
@@ -106,7 +117,12 @@ public class DiffList extends Page
                 return;
             }
             Collections.swap(diffList, oldIndex, oldIndex+1);
-            level.difficulties.saveOrder();
+            try {
+                level.difficulties.saveOrder();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Driver.setMenu(new ErrorDisplay("Failed to move difficulty\n"+e,this));
+            }
         });
 
         VBox buttons = new VBox();
@@ -148,8 +164,11 @@ public class DiffList extends Page
         newLevelButton.setOnAction(_ -> {
             try {
                 level.difficulties.add(newLevelEntry.getText());
+            } catch (FileAlreadyExistsException e) {
+                Driver.setMenu(new ErrorDisplay("Failed to add level\nA difficulty already exists with the folder name " + e.getFile(), this));
             } catch (IOException e) {
                 Driver.setMenu(new ErrorDisplay("Failed to add level\n"+e, this));
+                e.printStackTrace();
             }
             newLevelEntry.clear();
             refresh.fire();

@@ -3,7 +3,7 @@ module net.sowgro.npehero {
     requires javafx.fxml;
     requires javafx.media;
     requires java.desktop;
-    requires com.fasterxml.jackson.databind;
+    requires com.google.gson;
 
     exports net.sowgro.npehero;
 }

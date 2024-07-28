@@ -95,7 +95,8 @@ public class SettingsEditor extends Page
             try {
                 Settings.save();
             } catch (IOException ex) {
-                Driver.setMenu(new ErrorDisplay("Failed to save settings"+e, this));
+                ex.printStackTrace();
+                Driver.setMenu(new ErrorDisplay("Failed to save settings"+ex, this));
             }
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(new MainMenu());

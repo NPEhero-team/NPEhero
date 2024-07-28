@@ -1,5 +1,7 @@
 package net.sowgro.npehero.main;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.input.KeyCode;
@@ -36,7 +38,8 @@ public enum Control {
                 entry("Legacy Editor", List.of(LEGACY_PRINT, LEGACY_STOP))
             );
 
-    private static final JSONFile jsonFile = new JSONFile(new File("controls.json"));
+    private static final File file = new File("controls.json");
+    private static final Gson json = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
 
     Control(String label, KeyCode key) {
         this.label = label;
@@ -80,19 +83,21 @@ public enum Control {
     }
 
     public static void writeToFile() throws IOException {
+        Map<String, Object> data = new HashMap<>();
         for (Control control : Control.values()) {
-            jsonFile.set(control.toString(), control.getKey().toString());
+            data.put(control.toString(), control.getKey().toString());
         }
-        jsonFile.write();
+        FileWriter fileWriter = new FileWriter(file);
+        json.toJson(data, fileWriter);
+        fileWriter.close();
     }
 
     public static void readFromFile() throws Exception {
-        jsonFile.read();
+        Map<String, Object> data = json.fromJson(new FileReader(file), Map.class);
         for (Control control : Control.values()) {
-            if (jsonFile.containsKey(control.toString())) {
-                control.setKey(KeyCode.valueOf(jsonFile.getString(control.toString(), null)));
+            if (data.containsKey(control.toString())) {
+                control.setKey(KeyCode.valueOf((String) data.getOrDefault(control.toString(), null)));
             }
         }
     }
-
 }

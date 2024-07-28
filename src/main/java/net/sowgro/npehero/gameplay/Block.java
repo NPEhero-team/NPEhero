@@ -6,7 +6,7 @@ import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import net.sowgro.npehero.main.Note;
+import net.sowgro.npehero.levelapi.Note;
 
 /**
  * A block is a visual representation of a note on the screen. This is used both in the editor and in during the game play.

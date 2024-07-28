@@ -10,6 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
+import net.sowgro.npehero.levelapi.Difficulty;
+import net.sowgro.npehero.levelapi.LeaderboardEntry;
 import net.sowgro.npehero.main.*;
 
 public class LeaderboardView extends Page
@@ -29,9 +31,9 @@ public class LeaderboardView extends Page
         scores.getColumns().add(scoreCol);
         scores.getColumns().add(dateCol);
 
-        nameCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getName()));
-        scoreCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getScore() + ""));
-        dateCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getDate()));
+        nameCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().name));
+        scoreCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().score + ""));
+        dateCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().date));
 
         scores.setItems(diff.leaderboard.entries);
 

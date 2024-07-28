@@ -10,10 +10,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.main.Difficulty;
-import net.sowgro.npehero.main.Level;
+import net.sowgro.npehero.editor.ErrorDisplay;
+import net.sowgro.npehero.levelapi.Difficulty;
+import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
+
+import java.io.IOException;
 
 public class GameOver extends Page
 {
@@ -67,7 +70,12 @@ public class GameOver extends Page
             Sound.playSfx(Sound.FORWARD);
             save.setDisable(true);
             name.setDisable(true);
-            diff.leaderboard.add(name.getText(), score2);
+            try {
+                diff.leaderboard.add(name.getText(), score2);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Driver.setMenu(new ErrorDisplay("Failed to save score to leaderboard:\n"+e, this));
+            }
         });
 
         BorderPane b = new BorderPane();

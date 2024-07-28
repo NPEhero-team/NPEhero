@@ -16,7 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -25,9 +24,12 @@ import javafx.util.Duration;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gameplay.Block;
 import net.sowgro.npehero.gameplay.Target;
+import net.sowgro.npehero.levelapi.Difficulty;
+import net.sowgro.npehero.levelapi.Note;
 import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.main.Control;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NotesEditor2 extends Page {
@@ -164,7 +166,12 @@ public class NotesEditor2 extends Page {
         save.setText("Save");
         save.setOnAction(_ -> {
             diff.notes.list = noteList;
-            diff.notes.writeFile();
+            try {
+                diff.notes.writeFile();
+            } catch (IOException e) {
+                // TODO
+                throw new RuntimeException(e);
+            }
             diff.endTime = newEndTime.get();
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(new DiffEditor(diff, prev.prev));

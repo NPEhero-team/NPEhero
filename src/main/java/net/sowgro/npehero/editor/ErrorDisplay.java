@@ -23,9 +23,11 @@ public class ErrorDisplay extends Page {
     public ErrorDisplay(String message, Page prev) {
         Label main = new Label(message);
         main.getStyleClass().add("box");
+        main.setPadding(new Insets(10));
+        main.setWrapText(true);
 
         Button exit = new Button();
-        exit.setText("Back");
+        exit.setText("Ok");
         exit.setOnAction(e -> {
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
@@ -50,6 +52,7 @@ public class ErrorDisplay extends Page {
         Label main = new Label(message);
         main.getStyleClass().add("box");
         main.setPadding(new Insets(10));
+        main.setWrapText(true);
 
         Button exit = new Button();
         exit.setText("Cancel");

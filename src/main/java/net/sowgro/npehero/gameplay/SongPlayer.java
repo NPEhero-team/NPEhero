@@ -1,6 +1,5 @@
 package net.sowgro.npehero.gameplay;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +13,8 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import net.sowgro.npehero.Driver;
+import net.sowgro.npehero.levelapi.Difficulty;
+import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.gui.GameOver;
 import javafx.geometry.Pos;

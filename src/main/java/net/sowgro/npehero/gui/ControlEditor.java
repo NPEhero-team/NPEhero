@@ -76,6 +76,7 @@ public class ControlEditor extends Page {
                         Control.writeToFile();
                     } catch (IOException e) {
                         Driver.setMenu(new ErrorDisplay("An error occured while saving your controls\n"+e, this));
+                        e.printStackTrace();
                     }
                 });
                 controlButton.setOnAction(_ -> {

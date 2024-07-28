@@ -13,12 +13,12 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import net.sowgro.npehero.editor.ErrorDisplay;
+import net.sowgro.npehero.levelapi.Levels;
 import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.gui.MainMenu;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Stack;
 
 
@@ -81,20 +81,29 @@ public class Driver extends Application
         primaryStage.show();
 
         Stack<String> errors = new Stack<>();
+        System.out.println("Loading settings...");
         try {
             Settings.read();
+            System.out.println("Settings loaded");
         } catch (Exception e) {
+            e.printStackTrace();
             errors.push("Failed to load settings from file\n"+e);
         }
-        try {
-            Levels.readData();
-        } catch (FileNotFoundException e) {
-            errors.push("Failed to load levels: Level folder is missing\n");
-        }
+        System.out.println("Loading controls...");
         try {
             Control.readFromFile();
+            System.out.println("Controls loaded");
         } catch (Exception e) {
+            e.printStackTrace();
             errors.push("Failed to load controls from file\n"+e);
+        }
+        System.out.println("Loading levels...");
+        try {
+            Levels.readData();
+            System.out.println("Loaded " + Levels.list.size() + " levels (" + Levels.getValidList().size() + " valid)");
+        } catch (IOException e) {
+            e.printStackTrace();
+            errors.push("Failed to load levels\n");
         }
         Page last = new MainMenu();
         while (!errors.empty()) {

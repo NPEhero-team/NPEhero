@@ -1,8 +1,14 @@
 package net.sowgro.npehero.main;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
@@ -12,25 +18,29 @@ public class Settings
 	public static SimpleDoubleProperty musicVol = new SimpleDoubleProperty(1);
 	public static SimpleBooleanProperty enableMenuMusic = new SimpleBooleanProperty(true);
 
-	private static final JSONFile jsonFile = new JSONFile(new File("settings.json"));
+	private static final Gson jsonParser = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+	private static final File jsonFile = new File("settings.json");
 
 	/**
 	 * Reads json data from settings.json
 	 */
 	public static void read() throws Exception {
-        jsonFile.read();
-        effectsVol.set(jsonFile.getDouble("effectsVol", 1));
-		musicVol.set(jsonFile.getDouble("musicVol", 1));
-		enableMenuMusic.set(jsonFile.getBoolean("enableMenuMusic", true));
+		Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
+        effectsVol.set((Double) data.getOrDefault("effectsVol", 1.0));
+		musicVol.set((Double) data.getOrDefault("musicVol", 1.0));
+		enableMenuMusic.set((Boolean) data.getOrDefault("enableMenuMusic", true));
 	}
 
 	/**
 	 * Writes json data to settings.json
 	 */
 	public static void save() throws IOException {
-		jsonFile.set("effectsVol", effectsVol.get());
-		jsonFile.set("musicVol", musicVol.get());
-		jsonFile.set("enableMenuMusic", enableMenuMusic.get());
-		jsonFile.write();
+		Map<String, Object> data = new HashMap<>();
+		data.put("effectsVol", effectsVol.get());
+		data.put("musicVol", musicVol.get());
+		data.put("enableMenuMusic", enableMenuMusic.get());
+		FileWriter fileWriter = new FileWriter(jsonFile);
+		jsonParser.toJson(data, fileWriter);
+		fileWriter.close();
 	}
 }

@@ -11,8 +11,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import net.sowgro.npehero.main.Difficulty;
-import net.sowgro.npehero.main.Level;
+import net.sowgro.npehero.levelapi.Difficulty;
+import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.gameplay.ScoreController;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
@@ -28,7 +28,7 @@ public class LevelSurround extends Page
 
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> {
+        exit.setOnAction(_ -> {
             Driver.setMenu(prev);
             Sound.playSfx(Sound.BACKWARD);
             game.cancel();

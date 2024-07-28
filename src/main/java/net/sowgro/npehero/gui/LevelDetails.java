@@ -15,8 +15,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.main.Difficulty;
-import net.sowgro.npehero.main.Level;
+import net.sowgro.npehero.levelapi.Difficulty;
+import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.main.Sound;
 
 public class LevelDetails extends VBox

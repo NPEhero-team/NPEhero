@@ -1,5 +1,6 @@
 package net.sowgro.npehero.gui;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlurType;
@@ -55,8 +56,8 @@ public class MainMenu extends Page {
         exit.setOnAction(_ -> {
             Sound.playSfx(Sound.BACKWARD);
 //            Driver.quit();
-//            Platform.exit();
-            System.exit(0);
+            Platform.exit();
+//            System.exit(0);
         });
 
         VBox buttonBox = new VBox();

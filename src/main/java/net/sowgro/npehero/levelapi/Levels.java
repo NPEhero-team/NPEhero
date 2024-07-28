@@ -1,39 +1,48 @@
-package net.sowgro.npehero.main;
+package net.sowgro.npehero.levelapi;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
-import java.util.List;
+import java.util.HashMap;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
-public class Levels
-{
+/**
+ * Stores a list of all the levels
+ */
+public class Levels {
+
+    public static final ObservableList<Level> list = FXCollections.observableArrayList();
+    public static final HashMap<String, Exception> problems = new HashMap<>();
+
     private static final File dir = new File("levels");
-    public static ObservableList<Level> list = FXCollections.observableArrayList();
 
     /**
      * Reads contents of the levels folder and creates a level form each subfolder
+     * <p>
      * All subfolders in the levels folder are assumed to be levels
-     * @throws FileNotFoundException when the levels folder is not present
+     * @throws FileNotFoundException If the levels folder is missing.
+     * @throws IOException If there is a problem reading in the levels.
      */
-    public static void readData() throws FileNotFoundException
-    {
+    public static void readData() throws IOException {
         list.clear();
         File[] fileList = dir.listFiles();
         if (fileList == null) {
             throw new FileNotFoundException();
         }
-        for (File file: fileList)
-        {
-            Level level = new Level(file);
-            level.readData();
-            list.add(level);
+        for (File file: fileList) {
+            try {
+                Level level = new Level(file);
+                list.add(level);
+            } catch (IOException e) {
+                problems.put("", e);
+                e.printStackTrace();
+            }
         }
         list.sort(Comparator.naturalOrder());
     }
@@ -43,9 +52,11 @@ public class Levels
      * @param text: the name of the directory and default title
      * @throws IOException if there was an error adding the level
      */
-    public static void add(String text) throws IOException
-    {
-        File levelDir = new File(dir,text);
+    public static void add(String text) throws IOException {
+        File levelDir = new File(dir, text.toLowerCase().replaceAll("\\W+", "-"));
+        if (levelDir.exists()) {
+            throw new FileAlreadyExistsException(levelDir.getName());
+        }
         if (levelDir.mkdirs()) {
             Level temp = new Level(levelDir);
             temp.title = text;
@@ -59,23 +70,21 @@ public class Levels
     /**
      * Removes level from the filesystem then reloads this levelController
      * @param level: the level to be removed
-     * @throws IOException if there was an error deleting the level
+     * @throws IOException If there is a problem deleting the level
      */
-    public static void remove(Level level) throws IOException
-    {
+    public static void remove(Level level) throws IOException {
         File hold = level.dir;
-        list.remove(level);
-
-        // delete files recursively
-        // TODO clean this up
         Files.walk(hold.toPath())
             .sorted(Comparator.reverseOrder())
             .map(Path::toFile)
             .forEach(File::delete);
-
         list.remove(level);
     }
 
+    /**
+     * Gets a list of only the valid levels.
+     * @return A list of the valid levels.
+     */
     public static ObservableList<Level> getValidList() {
         ObservableList<Level> validList = FXCollections.observableArrayList();
         for (Level level : list) {
