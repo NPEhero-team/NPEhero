@@ -40,7 +40,7 @@ public class Levels {
                 Level level = new Level(file);
                 list.add(level);
             } catch (IOException e) {
-                problems.put("", e);
+                problems.put(file.getName(), e);
                 e.printStackTrace();
             }
         }

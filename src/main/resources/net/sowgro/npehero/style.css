@@ -11,7 +11,7 @@
 }
 
 /* buttons */
-Button, TextField, RadioButton, ToggleButton, ColorPicker {
+.button, TextField, RadioButton, ToggleButton, ColorPicker {
     -fx-background-color: rgba(0, 0, 0, 0.5); 
     -fx-text-fill: white;
     -fx-border-color: transparent;
@@ -22,22 +22,22 @@ Button, TextField, RadioButton, ToggleButton, ColorPicker {
     /*-fx-font-weight: 800;*/
 }
 
-Button:hover, TextField:hover, RadioButton:hover, ToggleButton:hover, ColorPicker:hover {
+.button:hover, TextField:hover, RadioButton:hover, ToggleButton:hover, ColorPicker:hover {
     -fx-background-color: rgb(50, 50, 50, 0.5);
 }
 
-Button:focused, TextField:focused, RadioButton:focused, ToggleButton:focused, ColorPicker:focused {
+.button:focused, TextField:focused, RadioButton:focused, ToggleButton:focused, ColorPicker:focused {
     -fx-background-color: rgb(50, 50, 50, 0.5);
     -fx-border-color: rgb(255, 255, 255);
 }
 
-Button:selected, TextField:selected, RadioButton:selected, ToggleButton:selected, ColorPicker:selected {
+.button:selected, TextField:selected, RadioButton:selected, ToggleButton:selected, ColorPicker:selected {
     -fx-background-color: rgb(255, 255, 255);
     -fx-text-fill: rgb(0, 0, 0);
 
 }
 
-Button:pressed, TextField:pressed, RadioButton:pressed, ToggleButton:pressed, ColorPicker:pressed {
+.button:pressed, TextField:pressed, RadioButton:pressed, ToggleButton:pressed, ColorPicker:pressed {
     -fx-background-color: rgb(231, 231, 231);
     -fx-border-color: transparent;
     -fx-text-fill: rgb(0, 0, 0);
@@ -258,5 +258,13 @@ CheckBox:selected > .box {
     /* -fx-border-color: red; */
     /* -fx-text-fill: white; */
     /* -fx-border-width: 20; */
+}
+
+.red Label {
+    -fx-text-fill: red;
+}
+
+.red:hover Label {
+    -fx-underline: true;
 }
 

@@ -22,6 +22,9 @@ public class LevelList extends Page
 {
     private HBox content = new HBox();
 
+    private final Label error;
+    private final HBox errorBox;
+
     public LevelList()
     {
         //sets up table view: requires special getters, setters and constructors to work
@@ -60,6 +63,18 @@ public class LevelList extends Page
         });
         levels.setPrefWidth(600);
         levels.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
+
+        error = new Label();
+        errorBox = new HBox(error);
+        errorBox.setSpacing(10);
+        errorBox.setPadding(new Insets(10));
+        errorBox.getStyleClass().addAll("box", "red");
+        errorBox.setOnMouseClicked(_ -> {
+            // TODO
+            Driver.setMenu(new ErrorList(Levels.problems, this));
+        });
+        refresh();
+
 
         Button edit = new Button("Edit");
         edit.setOnAction(e -> Driver.setMenu(new LevelEditor(levels.getSelectionModel().getSelectedItem(), this)));
@@ -108,7 +123,7 @@ public class LevelList extends Page
         Pane sidebar = new Pane();
 
         HBox main = new HBox();
-        main.getChildren().addAll(levels,buttons,sidebar);
+        main.getChildren().addAll(new VBox(levels, errorBox),buttons,sidebar);
         main.setSpacing(10);
 
         Button exit = new Button();
@@ -155,5 +170,16 @@ public class LevelList extends Page
     @Override
     public Pane getContent() {
         return content;
+    }
+
+    public void refresh() {
+        error.setText("Failed to load " + Levels.problems.size() + " level(s)");
+        if (Levels.problems.isEmpty()) {
+            errorBox.setVisible(false);
+            errorBox.setManaged(false);
+        } else {
+            errorBox.setVisible(true);
+            errorBox.setManaged(true);
+        }
     }
 }

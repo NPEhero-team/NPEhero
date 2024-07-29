@@ -51,7 +51,7 @@ public class Difficulties {
                     Difficulty diff = new Difficulty(cur, level);
                     list.add(diff);
                 } catch (IOException e) {
-                    problems.put("", e);
+                    problems.put(cur.getName(), e);
                     e.printStackTrace();
                 }
             }

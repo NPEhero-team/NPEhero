@@ -10,9 +10,8 @@ Goals:
 - [ ] Installer / Linux package
 
 Todo:
-- [ ] Make validation update on view
-- [ ] Click sounds on all buttons in editor
 - [ ] Display problems on diffList and levelList
+- [ ] Click sounds on all buttons in editor
 
 # Installation
 Coming soon.

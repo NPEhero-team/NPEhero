@@ -173,6 +173,12 @@ public class NotesEditor2 extends Page {
                 throw new RuntimeException(e);
             }
             diff.endTime = newEndTime.get();
+            diff.bpm = 0.0;
+            try {
+                diff.readMetadata();
+            } catch (IOException e) {
+                // TODO
+            }
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(new DiffEditor(diff, prev.prev));
         });
@@ -331,6 +337,15 @@ public class NotesEditor2 extends Page {
             }
             else {
                 newEndTime.set(tmp);
+            }
+        });
+
+        activeNotes.addListener((_, _, _) -> {
+            if (activeNotes.isEmpty()) {
+                selectionLabel.setText("Selection");
+            }
+            else {
+                selectionLabel.setText("Selection (" + activeNotes.size() + ")");
             }
         });
     }

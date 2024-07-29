@@ -35,6 +35,7 @@ public class LevelDetails extends VBox
         rightBox.prefHeightProperty().bind(super.prefHeightProperty().multiply(0.75));
         rightBox.setMinWidth(350);
         rightBox.getStyleClass().add("box");
+        rightBox.setPadding(new Insets(5));
 
         Button play = new Button();
         play.setDisable(true);
@@ -59,6 +60,7 @@ public class LevelDetails extends VBox
         else
         {
             VBox details = new VBox();
+            details.setPadding(new Insets(5));
 
             ScrollPane detailsScroll = new ScrollPane(details);
             detailsScroll.prefHeightProperty().bind(rightBox.prefHeightProperty());

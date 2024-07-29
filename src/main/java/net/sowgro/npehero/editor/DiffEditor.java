@@ -39,6 +39,7 @@ public class DiffEditor extends Page
 
         Button editNotes = new Button("Edit notes");
         editNotes.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             if (diff.level.song == null) {
                 Driver.setMenu(new ErrorDisplay("You must import a song file before editing the notes!", this));
                 return;
@@ -55,15 +56,19 @@ public class DiffEditor extends Page
         });
 
         Button oldEditNotes = new Button("Edit notes (legacy)");
-        oldEditNotes.setOnAction(_ -> Driver.setMenu(new ErrorDisplay(
+        oldEditNotes.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            Driver.setMenu(new ErrorDisplay(
                 "Warning: \nThe legacy editor will overwrite all existing notes!",
                 this,
                 new NotesEditor(diff, this))
-        ));
+            );
+        });
 
         Label scoresLable = new Label("Scores");
         Button editScores = new Button("Clear leaderboard");
         editScores.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             diff.leaderboard.entries.clear();
             try {
                 diff.leaderboard.save();
@@ -75,6 +80,7 @@ public class DiffEditor extends Page
 
         Button playLevel = new Button("Play level");
         playLevel.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             if (diff.isValid() && diff.level.isValid()) {
                 Driver.setMenu(new LevelSurround(diff.level, diff, this));
             }
@@ -85,6 +91,7 @@ public class DiffEditor extends Page
 
         Button save = new Button("Save");
         save.setOnAction(_ -> { //assigns text fields to values
+            Sound.playSfx(Sound.FORWARD);
             diff.title = title.getText();
 //            diff.bpm = Double.parseDouble(bpm.getText());
 //            diff.numBeats = Integer.parseInt(numBeats.getText());
