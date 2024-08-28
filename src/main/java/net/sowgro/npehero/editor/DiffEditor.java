@@ -10,7 +10,6 @@ import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gameplay.Block;
 import net.sowgro.npehero.gui.LevelSurround;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import net.sowgro.npehero.levelapi.Difficulty;
 import net.sowgro.npehero.levelapi.Note;
 import net.sowgro.npehero.main.*;
@@ -30,11 +29,11 @@ public class DiffEditor extends Page
         this.diff = diff;
         this.prev = prev;
 
-        Text folderNameLabel = new Text("Folder name");
+        Label folderNameLabel = new Label("Folder name");
         TextField folderName = new TextField(diff.thisDir.getName());
         folderName.setDisable(true);
 
-        Text titleLabel = new Text("Title");
+        Label titleLabel = new Label("Title");
         TextField title = new TextField(diff.title);
 
         Button editNotes = new Button("Edit notes");
@@ -110,6 +109,8 @@ public class DiffEditor extends Page
         scroll.getStyleClass().remove("scroll-pane");
         scroll.getStyleClass().add("box");
 //        scroll.setPrefHeight(400);
+        System.out.println("dbg"+scroll.heightProperty());
+        // TODO scroll.heightProperty is 0 here until the window is resized, idk what to do
         scroll.prefWidthProperty().bind(scroll.heightProperty().multiply(0.66));
 
         Pane[] lanes = new Pane[5];
@@ -121,7 +122,7 @@ public class DiffEditor extends Page
         scrollContent.setSpacing(5);
         scrollContent.setAlignment(Pos.CENTER);
 
-        diff.notes.list.forEach(n -> lanes[n.lane].getChildren().add(drawNote(n)));
+        diff.notes.list.forEach(n -> lanes[n.lane].getChildren().add(drawBlock(n)));
 
         VBox notePreview = new VBox();
 
@@ -170,7 +171,7 @@ public class DiffEditor extends Page
     }
 
     // Duplicates of NotesEditor2 methods, should be made generic and combined
-    private Block drawNote(Note n) {
+    private Block drawBlock(Note n) {
         Color color = diff.level.colors[n.lane];
         Block b = new Block(color,20, 20, 5, false, n);
         b.heightProperty().bind(scroll.widthProperty().divide(8));

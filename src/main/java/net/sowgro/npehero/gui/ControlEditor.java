@@ -31,6 +31,7 @@ public class ControlEditor extends Page {
         controls.setPadding(new Insets(10));
         controls.setVgap(20);
         controls.setHgap(40);
+        scrollPane.setFitToWidth(true);
 
         scrollPane.setPrefWidth(700);
         scrollPane.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
@@ -70,6 +71,7 @@ public class ControlEditor extends Page {
                 // control button
                 ToggleButton controlButton = new ToggleButton("<err>");
                 controlButton.setText(keyToString(control.keyProperty.get()));
+                GridPane.setHgrow(controlButton, Priority.ALWAYS);
                 control.keyProperty.addListener(_ -> {
                     controlButton.setText(keyToString(control.keyProperty.get()));
                     try {

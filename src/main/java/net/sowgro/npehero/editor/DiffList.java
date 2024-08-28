@@ -37,18 +37,14 @@ public class DiffList extends Page
         TableColumn<Difficulty,String> titleCol = new TableColumn<>("Name");
         TableColumn<Difficulty,String> validCol = new TableColumn<>("Valid?");
 
+        titleCol.prefWidthProperty().bind(diffs.widthProperty().multiply(0.4));
+        validCol.prefWidthProperty().bind(diffs.widthProperty().multiply(0.4));
+
         diffs.getColumns().add(titleCol);
         diffs.getColumns().add(validCol);
 
         titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
-        validCol.setCellValueFactory(data -> {
-            if (data.getValue().isValid()) {
-                return new ReadOnlyStringWrapper("Yes");
-            }
-            else {
-                return new ReadOnlyStringWrapper("No");
-            }
-        });
+        validCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().isValid() ? "Yes" : "No"));
 
         diffs.setItems(level.difficulties.list);
 

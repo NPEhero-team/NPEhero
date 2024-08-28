@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.editor.LevelList;
 import net.sowgro.npehero.main.Page;
@@ -26,10 +27,22 @@ public class MainMenu extends Page {
         dropShadow.setColor(Color.WHITE);
         dropShadow.setBlurType(BlurType.GAUSSIAN);
 
-        Text title = new Text();
-        title.setText("NPE Hero");
-        title.getStyleClass().add("t0");
-        title.setEffect(dropShadow);
+        Text npehero = new Text();
+        npehero.setBoundsType(TextBoundsType.VISUAL);
+        npehero.setText("NPE HERO");
+        npehero.getStyleClass().add("t0");
+        npehero.setEffect(dropShadow);
+
+        Text lessthan = new Text("<");
+        lessthan.setBoundsType(TextBoundsType.VISUAL);
+        lessthan.getStyleClass().add("t0e");
+
+        Text greaterthan = new Text(">");
+        greaterthan.setBoundsType(TextBoundsType.VISUAL);
+        greaterthan.getStyleClass().add("t0e");
+        HBox title = new HBox(lessthan, npehero, greaterthan);
+        title.setSpacing(20);
+        title.setAlignment(Pos.CENTER);
 
         Button play = new Button();
         play.setText("Play");
@@ -55,9 +68,7 @@ public class MainMenu extends Page {
         exit.setText("Quit");
         exit.setOnAction(_ -> {
             Sound.playSfx(Sound.BACKWARD);
-//            Driver.quit();
             Platform.exit();
-//            System.exit(0);
         });
 
         VBox buttonBox = new VBox();
@@ -68,7 +79,7 @@ public class MainMenu extends Page {
         VBox centerBox = new VBox();
         centerBox.setAlignment(Pos.CENTER);
         centerBox.getChildren().addAll(title, buttonBox);
-        centerBox.setSpacing(10);
+        centerBox.setSpacing(30);
 
         content.getChildren().add(centerBox);
         content.setAlignment(Pos.CENTER);

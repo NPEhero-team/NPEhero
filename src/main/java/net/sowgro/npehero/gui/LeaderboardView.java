@@ -27,6 +27,10 @@ public class LeaderboardView extends Page
         TableColumn<LeaderboardEntry, String> scoreCol = new TableColumn<>("Score");
         TableColumn<LeaderboardEntry, String> dateCol = new TableColumn<>("Date");
 
+        nameCol.prefWidthProperty().bind(scores.widthProperty().multiply(0.45));
+        scoreCol.prefWidthProperty().bind(scores.widthProperty().multiply(0.23));
+        dateCol.prefWidthProperty().bind(scores.widthProperty().multiply(0.27));
+
         scores.getColumns().add(nameCol);
         scores.getColumns().add(scoreCol);
         scores.getColumns().add(dateCol);
@@ -39,7 +43,7 @@ public class LeaderboardView extends Page
 
         scores.getStyleClass().add("unselectable");
 
-        scores.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.25));
+        scores.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.30));
         scores.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
 
         scoreCol.setSortType(SortType.DESCENDING);

@@ -206,9 +206,16 @@ Slider:focused .thumb{
     -fx-fill: black;
 }
 
+.t0e {
+    -fx-fill: #d45500;
+    -fx-font-size: 250;
+    -fx-font-family: "RIT Meera New";
+}
+
 .t1 {
     -fx-font-size: 50;
     -fx-fill: white;
+    -fx-padding: 0;
 }
 
 .t11 {

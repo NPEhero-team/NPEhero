@@ -90,19 +90,14 @@ public class LevelEditor extends Page
         TableColumn<Difficulty,String> diffCol = new TableColumn<>("Difficulty");
         TableColumn<Difficulty,String> validCol = new TableColumn<>("Valid?");
 
+        diffCol.prefWidthProperty().bind(diffList.widthProperty().multiply(0.45));
+        validCol.prefWidthProperty().bind(diffList.widthProperty().multiply(0.45));
+
         diffList.getColumns().add(diffCol);
         diffList.getColumns().add(validCol);
 
         diffCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
-        validCol.setCellValueFactory(data -> {
-            if (data.getValue().isValid()) {
-                return new ReadOnlyStringWrapper("Yes");
-            }
-            else {
-                return new ReadOnlyStringWrapper("No");
-            }
-        });
-
+        validCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().isValid() ? "Yes" : "No"));
         diffList.setItems(level.difficulties.list);
 
         diffList.setRowFactory( _ -> {

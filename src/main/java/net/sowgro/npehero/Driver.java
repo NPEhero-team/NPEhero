@@ -112,31 +112,20 @@ public class Driver extends Application
         Driver.setMenu(last);
     }
 
-    /**
-     * Replaces/adds a new pane to the primaryPane
-     * @param pane  the new pane
-     */
-    private static void setMenu(Pane pane) {
+    public static void setMenu(Page p) {
+        currentPage = p;
+        Pane pane = currentPage.getContent();
+        pane.setOpacity(0.0);
         primaryPane.setContent(pane);
         pane.prefWidthProperty().bind(primaryPane.widthProperty()); //makes pane fill the window
         pane.prefHeightProperty().bind(primaryPane.heightProperty());
-        primaryPane.requestFocus(); //make the pane itself focused by the keyboard naviagtion so no button is highlighted by default
-    }
-
-    /**
-     * @return the current pane in primaryPane
-     */
-    public static Page getMenu() {
-        return currentPage;
-    }
-
-    public static void setMenu(Page p) {
-        if (currentPage != null) {
-            currentPage.onLeave();
-        }
-        currentPage = p;
-        setMenu(currentPage.getContent());
+        primaryPane.requestFocus(); //make the pane itself focused by the keyboard navigation so no button is highlighted by default
         currentPage.onView();
+        FadeTransition ft = new FadeTransition(Duration.millis(100), currentPage.getContent());
+        ft.setInterpolator(Interpolator.EASE_BOTH);
+        ft.setFromValue(0.0);
+        ft.setToValue(1.0);
+        ft.play();
     }
 
     /**
@@ -171,7 +160,7 @@ public class Driver extends Application
         st.setToY(1.0);
 
         ParallelTransition pt = new ParallelTransition(ft, st, st2);
-        pt.setDelay(Duration.seconds(0.1));
+        pt.setDelay(Duration.seconds(0.3));
         pt.play();
         st.setOnFinished(_ -> backgroundImage.setImage(image));
     }

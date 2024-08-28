@@ -21,10 +21,13 @@ public class LevelSelector extends Page
     public LevelSelector()
     {
         //sets up table view: requires special getters, setters and constructors to work
-        TableView<Level> levels = new TableView<Level>();
+        TableView<Level> levels = new TableView<>();
         
-        TableColumn<Level,String> titleCol = new TableColumn<Level,String>("Title");
-        TableColumn<Level,String> artistCol = new TableColumn<Level,String>("Artist");
+        TableColumn<Level,String> titleCol = new TableColumn<>("Title");
+        TableColumn<Level,String> artistCol = new TableColumn<>("Artist");
+
+        titleCol.prefWidthProperty().bind(levels.widthProperty().multiply(0.5));
+        artistCol.prefWidthProperty().bind(levels.widthProperty().multiply(0.45));
 
         levels.getColumns().add(titleCol);
         levels.getColumns().add(artistCol);
@@ -41,7 +44,7 @@ public class LevelSelector extends Page
 
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> {
+        exit.setOnAction(_ -> {
             Driver.setMenu(new MainMenu());
             Sound.playSfx(Sound.BACKWARD);
         });
@@ -70,8 +73,6 @@ public class LevelSelector extends Page
 
     /**
      * adds corresponding level details pane to the right side
-     * @param rightBox
-     * @param levels
      */
     private void addDetails(Pane rightBox, TableView<Level> levels)
     {

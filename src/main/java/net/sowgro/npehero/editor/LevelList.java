@@ -34,6 +34,10 @@ public class LevelList extends Page
         TableColumn<Level,String> artistCol = new TableColumn<>("Artist");
         TableColumn<Level,String> validCol = new TableColumn<>("Valid?");
 
+        titleCol.prefWidthProperty().bind(levels.widthProperty().multiply(0.4));
+        artistCol.prefWidthProperty().bind(levels.widthProperty().multiply(0.4));
+        validCol.prefWidthProperty().bind(levels.widthProperty().multiply(0.15));
+
         levels.getColumns().add(titleCol);
         levels.getColumns().add(artistCol);
         levels.getColumns().add(validCol);
@@ -128,7 +132,7 @@ public class LevelList extends Page
 
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> {
+        exit.setOnAction(_ -> {
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(new MainMenu());
         });

@@ -8,11 +8,13 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextBoundsType;
 import javafx.scene.text.TextFlow;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.levelapi.Difficulty;
@@ -22,10 +24,7 @@ import net.sowgro.npehero.main.Sound;
 public class LevelDetails extends VBox
 {
     /**
-     * this class is a layout class, most of its purpose is to place UI elements like Buttons within Panes like VBoxes.
-     * the creation of these UI elements are mostly not commented due to their repetitive and self explanatory nature.
-     * style classes are defined in the style.css file.
-     * 
+     * Create a LevelDetails Pane
      * @param level: the selected level on the right side
      */
     public LevelDetails(Level level, LevelSelector ls)
@@ -59,17 +58,10 @@ public class LevelDetails extends VBox
 
         else
         {
-            VBox details = new VBox();
-            details.setPadding(new Insets(5));
-
-            ScrollPane detailsScroll = new ScrollPane(details);
-            detailsScroll.prefHeightProperty().bind(rightBox.prefHeightProperty());
-            detailsScroll.prefWidthProperty().bind(rightBox.prefWidthProperty());
-            detailsScroll.getStyleClass().remove("scroll-pane");
-
             Text title = new Text();
             title.setText(level.title);
             title.getStyleClass().add("t1");
+//            title.setLineSpacing(0.5);
 
             Text artist = new Text();
             artist.setText(level.artist);
@@ -79,11 +71,22 @@ public class LevelDetails extends VBox
             desc.setText(level.desc);
             desc.getStyleClass().add("t3");
 
-            ImageView previewView = new ImageView();
-            Image preview = level.preview;
-            previewView.setImage(preview);
-            previewView.fitWidthProperty().bind(super.prefWidthProperty().multiply(0.5));
-            previewView.setPreserveRatio(true);
+            TextFlow titleFlow = new TextFlow(title);
+            titleFlow.setLineSpacing(0);
+            TextFlow artistFlow = new TextFlow(artist);
+            VBox titleArtistDesc = new VBox(titleFlow, artistFlow);
+            if (level.desc != null && !level.desc.isEmpty()) {
+
+            }
+            titleArtistDesc.setSpacing(-5);
+
+            ImageView imageView = new ImageView();
+            Image image = level.preview;
+            imageView.setImage(image);
+            imageView.fitWidthProperty().bind(super.prefWidthProperty().multiply(0.5));
+            imageView.setPreserveRatio(true);
+            VBox imageHolder = new VBox(imageView);
+            imageHolder.setAlignment(Pos.CENTER);
 
             FlowPane diffSelector = new FlowPane();
             diffSelector.setAlignment(Pos.CENTER);
@@ -107,17 +110,25 @@ public class LevelDetails extends VBox
             leaderboard.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull());
             leaderboard.setOnAction(e -> {
                 Sound.playSfx(Sound.FORWARD);
-                Driver.setMenu(new LeaderboardView((Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), Driver.getMenu()));
+                Driver.setMenu(new LeaderboardView((Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), ls));
             });
-
 
             HBox diffBox = new HBox();
             diffSelector.prefWidthProperty().bind(diffBox.widthProperty());
             diffBox.getChildren().add(diffSelector);
-            
-            details.setSpacing(10);
-            details.getChildren().addAll(new TextFlow(title), new TextFlow(artist), new TextFlow(desc), previewView, diffBox);
+
+            BorderPane details = new BorderPane();
+            details.setCenter(imageHolder);
+            details.setBottom(diffBox);
+            details.setTop(titleArtistDesc);
+            details.setPadding(new Insets(5));
+
+            ScrollPane detailsScroll = new ScrollPane(details);
+            detailsScroll.prefHeightProperty().bind(rightBox.prefHeightProperty());
+            detailsScroll.prefWidthProperty().bind(rightBox.prefWidthProperty());
+            detailsScroll.getStyleClass().remove("scroll-pane");
             detailsScroll.setFitToWidth(true);
+            details.minHeightProperty().bind(detailsScroll.heightProperty());
 
             rightBox.getChildren().add(detailsScroll);
             rightBox.setPadding(new Insets(5));
