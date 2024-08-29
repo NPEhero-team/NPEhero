@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -20,7 +21,6 @@ public class LevelSelector extends Page
 
     public LevelSelector()
     {
-        //sets up table view: requires special getters, setters and constructors to work
         TableView<Level> levels = new TableView<>();
         
         TableColumn<Level,String> titleCol = new TableColumn<>("Title");
@@ -36,11 +36,7 @@ public class LevelSelector extends Page
         artistCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().artist));
 
         levels.setItems(Levels.getValidList());
-
-        levels.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.25));
-        levels.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
-        levels.setMinWidth(300);
-
+        levels.prefHeightProperty().bind(content.heightProperty().multiply(0.75));
 
         Button exit = new Button();
         exit.setText("Back");
@@ -54,38 +50,32 @@ public class LevelSelector extends Page
         leftBox.setSpacing(10);
         leftBox.getChildren().addAll(levels,exit);
 
-        Pane rightBox = new Pane();
-        addDetails(rightBox, levels);
+        BorderPane rightBox = new BorderPane(new LevelDetails(levels.getSelectionModel().getSelectedItem(), this));
+//        details1.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.37));
+        rightBox.prefHeightProperty().bind(content.heightProperty());
+//        details1.maxWidthProperty().bind(content.prefWidthProperty().multiply(0.37));
+//        details1.maxHeightProperty().bind(content.prefHeightProperty());
 
-        content.getChildren().addAll(leftBox, rightBox);
-        content.setSpacing(10);
+        HBox centerBox = new HBox(leftBox, rightBox);
+        centerBox.setSpacing(10);
+        content.getChildren().addAll(centerBox);
+//        content.setSpacing(10);
         content.setAlignment(Pos.CENTER);
+        leftBox.prefWidthProperty().bind(centerBox.widthProperty().multiply(0.4));
+        rightBox.prefWidthProperty().bind(centerBox.widthProperty().multiply(0.6));
+        centerBox.setPrefWidth(1200);
 
         levels.getStyleClass().remove("list-view");
         //listens for change in selected item of the list
-        levels.getSelectionModel().selectedItemProperty().addListener(_ -> addDetails(rightBox, levels));
+        levels.getSelectionModel().selectedItemProperty().addListener(_ -> {
+            rightBox.setCenter(new LevelDetails(levels.getSelectionModel().getSelectedItem(), this));
+            System.out.println("Got here");
+        });
     }
 
     @Override
     public Pane getContent() {
         return content;
-    }
-
-    /**
-     * adds corresponding level details pane to the right side
-     */
-    private void addDetails(Pane rightBox, TableView<Level> levels)
-    {
-        VBox details = new LevelDetails(levels.getSelectionModel().getSelectedItem(), this);
-        if (! rightBox.getChildren().isEmpty())
-        {
-            rightBox.getChildren().remove(0);
-        }
-        rightBox.getChildren().add(details);
-        details.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.37));
-        details.prefHeightProperty().bind(content.prefHeightProperty());
-        details.maxWidthProperty().bind(content.prefWidthProperty().multiply(0.37));
-        details.maxHeightProperty().bind(content.prefHeightProperty());
     }
 
 }
