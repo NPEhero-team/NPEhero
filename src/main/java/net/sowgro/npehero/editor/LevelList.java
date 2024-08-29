@@ -153,6 +153,7 @@ public class LevelList extends Page
         centerBox.getChildren().addAll(main, exit);
         centerBox.setSpacing(10);
         centerBox.setAlignment(Pos.CENTER);
+        centerBox.maxWidthProperty().bind(content.widthProperty().multiply(0.95));
 
         content.getChildren().add(centerBox);
         content.setAlignment(Pos.CENTER);

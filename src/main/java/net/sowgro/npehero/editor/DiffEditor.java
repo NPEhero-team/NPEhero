@@ -109,7 +109,7 @@ public class DiffEditor extends Page
         scroll.getStyleClass().remove("scroll-pane");
         scroll.getStyleClass().add("box");
 //        scroll.setPrefHeight(400);
-        System.out.println("dbg"+scroll.heightProperty());
+//        System.out.println("dbg"+scroll.heightProperty());
         // TODO scroll.heightProperty is 0 here until the window is resized, idk what to do
         scroll.prefWidthProperty().bind(scroll.heightProperty().multiply(0.66));
 

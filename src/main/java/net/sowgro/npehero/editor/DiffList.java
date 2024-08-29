@@ -8,14 +8,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.gui.MainMenu;
 import net.sowgro.npehero.levelapi.Difficulty;
 import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
-import net.sowgro.npehero.main.ValidIndicator;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -204,6 +201,7 @@ public class DiffList extends Page
         centerBox.getChildren().addAll(main, exit);
         centerBox.setSpacing(10);
         centerBox.setAlignment(Pos.CENTER);
+        centerBox.maxWidthProperty().bind(content.widthProperty().multiply(0.95));
 
         content.getChildren().add(centerBox);
         content.setAlignment(Pos.CENTER);

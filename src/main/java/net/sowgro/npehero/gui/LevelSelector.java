@@ -51,25 +51,21 @@ public class LevelSelector extends Page
         leftBox.getChildren().addAll(levels,exit);
 
         BorderPane rightBox = new BorderPane(new LevelDetails(levels.getSelectionModel().getSelectedItem(), this));
-//        details1.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.37));
         rightBox.prefHeightProperty().bind(content.heightProperty());
-//        details1.maxWidthProperty().bind(content.prefWidthProperty().multiply(0.37));
-//        details1.maxHeightProperty().bind(content.prefHeightProperty());
 
         HBox centerBox = new HBox(leftBox, rightBox);
         centerBox.setSpacing(10);
         content.getChildren().addAll(centerBox);
-//        content.setSpacing(10);
         content.setAlignment(Pos.CENTER);
         leftBox.prefWidthProperty().bind(centerBox.widthProperty().multiply(0.4));
         rightBox.prefWidthProperty().bind(centerBox.widthProperty().multiply(0.6));
         centerBox.setPrefWidth(1200);
+        centerBox.maxWidthProperty().bind(content.widthProperty().multiply(0.95));
 
         levels.getStyleClass().remove("list-view");
         //listens for change in selected item of the list
         levels.getSelectionModel().selectedItemProperty().addListener(_ -> {
             rightBox.setCenter(new LevelDetails(levels.getSelectionModel().getSelectedItem(), this));
-            System.out.println("Got here");
         });
     }
 
