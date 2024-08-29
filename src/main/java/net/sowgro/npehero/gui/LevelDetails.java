@@ -67,16 +67,17 @@ public class LevelDetails extends VBox
             artist.setText(level.artist);
             artist.getStyleClass().add("t2");
 
-            Text desc = new Text();
-            desc.setText(level.desc);
-            desc.getStyleClass().add("t3");
-
             TextFlow titleFlow = new TextFlow(title);
             titleFlow.setLineSpacing(0);
             TextFlow artistFlow = new TextFlow(artist);
             VBox titleArtistDesc = new VBox(titleFlow, artistFlow);
             if (level.desc != null && !level.desc.isEmpty()) {
-
+                Text desc = new Text();
+                desc.setText(level.desc);
+                desc.getStyleClass().add("t3");
+                TextFlow descFlow = new TextFlow(desc);
+                descFlow.setPadding(new Insets(20, 0, 0, 0));
+                titleArtistDesc.getChildren().add(descFlow);
             }
             titleArtistDesc.setSpacing(-5);
 

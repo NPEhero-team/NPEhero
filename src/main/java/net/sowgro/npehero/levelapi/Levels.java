@@ -20,7 +20,7 @@ public class Levels {
     public static final ObservableList<Level> list = FXCollections.observableArrayList();
     public static final HashMap<String, Exception> problems = new HashMap<>();
 
-    private static final File dir = new File("levels");
+    public static final File dir = new File("levels");
 
     /**
      * Reads contents of the levels folder and creates a level form each subfolder

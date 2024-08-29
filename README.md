@@ -11,16 +11,19 @@ Goals:
 
 Todo:
 - [ ] fix reliance on local font
-- [ ] Redesign level editor menus
-  - [ ] remove sidebar new dialog
-- [ ] Make scaling of the center box consistent across pages
+
+bugs to squash
+
 - [ ] Improve errorList and controlEditor
 - [ ] Click sounds on all buttons in editor
 - [ ] Fix notesEditor note preview being too small with no notes
 - [ ] Properly center background image
 
+features to add
 - [ ] Tweak design of songPlayer
-- [ ] Level sharing file format, import and export
+  - [ ] Redesign level editor menus
+- [ ] remove sidebar new dialog
+- [ ] Make scaling of the center box consistent across pages
 
 # Installation
 Coming soon.

@@ -4,6 +4,9 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import net.sowgro.npehero.Driver;
 import javafx.scene.layout.HBox;
@@ -14,7 +17,7 @@ import net.sowgro.npehero.levelapi.Levels;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
-import java.io.FileNotFoundException;
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 
@@ -110,8 +113,17 @@ public class LevelList extends Page
 
         ToggleButton create = new ToggleButton("Create");
 
+        Button viewFolder = new Button("Open Folder");
+        viewFolder.setOnAction(_ -> new Thread(() -> {
+            try {
+                Desktop.getDesktop().open(Levels.dir);
+            } catch (IOException ex) {
+                Driver.setMenu(new ErrorDisplay("Failed to open folder\n"+ex, this));
+            }
+        }).start());
+
         VBox buttons = new VBox();
-        buttons.getChildren().addAll(create, edit, remove, refresh);
+        buttons.getChildren().addAll(create, edit, remove, refresh, viewFolder);
         buttons.setSpacing(10);
 
         TextField newLevelEntry = new TextField();
