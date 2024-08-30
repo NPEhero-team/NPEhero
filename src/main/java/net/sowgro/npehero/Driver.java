@@ -113,6 +113,9 @@ public class Driver extends Application
     }
 
     public static void setMenu(Page p) {
+        if (currentPage != null) {
+            currentPage.onLeave();
+        }
         currentPage = p;
         Pane pane = currentPage.getContent();
         pane.setOpacity(0.0);

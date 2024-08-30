@@ -39,7 +39,7 @@ public class Levels {
             try {
                 Level level = new Level(file);
                 list.add(level);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 problems.put(file.getName(), e);
                 e.printStackTrace();
             }
@@ -52,7 +52,7 @@ public class Levels {
      * @param text: the name of the directory and default title
      * @throws IOException if there was an error adding the level
      */
-    public static void add(String text) throws IOException {
+    public static Level add(String text) throws IOException {
         File levelDir = new File(dir, text.toLowerCase().replaceAll("\\W+", "-"));
         if (levelDir.exists()) {
             throw new FileAlreadyExistsException(levelDir.getName());
@@ -61,6 +61,7 @@ public class Levels {
             Level temp = new Level(levelDir);
             temp.title = text;
             list.add(temp);
+            return temp;
         }
         else {
             throw new IOException();

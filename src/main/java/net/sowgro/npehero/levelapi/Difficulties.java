@@ -82,7 +82,7 @@ public class Difficulties {
      * @param text The name of the directory
      * @throws IOException If there is a problem adding the level
      */
-    public void add(String text) throws IOException {
+    public Difficulty add(String text) throws IOException {
         File diffDir = new File(level.dir, text.toLowerCase().replaceAll("\\W+", "-"));
         if (diffDir.exists()) {
             throw new FileAlreadyExistsException(diffDir.getName());
@@ -92,6 +92,7 @@ public class Difficulties {
             temp.title = text;
             list.add(temp);
             list.sort(Comparator.naturalOrder());
+            return temp;
         }
         else {
             throw new IOException();

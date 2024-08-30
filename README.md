@@ -10,20 +10,15 @@ Goals:
 - [ ] Installer / Linux package
 
 Todo:
+- [ ] Tweak design of songPlayer
+- [ ] Redesign level editor menus
 - [ ] fix reliance on local font
-
-bugs to squash
-
 - [ ] Improve errorList and controlEditor
 - [ ] Click sounds on all buttons in editor
 - [ ] Fix notesEditor note preview being too small with no notes
 - [ ] Properly center background image
+- [ ] NotesEditor2: Clicking with the playhead requires pressing play first
 
-features to add
-- [ ] Tweak design of songPlayer
-  - [ ] Redesign level editor menus
-- [ ] remove sidebar new dialog
-- [ ] Make scaling of the center box consistent across pages
 
 # Installation
 Coming soon.

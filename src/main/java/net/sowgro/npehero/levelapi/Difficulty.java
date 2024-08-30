@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -50,6 +51,9 @@ public class Difficulty implements Comparable<Difficulty>
             return;
         }
         Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
+        if (data == null) {
+            data = new HashMap<>();
+        }
 
         title = (String) data.getOrDefault("title", title);
         bpm = (Double) data.getOrDefault("bpm", bpm);
@@ -78,8 +82,13 @@ public class Difficulty implements Comparable<Difficulty>
      * @throws IOException If there is a problem writing to the file
      */
     public void writeMetadata() throws IOException {
-        jsonFile.createNewFile();
+        if (!jsonFile.createNewFile()) {
+            throw new IOException("Could not create file " + jsonFile.getAbsolutePath());
+        }
         Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class); // start with previous values
+        if (data == null) {
+            data = new HashMap<>();
+        }
         data.put("title", title);
         data.put("endTime", endTime);
         data.put("priority", order);

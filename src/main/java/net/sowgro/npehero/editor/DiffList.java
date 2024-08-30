@@ -148,20 +148,8 @@ public class DiffList extends Page
         buttons.getChildren().addAll(create, edit, remove, moveUp, moveDown, refresh);
         buttons.setSpacing(10);
 
-        TextField newLevelEntry = new TextField();
-        Button newLevelButton = new Button("add");
-
-        HBox newLevel = new HBox(newLevelEntry,newLevelButton);
-        Label newLevelLabel = new Label("Name of new difficulty");
-        VBox newLevelBox = new VBox(newLevelLabel, newLevel);
-        newLevelBox.setSpacing(10);
-        newLevelBox.getStyleClass().add("box");
-        newLevelBox.setPadding(new Insets(10));
-
-        Pane sidebar = new Pane();
-
         HBox main = new HBox();
-        main.getChildren().addAll(new VBox(diffs, errorBox),buttons, sidebar);
+        main.getChildren().addAll(new VBox(diffs, errorBox),buttons);
         main.setSpacing(10);
 
         Button exit = new Button();
@@ -173,28 +161,17 @@ public class DiffList extends Page
 
         create.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
-            if (create.isSelected()) {
-                sidebar.getChildren().add(newLevelBox);
-            }
-            else {
-                sidebar.getChildren().remove(newLevelBox);
-            }
-        });
-
-        newLevelButton.setOnAction(_ -> {
-            Sound.playSfx(Sound.FORWARD);
-            try {
-                level.difficulties.add(newLevelEntry.getText());
-            } catch (FileAlreadyExistsException e) {
-                Driver.setMenu(new ErrorDisplay("Failed to add level\nA difficulty already exists with the folder name " + e.getFile(), this));
-            } catch (IOException e) {
-                Driver.setMenu(new ErrorDisplay("Failed to add level\n"+e, this));
-                e.printStackTrace();
-            }
-            newLevelEntry.clear();
-            refresh.fire();
-            sidebar.getChildren().clear();
-            create.setSelected(false);
+            FolderNameEntry.StringToVoidLambda next = (String name) -> {
+                try {
+                    Difficulty d = level.difficulties.add(name);
+                    Driver.setMenu(new DiffEditor(d, new DiffList(level, prev)));
+                } catch (FileAlreadyExistsException e) {
+                    Driver.setMenu(new ErrorDisplay("Failed to add difficulty\nA difficulty already exists with the folder name " + e.getFile(), this));
+                } catch (IOException e) {
+                    Driver.setMenu(new ErrorDisplay("Failed to add difficulty\n" + e, this));
+                }
+            };
+            Driver.setMenu(new FolderNameEntry("difficulty", this, next));
         });
 
         VBox centerBox = new VBox();

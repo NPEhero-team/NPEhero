@@ -111,7 +111,7 @@ public class LevelList extends Page
             levels.setItems(Levels.list);
         });
 
-        ToggleButton create = new ToggleButton("Create");
+        Button create = new Button("Create");
 
         Button viewFolder = new Button("Open Folder");
         viewFolder.setOnAction(_ -> new Thread(() -> {
@@ -126,20 +126,10 @@ public class LevelList extends Page
         buttons.getChildren().addAll(create, edit, remove, refresh, viewFolder);
         buttons.setSpacing(10);
 
-        TextField newLevelEntry = new TextField();
-        Button newLevelButton = new Button("add");
 
-        HBox newLevel = new HBox(newLevelEntry,newLevelButton);
-        Label newLevelLabel = new Label("Name of new level");
-        VBox newLevelBox = new VBox(newLevelLabel, newLevel);
-        newLevelBox.setSpacing(10);
-        newLevelBox.getStyleClass().add("box");
-        newLevelBox.setPadding(new Insets(10));
-
-        Pane sidebar = new Pane();
 
         HBox main = new HBox();
-        main.getChildren().addAll(new VBox(levels, errorBox),buttons,sidebar);
+        main.getChildren().addAll(new VBox(levels, errorBox),buttons);
         main.setSpacing(10);
 
         Button exit = new Button();
@@ -159,28 +149,18 @@ public class LevelList extends Page
         content.setAlignment(Pos.CENTER);
 
         create.setOnAction(_ -> {
-            if (create.isSelected()) {
-                sidebar.getChildren().add(newLevelBox);
-            }
-            else {
-                sidebar.getChildren().remove(newLevelBox);
-            }
-        });
-
-        newLevelButton.setOnAction(_ -> {
-            try {
-                Levels.add(newLevelEntry.getText());
-            } catch (FileAlreadyExistsException e) {
-                Driver.setMenu(new ErrorDisplay("Failed to add level\nA level already exists with the folder name " + e.getFile(), this));
-                e.printStackTrace();
-            } catch (IOException e) {
-                Driver.setMenu(new ErrorDisplay("Failed to create this level\n"+e.toString(), this));
-                e.printStackTrace();
-            }
-            newLevelEntry.clear();
-            refresh.fire();
-            sidebar.getChildren().clear();
-            create.setSelected(false);
+            Sound.playSfx(Sound.FORWARD);
+            FolderNameEntry.StringToVoidLambda next = (String name) -> {
+                try {
+                    Level l = Levels.add(name);
+                    Driver.setMenu(new LevelEditor(l, new LevelList()));
+                } catch (FileAlreadyExistsException e) {
+                    Driver.setMenu(new ErrorDisplay("Failed to add level\nA level already exists with the folder name '" + e.getFile() + "'", this));
+                } catch (IOException e) {
+                    Driver.setMenu(new ErrorDisplay("Failed to create level\n"+e, this));
+                }
+            };
+            Driver.setMenu(new FolderNameEntry("level", this, next));
         });
     }
 
