@@ -92,7 +92,7 @@ public class LevelDetails extends VBox
             play.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull()); //disables play button when no difficulty is selected
             play.setOnAction(e -> {
                 Sound.playSfx(Sound.FORWARD);
-                Driver.setMenu(new LevelSurround(level, (Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), ls));
+                Driver.setMenu(new LevelSurround((Difficulty)diffToggleGroup.getSelectedToggle().getUserData(), ls));
             });
 
             leaderboard.disableProperty().bind(diffToggleGroup.selectedToggleProperty().isNull());

@@ -80,7 +80,7 @@ public class DiffEditor extends Page
         playLevel.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
             if (diff.isValid() && diff.level.isValid()) {
-                Driver.setMenu(new LevelSurround(diff.level, diff, this));
+                Driver.setMenu(new LevelSurround(diff, this));
             }
             else {
                 Driver.setMenu(new ErrorDisplay("This Level is not valid!\nCheck that all required fields\nare populated.", this));

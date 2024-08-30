@@ -21,10 +21,10 @@ public class LevelSurround extends Page
 {
     private final HBox content = new HBox();
 
-    public LevelSurround(Level level, Difficulty difficulty, Page prev)
+    public LevelSurround(Difficulty difficulty, Page prev)
     {
         ScoreController sc = new ScoreController();
-        SongPlayer game = new SongPlayer(level, difficulty, prev, sc);
+        SongPlayer game = new SongPlayer(difficulty, prev, sc);
 
         Button exit = new Button();
         exit.setText("Back");
@@ -40,11 +40,11 @@ public class LevelSurround extends Page
         buttonBox.setSpacing(10);
 
         Text title = new Text();
-        title.setText(level.title);
+        title.setText(difficulty.level.title);
         title.getStyleClass().add("t2");
 
         Text artist = new Text();
-        artist.setText(level.artist+" - "+difficulty.title);
+        artist.setText(difficulty.level.artist+" - "+difficulty.title);
         artist.getStyleClass().add("t3");
 
         VBox titleTextBox = new VBox();

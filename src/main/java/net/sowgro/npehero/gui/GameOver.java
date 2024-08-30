@@ -99,7 +99,7 @@ public class GameOver extends Page
         replay.setText("Replay");
         replay.setOnAction(e -> {
             Sound.playSfx(Sound.FORWARD);
-            Driver.setMenu(new LevelSurround(level, diff, prev));
+            Driver.setMenu(new LevelSurround(diff, prev));
         });
 
         BorderPane buttonBox = new BorderPane();

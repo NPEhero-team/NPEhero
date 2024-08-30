@@ -27,19 +27,11 @@ import javafx.scene.paint.Color;
 import javafx.animation.*;
 import javafx.util.*;
 
-
-//hi aidan here are some objects you can use
-// cntrl.setScore(0) - pass in int
-// cntrl.getScore() - returns int
-// d.bpm - int, defined in difficulty metadata
-// lvl.colors - array of colors (size 5) for the block colors
-// d.notes - File, notes.txt in the difficulty folder
-
-// gui.Driver.setMenu(new GameOver(lvl, d, p, cntrl.getScore()));
-
-//d.numBeats - int
-//d.song - File
-
+class KeyLane {
+	Target target; //Initializes the button, each parameter is a placeholder that is changed later
+	Queue<NoteInfo> sends = new LinkedList<>(); //Queue that dictates when to send the notes
+	ArrayList<Block> lane = new ArrayList<>(); //Array list containing all the notes currently on the field for that lane
+}
 
 public class SongPlayer extends Pane {
 	private Double bpm;		//initializes the bpm of the song, to be read in from a metadata file later
@@ -63,61 +55,48 @@ public class SongPlayer extends Pane {
 	HBox buttonBox = new HBox();	//used to align the buttons horizontally
 	VBox place = new VBox();		//used to place the buttons within the frame
 
-	Target dButton = new Target(Color.RED, 50, 50, 5, Control.LANE0.targetString());	//Initializes the button, each parameter is a placeholder that is changed later
-	Queue<NoteInfo> dSends = new LinkedList<NoteInfo>(); 		//Queue that dictates when to send the notes
-	ArrayList<Block> dLane = new ArrayList<Block>(); 			//Array list containing all the notes currently on the field for that lane
-																//process is repeated for the following four buttons
-	Target fButton = new Target(Color.BLUE, 50, 50, 5, Control.LANE1.targetString());
-	Queue<NoteInfo> fSends = new LinkedList<NoteInfo>();
-	ArrayList<Block> fLane = new ArrayList<Block>();
+	KeyLane[] lanes = new KeyLane[5];
 
-	Target sButton = new Target(Color.GREEN, 50, 50, 5, Control.LANE2.targetString());
-	Queue<NoteInfo> spaceSends = new LinkedList<NoteInfo>();
-	ArrayList<Block> spaceLane = new ArrayList<Block>();
-
-	Target jButton = new Target(Color.PURPLE, 50, 50, 5, Control.LANE3.targetString());
-	Queue<NoteInfo> jSends = new LinkedList<NoteInfo>();
-	ArrayList<Block> jLane = new ArrayList<Block>();
-
-	Target kButton = new Target(Color.YELLOW, 50, 50, 5, Control.LANE4.targetString());
-	Queue<NoteInfo> kSends = new LinkedList<NoteInfo>();
-	ArrayList<Block> kLane = new ArrayList<Block>();
+	{
+		lanes[0] = new KeyLane();
+		lanes[0].target = new Target(Color.RED, 50, 50, 5, Control.LANE0.targetString());
+		lanes[1] = new KeyLane();
+		lanes[1].target = new Target(Color.BLUE, 50, 50, 5, Control.LANE1.targetString());
+		lanes[2] = new KeyLane();
+		lanes[2].target = new Target(Color.GREEN, 50, 50, 5, Control.LANE2.targetString());
+		lanes[3] = new KeyLane();
+		lanes[3].target = new Target(Color.PURPLE, 50, 50, 5, Control.LANE3.targetString());
+		lanes[4] = new KeyLane();
+		lanes[4].target = new Target(Color.YELLOW, 50, 50, 5, Control.LANE4.targetString());
+	}
 
 	/**
 	 * Establishes what the chart for the song is going to look like
 	 * @throws FileNotFoundException
 	 */
 	public void loadSong() throws FileNotFoundException {
-		difficulty.notes.list.forEach(e -> {
-			switch (e.lane) {
-				case 0 -> dSends.add(new NoteInfo(e.time.get() * (bpm / 60)));
-				case 1 -> fSends.add(new NoteInfo(e.time.get() * (bpm / 60)));
-				case 2 -> spaceSends.add(new NoteInfo(e.time.get() * (bpm / 60)));
-				case 3 -> jSends.add(new NoteInfo(e.time.get() * (bpm / 60)));
-				case 4 -> kSends.add(new NoteInfo(e.time.get() * (bpm / 60)));
-			}
-		});
+		difficulty.notes.list.forEach(e -> lanes[e.lane].sends.add(new NoteInfo(e.time.get() * (bpm / 60))));
 	}
 
-	public SongPlayer(Level lvl, Difficulty d, Page p, ScoreController cntrl) {
+	public SongPlayer(Difficulty diff, Page prev, ScoreController cntrl) {
 		Sound.stopSong();
-		song = lvl.song;
+		song = diff.level.song;
 
-		if (lvl.background != null) {
-			Driver.setBackground(lvl.background);
+		if (diff.level.background != null) {
+			Driver.setBackground(diff.level.background);
 		}
 		bpm = 60.0;					//Reads the song's bpm from a metadata file
-		level = lvl;
-		difficulty = d;
-		pane = p;
+		level = diff.level;
+		difficulty = diff;
+		pane = prev;
 
 		//System.out.println(d.bpm + " " + d.numBeats);
 
-		if (d.endTime != 0) {
-			songLength = d.endTime;
+		if (diff.endTime != 0) {
+			songLength = diff.endTime;
 		}
 		else {
-			songLength = d.level.song.getDuration().toSeconds();
+			songLength = diff.level.song.getDuration().toSeconds();
 		}
 		timer = new Timer(bpm);	//Sets the timer's bpm to that of the song
 		scoreCounter = cntrl;			//Uses the song's designated scoreCounter
@@ -127,52 +106,42 @@ public class SongPlayer extends Pane {
 		} catch (FileNotFoundException e) {
 		}
 
-		dButton.setColor(lvl.colors[0]);	//sets the color of the five buttons to be
-		fButton.setColor(lvl.colors[1]);	//the colors outlined in the songs metadata
-		sButton.setColor(lvl.colors[2]);	//file
-		jButton.setColor(lvl.colors[3]);
-		kButton.setColor(lvl.colors[4]);
-		genButton(dButton);		//binds the size of each button to the screen, so that
-		genButton(fButton);		//they are dynamically resizeable
-		genButton(sButton);
-		genButton(jButton);
-		genButton(kButton);
+		for (int i = 0; i < lanes.length; i++) {
+			lanes[i].target.setColor(level.colors[i]);
+			genButton(lanes[i].target);
+		}
 
 		eventHandler = e -> {
-			/**
+			/*
 			 * The keyboard detection for the game: when a key is pressed it
 			 * calls the checkNote() method for the corresponding lane
 			 */
-//			System.out.println(e.getCode());
-//			if (super.isVisible())
-//			{
-				if (e.getCode() == Control.LANE0.getKey()) {
-					checkNote(dLane, dButton);
-				}
-				if (e.getCode() == Control.LANE1.getKey()) {
-					checkNote(fLane, fButton);
-				}
-				if (e.getCode() == Control.LANE2.getKey()) {
-					checkNote(spaceLane, sButton);
-				}
-				if (e.getCode() == Control.LANE3.getKey()) {
-					checkNote(jLane, jButton);
-				}
-				if (e.getCode() == Control.LANE4.getKey()) {
-					checkNote(kLane, kButton);
-				}
-				if (e.getCode() == Control.LEGACY_PRINT.getKey()) {
-					System.out.println("" + timer.time());
-				}
-//			}
+			if (e.getCode() == Control.LANE0.getKey()) {
+				checkNote(lanes[0].lane, lanes[0].target);
+			}
+			if (e.getCode() == Control.LANE1.getKey()) {
+				checkNote(lanes[1].lane, lanes[1].target);
+			}
+			if (e.getCode() == Control.LANE2.getKey()) {
+				checkNote(lanes[2].lane, lanes[2].target);
+			}
+			if (e.getCode() == Control.LANE3.getKey()) {
+				checkNote(lanes[3].lane, lanes[3].target);
+			}
+			if (e.getCode() == Control.LANE4.getKey()) {
+				checkNote(lanes[4].lane, lanes[4].target);
+			}
+			if (e.getCode() == Control.LEGACY_PRINT.getKey()) {
+				System.out.println("" + timer.time());
+			}
 			e.consume();
-			//prints the user's current score and combo, for debugging purposes
-			//System.out.println("Score: " + scoreCounter.getScore() + "\nCombo: " + scoreCounter.getCombo() + "\n");
 		};
 		Driver.primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
 
 		buttonBox.setAlignment(Pos.CENTER);		//puts the buttons in the center of the screen
-		buttonBox.getChildren().addAll(dButton, fButton, sButton, jButton, kButton);	//places the buttons in the correct row order
+		for (KeyLane lane : lanes) { //places the buttons in the correct row order
+			buttonBox.getChildren().add(lane.target);
+		}
 		buttonBox.setSpacing(10); //sets the space between each button
 
 		place.prefWidthProperty().bind(super.widthProperty());		//Sets the height and with of the scene
@@ -249,11 +218,10 @@ public class SongPlayer extends Pane {
 
 		@Override
 		public void handle(long arg0) {
-			sendNote(dSends, dLane, dButton);
-			sendNote(fSends, fLane, fButton);
-			sendNote(spaceSends, spaceLane, sButton);
-			sendNote(jSends, jLane, jButton);
-			sendNote(kSends, kLane, kButton);
+			for (KeyLane lane : lanes) {
+				sendNote(lane.sends, lane.lane, lane.target);
+			}
+
 			if (timer.time() > songLength) {
 				Driver.setMenu(new GameOver(level, difficulty, pane, scoreCounter.getScore()));
 				cancel();
@@ -310,7 +278,7 @@ public class SongPlayer extends Pane {
 	 * @return
 	 */
 	private double distanceToGoal(Block note) {
-		return Math.abs((super.getHeight() - note.getTranslateY() + note.getHeight()/2) - dButton.rect.getLayoutY());
+		return Math.abs((super.getHeight() - note.getTranslateY() + note.getHeight()/2) - lanes[0].target.rect.getLayoutY());
 	}
 
 	/**
