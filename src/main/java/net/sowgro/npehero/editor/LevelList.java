@@ -84,12 +84,16 @@ public class LevelList extends Page
 
 
         Button edit = new Button("Edit");
-        edit.setOnAction(e -> Driver.setMenu(new LevelEditor(levels.getSelectionModel().getSelectedItem(), this)));
+        edit.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            Driver.setMenu(new LevelEditor(levels.getSelectionModel().getSelectedItem(), this));
+        });
         edit.setDisable(true);
         edit.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
 
         Button remove = new Button("Delete");
         remove.setOnAction(e -> {
+            Sound.playSfx(Sound.FORWARD);
             try {
                 Levels.remove(levels.getSelectionModel().getSelectedItem());
             } catch (IOException ex) {
@@ -102,6 +106,7 @@ public class LevelList extends Page
 
         Button refresh = new Button("Refresh");
         refresh.setOnAction(e -> {
+            Sound.playSfx(Sound.FORWARD);
             try {
                 Levels.readData();
             } catch (IOException ex) {
@@ -115,6 +120,7 @@ public class LevelList extends Page
 
         Button viewFolder = new Button("Open Folder");
         viewFolder.setOnAction(_ -> new Thread(() -> {
+            Sound.playSfx(Sound.FORWARD);
             try {
                 Desktop.getDesktop().open(Levels.dir);
             } catch (IOException ex) {

@@ -68,17 +68,26 @@ public class LevelEditor extends Page
         FileChooser backgroundChooser = new FileChooser();
         backgroundChooser.getExtensionFilters().add(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
         Button backgroundButton = new Button("Background Image");
-        backgroundButton.setOnAction(_ -> selectedBackground = backgroundChooser.showOpenDialog(Driver.primaryStage));
+        backgroundButton.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            selectedBackground = backgroundChooser.showOpenDialog(Driver.primaryStage);
+        });
 
         FileChooser previewChooser = new FileChooser();
         previewChooser.getExtensionFilters().add(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
         Button previewButton = new Button("Preview Image");
-        previewButton.setOnAction(_ -> selectedPreview = previewChooser.showOpenDialog(Driver.primaryStage));
+        previewButton.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            selectedPreview = previewChooser.showOpenDialog(Driver.primaryStage);
+        });
 
         FileChooser songChooser = new FileChooser();
         songChooser.getExtensionFilters().add(new ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"));
         Button songButton = new Button("Song file");
-        songButton.setOnAction(_ -> selectedSong = songChooser.showOpenDialog(Driver.primaryStage));
+        songButton.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            selectedSong = songChooser.showOpenDialog(Driver.primaryStage);
+        });
 
 
         HBox diffLabel = new HBox(new Text("Difficulties"), diffsInvalid);
@@ -112,12 +121,16 @@ public class LevelEditor extends Page
         });
 
         Button newDiffs = new Button("Edit difficulties");
-        newDiffs.setOnAction(_ -> Driver.setMenu(new DiffList(level, this)));
+        newDiffs.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            Driver.setMenu(new DiffList(level, this));
+        });
 
         diffList.setSelectionModel(null);
 
         Button save = new Button("Save");
         save.setOnAction(e -> { //assigns fields to values
+            Sound.playSfx(Sound.FORWARD);
             level.title = title.getText();
             level.artist = artist.getText();
             level.desc = desc.getText();

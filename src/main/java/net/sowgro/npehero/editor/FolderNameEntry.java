@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.main.Page;
+import net.sowgro.npehero.main.Sound;
 
 public class FolderNameEntry extends Page {
     private final HBox content = new HBox();
@@ -38,10 +39,16 @@ public class FolderNameEntry extends Page {
         newLevelBox.setPrefWidth(400);
 
         Button newLevelButton = new Button("Create");
-        newLevelButton.setOnAction(_ -> next.run(newLevelEntry.getText()));
+        newLevelButton.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            next.run(newLevelEntry.getText());
+        });
 
         Button cancel = new Button("Cancel");
-        cancel.setOnAction(_ -> Driver.setMenu(prev));
+        cancel.setOnAction(_ -> {
+            Sound.playSfx(Sound.BACKWARD);
+            Driver.setMenu(prev);
+        });
 
         HBox buttonBox = new HBox(cancel, newLevelButton);
         buttonBox.setSpacing(10);

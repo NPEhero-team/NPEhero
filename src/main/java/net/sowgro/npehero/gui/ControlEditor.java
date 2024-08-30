@@ -83,6 +83,7 @@ public class ControlEditor extends Page {
                     }
                 });
                 controlButton.setOnAction(_ -> {
+                    Sound.playSfx(Sound.FORWARD);
                     EventHandler<KeyEvent> keyListener = new EventHandler<>() {
                         @Override
                         public void handle(KeyEvent k) {
@@ -104,6 +105,7 @@ public class ControlEditor extends Page {
                 // reset button
                 Button resetButton = new Button("Reset");
                 resetButton.setOnAction(_ -> {
+                    Sound.playSfx(Sound.FORWARD);
                     control.keyProperty.set(control.defaultKey);
                 });
                 controls.add(resetButton, 2, i);

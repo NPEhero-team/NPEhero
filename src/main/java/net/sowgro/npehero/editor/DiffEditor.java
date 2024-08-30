@@ -147,7 +147,7 @@ public class DiffEditor extends Page
 
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> {
+        exit.setOnAction(_ -> {
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
         });
@@ -181,10 +181,6 @@ public class DiffEditor extends Page
         b.strokeWidthProperty().bind(scroll.widthProperty().divide(120));
         b.layoutYProperty().bind(secondToScreenPos(n.time.add(0)));
         return b;
-    }
-
-    private DoubleBinding secondToScreenPos(double second) {
-        return scroll.heightProperty().multiply(second * 0.9);
     }
 
     private DoubleBinding secondToScreenPos(DoubleBinding second) {

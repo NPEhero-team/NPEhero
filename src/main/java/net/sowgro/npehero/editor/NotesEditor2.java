@@ -165,6 +165,7 @@ public class NotesEditor2 extends Page {
         Button save = new Button();
         save.setText("Save");
         save.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             diff.notes.list = noteList;
             try {
                 diff.notes.writeFile();
@@ -256,6 +257,7 @@ public class NotesEditor2 extends Page {
         });
 
         play.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             if (play.isSelected()) {
                 m.play();
             }
@@ -266,6 +268,7 @@ public class NotesEditor2 extends Page {
         });
 
         scrollLock.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             if (scrollLock.isSelected()) {
                 // vvalue takes in a value between 0 and 1 NOT a pixel value
                 scroll.vvalueProperty().bind(playhead.layoutYProperty().subtract(scroll.heightProperty().divide(2)).divide(scrollContent.heightProperty().subtract(scroll.heightProperty())));
@@ -278,10 +281,12 @@ public class NotesEditor2 extends Page {
         });
 
         reset.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             m.seek(new Duration(0));
         });
 
         delNote.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             activeNotes.forEach(e -> {
                 noteList.remove(e.note);
             });
@@ -289,11 +294,13 @@ public class NotesEditor2 extends Page {
         });
 
         clearSelect.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             activeNotes.forEach(e -> e.setFill(e.color));
             activeNotes.clear();
         });
 
         selectAll.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             activeNotes.clear();
             for (Pane lane : lanes) {
                 lane.getChildren().forEach(e -> activeNotes.add((Block) e));
@@ -304,6 +311,7 @@ public class NotesEditor2 extends Page {
         Pane addHelp = addHelp();
         Pane moveHelp = moveHelp();
         addNote.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             if (addNote.isSelected()) {
                 helpBox.getChildren().clear();
                 helpBox.getChildren().add(addHelp);
@@ -314,6 +322,7 @@ public class NotesEditor2 extends Page {
         });
 
         moveNote.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             if (moveNote.isSelected()) {
                 helpBox.getChildren().clear();
                 helpBox.getChildren().add(moveHelp);
@@ -331,6 +340,7 @@ public class NotesEditor2 extends Page {
         });
 
         setEnd.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             double tmp = screenPosToSecond(playhead.getLayoutY());
             if (Math.round(tmp*10)/10 == Math.round(m.getTotalDuration().toSeconds() * 10)/10) {
                 newEndTime.set(0);
