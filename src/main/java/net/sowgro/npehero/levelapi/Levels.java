@@ -40,8 +40,7 @@ public class Levels {
                 Level level = new Level(file);
                 list.add(level);
             } catch (Exception e) {
-                problems.put(file.getName(), e);
-                e.printStackTrace();
+                problems.put("Failed to load load level in folder '" + file.getName() + "'", e);
             }
         }
         list.sort(Comparator.naturalOrder());

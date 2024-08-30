@@ -10,7 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.editor.ErrorDisplay;
+import net.sowgro.npehero.main.ErrorDisplay;
 import net.sowgro.npehero.levelapi.Difficulty;
 import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.main.Page;
@@ -73,8 +73,7 @@ public class GameOver extends Page
             try {
                 diff.leaderboard.add(name.getText(), score2);
             } catch (IOException e) {
-                e.printStackTrace();
-                Driver.setMenu(new ErrorDisplay("Failed to save score to leaderboard:\n"+e, this));
+                Driver.setMenu(new ErrorDisplay("Failed to save score to leaderboard", e, this));
             }
         });
 

@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import net.sowgro.npehero.Driver;
 import javafx.scene.layout.HBox;
@@ -14,6 +13,8 @@ import javafx.scene.layout.VBox;
 import net.sowgro.npehero.gui.MainMenu;
 import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.levelapi.Levels;
+import net.sowgro.npehero.main.ErrorDisplay;
+import net.sowgro.npehero.main.ErrorList;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
@@ -97,8 +98,7 @@ public class LevelList extends Page
             try {
                 Levels.remove(levels.getSelectionModel().getSelectedItem());
             } catch (IOException ex) {
-                Driver.setMenu(new ErrorDisplay("Failed to remove this level\n"+e.toString(), this));
-                ex.printStackTrace();
+                Driver.setMenu(new ErrorDisplay("Failed to remove this level", ex, this));
             }
         });
         remove.setDisable(true);
@@ -110,8 +110,7 @@ public class LevelList extends Page
             try {
                 Levels.readData();
             } catch (IOException ex) {
-                Driver.setMenu(new ErrorDisplay("Failed to load levels: Level folder is missing\n"+e.toString(), this));
-                ex.printStackTrace();
+                Driver.setMenu(new ErrorDisplay("Failed to load levels: Level folder is missing", ex, this));
             }
             levels.setItems(Levels.list);
         });
@@ -124,7 +123,7 @@ public class LevelList extends Page
             try {
                 Desktop.getDesktop().open(Levels.dir);
             } catch (IOException ex) {
-                Driver.setMenu(new ErrorDisplay("Failed to open folder\n"+ex, this));
+                Driver.setMenu(new ErrorDisplay("Failed to open folder", ex, this));
             }
         }).start());
 
@@ -163,7 +162,7 @@ public class LevelList extends Page
                 } catch (FileAlreadyExistsException e) {
                     Driver.setMenu(new ErrorDisplay("Failed to add level\nA level already exists with the folder name '" + e.getFile() + "'", this));
                 } catch (IOException e) {
-                    Driver.setMenu(new ErrorDisplay("Failed to create level\n"+e, this));
+                    Driver.setMenu(new ErrorDisplay("Failed to create level", e, this));
                 }
             };
             Driver.setMenu(new FolderNameEntry("level", this, next));

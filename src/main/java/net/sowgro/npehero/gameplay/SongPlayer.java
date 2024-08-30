@@ -125,7 +125,6 @@ public class SongPlayer extends Pane {
 		try {
 			loadSong();			//Calls the file loading from the song's notes.txt file
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		}
 
 		dButton.setColor(lvl.colors[0]);	//sets the color of the five buttons to be

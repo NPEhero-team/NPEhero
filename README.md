@@ -9,15 +9,16 @@ Goals:
 - [ ] Code cleanup
 - [ ] Installer / Linux package
 
-Todo:
-- [ ] Tweak design of songPlayer
-- [ ] Redesign level editor menus
-- [ ] fix reliance on local font
-- [ ] Improve errorList and controlEditor
-- [ ] Click sounds on all buttons in editor
-- [ ] Fix notesEditor note preview being too small with no notes
-- [ ] Properly center background image
-- [ ] NotesEditor2: Clicking with the playhead requires pressing play first
+Todo - needs design:
+- Tweak design of songPlayer
+- Redesign level editor menus
+- Improve errorList and error handling
+
+Todo - bugs:
+- fix reliance on local font
+- Fix notesEditor note preview being too small with no notes
+- Properly center background image
+- NotesEditor2: Clicking with the playhead requires pressing play first
 
 
 # Installation

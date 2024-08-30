@@ -1,4 +1,4 @@
-package net.sowgro.npehero.editor;
+package net.sowgro.npehero.main;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,8 +8,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.main.Page;
-import net.sowgro.npehero.main.Sound;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class ErrorDisplay extends Page {
 
@@ -35,6 +36,64 @@ public class ErrorDisplay extends Page {
 
         VBox centerBox = new VBox();
         centerBox.getChildren().addAll(main, exit);
+        centerBox.setSpacing(10);
+        centerBox.setAlignment(Pos.CENTER);
+
+        content.getChildren().add(centerBox);
+        content.setAlignment(Pos.CENTER);
+    }
+
+    /**
+     * Error display with a message, exception and Back button
+     * @param message The message to display
+     * @param e The exception that occurred
+     * @param prev The destination of the close button
+     */
+    public ErrorDisplay(String message, Exception e, Page prev) {
+        Label title = new Label(message);
+        title.setPadding(new Insets(10));
+        title.setWrapText(true);
+
+        Label exView = new Label(e.toString());
+        exView.getStyleClass().add("red");
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String sStackTrace = sw.toString(); // stack trace as a string
+
+        Label stackTrace = new Label(sStackTrace);
+        stackTrace.getStyleClass().add("red");
+        stackTrace.setVisible(false);
+        stackTrace.setManaged(false);
+
+        Button exit = new Button();
+        exit.setText("Ok");
+        exit.setOnAction(_ -> {
+            Sound.playSfx(Sound.BACKWARD);
+            Driver.setMenu(prev);
+        });
+
+        Button printStack = new Button("Print to console");
+        printStack.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            e.printStackTrace();
+        });
+
+        Button showStack = new Button("Show Stack Trace");
+        showStack.setOnAction(_ -> {
+            stackTrace.setVisible(true);
+            stackTrace.setManaged(true);
+        });
+
+        HBox buttonBox = new HBox(exit, showStack);
+        buttonBox.setSpacing(10);
+
+        VBox main = new VBox(title, exView);
+        main.getStyleClass().add("box");
+
+        VBox centerBox = new VBox();
+        centerBox.getChildren().addAll(main, buttonBox, stackTrace);
         centerBox.setSpacing(10);
         centerBox.setAlignment(Pos.CENTER);
 

@@ -11,6 +11,8 @@ import javafx.scene.layout.VBox;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.levelapi.Difficulty;
 import net.sowgro.npehero.levelapi.Level;
+import net.sowgro.npehero.main.ErrorDisplay;
+import net.sowgro.npehero.main.ErrorList;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
 
@@ -84,8 +86,7 @@ public class DiffList extends Page
             try {
                 level.difficulties.remove(diffs.getSelectionModel().getSelectedItem());
             } catch (IOException ex) {
-                ex.printStackTrace();
-                Driver.setMenu(new ErrorDisplay("Failed to remove difficulty\n"+e, this));
+                Driver.setMenu(new ErrorDisplay("Failed to remove difficulty", ex, this));
             }
         });
         remove.setDisable(true);
@@ -120,8 +121,7 @@ public class DiffList extends Page
             try {
                 level.difficulties.saveOrder();
             } catch (IOException e) {
-                e.printStackTrace();
-                Driver.setMenu(new ErrorDisplay("Failed to move difficulty\n"+e,this));
+                Driver.setMenu(new ErrorDisplay("Failed to move difficulty", e,this));
             }
         });
 
@@ -139,8 +139,7 @@ public class DiffList extends Page
             try {
                 level.difficulties.saveOrder();
             } catch (IOException e) {
-                e.printStackTrace();
-                Driver.setMenu(new ErrorDisplay("Failed to move difficulty\n"+e,this));
+                Driver.setMenu(new ErrorDisplay("Failed to move difficulty", e,this));
             }
         });
 
@@ -168,7 +167,7 @@ public class DiffList extends Page
                 } catch (FileAlreadyExistsException e) {
                     Driver.setMenu(new ErrorDisplay("Failed to add difficulty\nA difficulty already exists with the folder name " + e.getFile(), this));
                 } catch (IOException e) {
-                    Driver.setMenu(new ErrorDisplay("Failed to add difficulty\n" + e, this));
+                    Driver.setMenu(new ErrorDisplay("Failed to add difficulty", e, this));
                 }
             };
             Driver.setMenu(new FolderNameEntry("difficulty", this, next));

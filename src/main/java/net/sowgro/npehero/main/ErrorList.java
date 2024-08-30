@@ -1,19 +1,11 @@
-package net.sowgro.npehero.editor;
+package net.sowgro.npehero.main;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.gui.SettingsEditor;
-import net.sowgro.npehero.main.Control;
-import net.sowgro.npehero.main.Page;
-import net.sowgro.npehero.main.Sound;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 public class ErrorList extends Page {
@@ -57,7 +49,7 @@ public class ErrorList extends Page {
 
             // reset button
             Button resetButton = new Button("View Error");
-            resetButton.setOnAction(_ -> Driver.setMenu(new ErrorDisplay("E: \n"+error.getValue(), this)));
+            resetButton.setOnAction(_ -> Driver.setMenu(new ErrorDisplay(error.getKey(), error.getValue(), this)));
             controls.add(resetButton, 1, i);
             i++;
         }

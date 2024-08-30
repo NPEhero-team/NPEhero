@@ -152,13 +152,11 @@ public class LevelEditor extends Page
                 }
             } catch (Exception ex) {
                 // TODO
-                ex.printStackTrace();
             }
             try {
                 level.writeMetadata();
             } catch (IOException ex) {
                 // TODO
-                ex.printStackTrace();
             }
             validate();
         });

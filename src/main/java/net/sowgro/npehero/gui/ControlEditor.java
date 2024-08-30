@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import net.sowgro.npehero.Driver;
-import net.sowgro.npehero.editor.ErrorDisplay;
+import net.sowgro.npehero.main.ErrorDisplay;
 import net.sowgro.npehero.main.Control;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
@@ -78,8 +78,7 @@ public class ControlEditor extends Page {
                     try {
                         Control.writeToFile();
                     } catch (IOException e) {
-                        Driver.setMenu(new ErrorDisplay("An error occured while saving your controls\n"+e, this));
-                        e.printStackTrace();
+                        Driver.setMenu(new ErrorDisplay("An error occurred while saving your controls", e, this));
                     }
                 });
                 controlButton.setOnAction(_ -> {

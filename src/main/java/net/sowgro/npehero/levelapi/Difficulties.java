@@ -51,8 +51,7 @@ public class Difficulties {
                     Difficulty diff = new Difficulty(cur, level);
                     list.add(diff);
                 } catch (IOException e) {
-                    problems.put(cur.getName(), e);
-                    e.printStackTrace();
+                    problems.put("Failed to load difficulty in folder '" + cur.getName() + "'", e);
                 }
             }
         }

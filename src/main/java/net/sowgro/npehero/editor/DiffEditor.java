@@ -72,7 +72,6 @@ public class DiffEditor extends Page
             try {
                 diff.leaderboard.save();
             } catch (IOException e) {
-                e.printStackTrace();
                 Driver.setMenu(new ErrorDisplay("Failed to clear the leaderboard:\n"+e, this));
             }
         });
@@ -97,7 +96,6 @@ public class DiffEditor extends Page
             try {
                 diff.writeMetadata();
             } catch (IOException e) {
-                e.printStackTrace();
                 //TODO
                 throw new RuntimeException(e);
             }
