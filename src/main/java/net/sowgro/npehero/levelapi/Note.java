@@ -31,4 +31,8 @@ public class Note {
         this.lane = other.lane;
         this.time.set(other.time.get());
     }
+
+    public double getTime() {
+        return time.get();
+    }
 }

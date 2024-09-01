@@ -28,18 +28,45 @@ public enum Control {
     LEGACY_PRINT    ("Print Time", KeyCode.Q),
     LEGACY_STOP     ("Stop Edit", KeyCode.ESCAPE);
 
-    public final String label;
-    public final KeyCode defaultKey;
-    public final ObjectProperty<KeyCode> keyProperty = new SimpleObjectProperty<>();
-
     public static final List<Map.Entry<String, List<Control>>> sections = List.of(
                 entry("Gameplay",      List.of(LANE0, LANE1, LANE2, LANE3, LANE4)),
                 entry("Editor",        List.of(DELETE_NOTE, NOTE_UP, NOTE_DOWN, SCROLL_LOCK, PLAY_PAUSE, CLEAR_SELECTION, SELECT_ALL)),
                 entry("Legacy Editor", List.of(LEGACY_PRINT, LEGACY_STOP))
             );
 
+    public static final Control[] lanes = {
+            LANE0,
+            LANE1,
+            LANE2,
+            LANE3,
+            LANE4,
+    };
+
     private static final File file = new File("controls.json");
     private static final Gson json = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+
+    public static void writeToFile() throws IOException {
+        Map<String, Object> data = new HashMap<>();
+        for (Control control : Control.values()) {
+            data.put(control.toString(), control.getKey().toString());
+        }
+        FileWriter fileWriter = new FileWriter(file);
+        json.toJson(data, fileWriter);
+        fileWriter.close();
+    }
+
+    public static void readFromFile() throws Exception {
+        Map<String, Object> data = json.fromJson(new FileReader(file), Map.class);
+        for (Control control : Control.values()) {
+            if (data.containsKey(control.toString())) {
+                control.setKey(KeyCode.valueOf((String) data.getOrDefault(control.toString(), null)));
+            }
+        }
+    }
+
+    public final String label;
+    public final KeyCode defaultKey;
+    public final ObjectProperty<KeyCode> keyProperty = new SimpleObjectProperty<>();
 
     Control(String label, KeyCode key) {
         this.label = label;
@@ -80,24 +107,5 @@ public enum Control {
                 }
             }
         };
-    }
-
-    public static void writeToFile() throws IOException {
-        Map<String, Object> data = new HashMap<>();
-        for (Control control : Control.values()) {
-            data.put(control.toString(), control.getKey().toString());
-        }
-        FileWriter fileWriter = new FileWriter(file);
-        json.toJson(data, fileWriter);
-        fileWriter.close();
-    }
-
-    public static void readFromFile() throws Exception {
-        Map<String, Object> data = json.fromJson(new FileReader(file), Map.class);
-        for (Control control : Control.values()) {
-            if (data.containsKey(control.toString())) {
-                control.setKey(KeyCode.valueOf((String) data.getOrDefault(control.toString(), null)));
-            }
-        }
     }
 }

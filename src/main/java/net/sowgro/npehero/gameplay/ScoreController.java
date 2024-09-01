@@ -37,10 +37,8 @@ public class ScoreController{
     /**
      * Called when the user misses a note
      */
-    public void miss(boolean muted) {
-        if (!muted) {
-            Sound.playSfx(Sound.MISS);
-        }
+    public void miss() {
+        Sound.playSfx(Sound.MISS);
         combo = 0;
         comboMultiplier = 1;
         scoreProperty.setValue(score+"");
@@ -48,7 +46,7 @@ public class ScoreController{
         // System.out.println("Miss");
     }
 
-    /*
+    /**
      * Increments the combo by one
      */
     private void combo() {

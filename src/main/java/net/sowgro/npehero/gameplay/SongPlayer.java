@@ -1,20 +1,18 @@
 package net.sowgro.npehero.gameplay;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.levelapi.Difficulty;
 import net.sowgro.npehero.levelapi.Level;
+import net.sowgro.npehero.levelapi.Note;
+import net.sowgro.npehero.levelapi.Notes;
 import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.gui.GameOver;
 import javafx.geometry.Pos;
@@ -27,244 +25,180 @@ import javafx.scene.paint.Color;
 import javafx.animation.*;
 import javafx.util.*;
 
-class KeyLane {
-	Target target; //Initializes the button, each parameter is a placeholder that is changed later
-	Queue<NoteInfo> sends = new LinkedList<>(); //Queue that dictates when to send the notes
-	ArrayList<Block> lane = new ArrayList<>(); //Array list containing all the notes currently on the field for that lane
-}
+public class SongPlayer extends HBox {
 
-public class SongPlayer extends Pane {
-	private Double bpm;		//initializes the bpm of the song, to be read in from a metadata file later
-	private double songLength; //initializes the length of the song in terms of the song's bpm, to be read in later
-
-	private EventHandler<KeyEvent> eventHandler;
-
-	private Media song;
-	private boolean songIsPlaying = false;
-	private boolean missMute = false;
-
-	private Level level;
-	private Difficulty difficulty;
-	private Page pane;
-
-	Timer timer;			//the timer that determines when notes will fall, counted in terms of the song's bpm
-	final int TIME = 1000;  //delay for notes falling down the screen
-
-	ScoreController scoreCounter = new ScoreController();	//used to keep track of the user's score
-
-	HBox buttonBox = new HBox();	//used to align the buttons horizontally
-	VBox place = new VBox();		//used to place the buttons within the frame
-
-	KeyLane[] lanes = new KeyLane[5];
-
-	{
-		lanes[0] = new KeyLane();
-		lanes[0].target = new Target(Color.RED, 50, 50, 5, Control.LANE0.targetString());
-		lanes[1] = new KeyLane();
-		lanes[1].target = new Target(Color.BLUE, 50, 50, 5, Control.LANE1.targetString());
-		lanes[2] = new KeyLane();
-		lanes[2].target = new Target(Color.GREEN, 50, 50, 5, Control.LANE2.targetString());
-		lanes[3] = new KeyLane();
-		lanes[3].target = new Target(Color.PURPLE, 50, 50, 5, Control.LANE3.targetString());
-		lanes[4] = new KeyLane();
-		lanes[4].target = new Target(Color.YELLOW, 50, 50, 5, Control.LANE4.targetString());
+	static class Lane {
+		Target target; //Initializes the button, each parameter is a placeholder that is changed later
+		ArrayList<Block> blocks = new ArrayList<>(); //Array list containing all the notes currently on the field for that lane
+		Pane pane = new Pane();
 	}
 
-	/**
-	 * Establishes what the chart for the song is going to look like
-	 * @throws FileNotFoundException
-	 */
-	public void loadSong() throws FileNotFoundException {
-		difficulty.notes.list.forEach(e -> lanes[e.lane].sends.add(new NoteInfo(e.time.get() * (bpm / 60))));
-	}
+	private final int FALL_TIME = 1;  // delay for notes falling down the screen (seconds)
+	private final double START_DELAY = 1;  // seconds
 
-	public SongPlayer(Difficulty diff, Page prev, ScoreController cntrl) {
+	private final Level level;
+	private final Media song;
+    private final ScoreController scoreCounter;
+
+    private final EventHandler<KeyEvent> eventHandler;
+	private final Timeline timeline;
+
+	private boolean done = false;
+	private final Lane[] lanes = new Lane[5];
+
+	public SongPlayer(Difficulty diff, Page prev, ScoreController scoreController) {
+		this.level = diff.level;
+		this.song = diff.level.song;
+		this.scoreCounter = scoreController; // Uses the song's designated scoreCounter
+		double songLength = diff.endTime != 0 ? diff.endTime : diff.level.song.getDuration().toSeconds();
+        Notes notes = diff.notes;
+
 		Sound.stopSong();
-		song = diff.level.song;
-
-		if (diff.level.background != null) {
-			Driver.setBackground(diff.level.background);
+		if (level.background != null) {
+			Driver.setBackground(level.background);
 		}
-		bpm = 60.0;					//Reads the song's bpm from a metadata file
-		level = diff.level;
-		difficulty = diff;
-		pane = prev;
-
-		//System.out.println(d.bpm + " " + d.numBeats);
-
-		if (diff.endTime != 0) {
-			songLength = diff.endTime;
-		}
-		else {
-			songLength = diff.level.song.getDuration().toSeconds();
-		}
-		timer = new Timer(bpm);	//Sets the timer's bpm to that of the song
-		scoreCounter = cntrl;			//Uses the song's designated scoreCounter
-
-		try {
-			loadSong();			//Calls the file loading from the song's notes.txt file
-		} catch (FileNotFoundException e) {
+		// create targets
+        for (int i = 0; i < lanes.length; i++) {
+			lanes[i] = new Lane();
+			var tmp = new Target(level.colors[i], 50, 50, 20, Control.lanes[i].targetString());
+			bindTarget(tmp);
+			lanes[i].target = tmp;
 		}
 
-		for (int i = 0; i < lanes.length; i++) {
-			lanes[i].target.setColor(level.colors[i]);
-			genButton(lanes[i].target);
+		// create timeline
+		timeline = new Timeline();
+		for (Note note : notes.list) {
+			// schedule each note to send at its time
+			KeyFrame kf = new KeyFrame(Duration.seconds(note.getTime() + START_DELAY), _ -> sendNote(note));
+			timeline.getKeyFrames().add(kf);
 		}
+		// schedule the song to start after the delay
+		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(FALL_TIME + START_DELAY), _ -> {
+            if (!done) {
+                Sound.playSong(song);
+            }
+        }));
+		// schedule the game over screen to show at the end
+		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(songLength + START_DELAY), _ -> {
+			Driver.setMenu(new GameOver(level, diff, prev, scoreCounter.getScore()));
+			cancel();
+		}));
 
+		// handle keyboard input
 		eventHandler = e -> {
-			/*
-			 * The keyboard detection for the game: when a key is pressed it
-			 * calls the checkNote() method for the corresponding lane
-			 */
-			if (e.getCode() == Control.LANE0.getKey()) {
-				checkNote(lanes[0].lane, lanes[0].target);
-			}
-			if (e.getCode() == Control.LANE1.getKey()) {
-				checkNote(lanes[1].lane, lanes[1].target);
-			}
-			if (e.getCode() == Control.LANE2.getKey()) {
-				checkNote(lanes[2].lane, lanes[2].target);
-			}
-			if (e.getCode() == Control.LANE3.getKey()) {
-				checkNote(lanes[3].lane, lanes[3].target);
-			}
-			if (e.getCode() == Control.LANE4.getKey()) {
-				checkNote(lanes[4].lane, lanes[4].target);
+			for (int i = 0; i < lanes.length; i++) {
+				if (e.getCode() == Control.lanes[i].getKey()) {
+					checkNote(lanes[i]);
+				}
 			}
 			if (e.getCode() == Control.LEGACY_PRINT.getKey()) {
-				System.out.println("" + timer.time());
+				System.out.println("" + timeline.getCurrentTime());
 			}
 			e.consume();
 		};
 		Driver.primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
 
-		buttonBox.setAlignment(Pos.CENTER);		//puts the buttons in the center of the screen
-		for (KeyLane lane : lanes) { //places the buttons in the correct row order
-			buttonBox.getChildren().add(lane.target);
+		// layout
+		HBox buttonBox = new HBox();
+		buttonBox.setAlignment(Pos.BOTTOM_CENTER);		//puts the buttons in the center of the screen
+		for (Lane lane : lanes) { //places the buttons in the correct row order
+			Line line = new Line();
+			line.setStroke(lane.target.getFillColor());
+			line.setStrokeWidth(2);
+			line.setStartY(0);
+			line.endYProperty().bind(lane.target.layoutYProperty().subtract(2));
+			VBox back = new VBox(line, lane.target);
+			back.setAlignment(Pos.BOTTOM_CENTER);
+			StackPane stackPane = new StackPane(back, lane.pane);
+			buttonBox.getChildren().add(stackPane);
 		}
-		buttonBox.setSpacing(10); //sets the space between each button
-
-		place.prefWidthProperty().bind(super.widthProperty());		//Sets the height and with of the scene
-		place.prefHeightProperty().bind(super.heightProperty());	//to natch the window
-		place.getChildren().addAll(buttonBox);		//adds the buttonBox to the screen
-		place.setAlignment(Pos.BOTTOM_CENTER);		//sets the alignment of the pane
-		place.setSpacing(10);	
-
-		StackPane root = new StackPane();
-		root.getChildren().addAll(place);	//aligns the components within the pane
-
-		super.getChildren().addAll(root);	//puts all of the combonents in the pane to be rendered
+		buttonBox.spacingProperty().bind(super.heightProperty().multiply(20/1080.0));
+		super.getChildren().add(buttonBox);
+		super.setPadding(new Insets(0, 20, 10, 20));
+		super.setAlignment(Pos.BOTTOM_CENTER);
 	}
 
 	/**
 	 * Checks if a note should be sent at the current time, and sends the note if it
 	 * needs to be
-	 * 
-	 * @param sends the queue to check
-	 * @param lane  the lane to send the note to
 	 */
-	public void sendNote(Queue<NoteInfo> sends, ArrayList<Block> lane, Target button) {
-		if (sends.peek() != null && timer.time() > sends.peek().getTime()-(1000*(bpm/60000.0))) {
-			TranslateTransition anim = new TranslateTransition(Duration.millis(TIME+105));
+	public void sendNote(Note note) {
+		Lane lane = lanes[note.lane];
 
-			lane.add(new Block(button.getColor(), 50, 50, 5));
-			int index = lane.size() - 1;
-			sends.remove();
-			lane.get(index).setCache(true); //added by tbone to try to improve performance
-			lane.get(index).setCacheHint(CacheHint.SPEED); //this too
-			lane.get(index).heightProperty().bind(super.widthProperty().divide(8));
-			lane.get(index).widthProperty().bind(super.widthProperty().divide(8));
-			lane.get(index).arcHeightProperty().bind(super.widthProperty().divide(25));
-			lane.get(index).arcWidthProperty().bind(super.widthProperty().divide(25));
-			lane.get(index).setX(button.getLayoutX());
-			lane.get(index).setY(-lane.get(index).getHeight());
-			anim.setInterpolator(Interpolator.LINEAR);
-			anim.setByY(super.getHeight() + lane.get(index).getHeight() + 75);
-			anim.setCycleCount(1);
-			anim.setAutoReverse(false);
-			anim.setNode(lane.get(lane.size() - 1));
-			anim.play();
+		Block block = new Block(lane.target.getColor(), 50, 50, 15);
+		block.setCache(true);
+		block.setCacheHint(CacheHint.SPEED);
+		block.xProperty().bind(lane.pane.widthProperty().subtract(block.widthProperty()).divide(2));
+		block.yProperty().bind(block.heightProperty().negate());
+		bindBlock(block);
 
-			anim.setOnFinished(e -> {
-				if (super.getChildren().removeAll(anim.getNode())){
-					scoreCounter.miss(missMute);
-					FillTransition ft = new FillTransition(Duration.millis(500), button.rect);
-					ft.setFromValue(Color.RED);
-					ft.setToValue(button.getFillColor());
-					ft.play();
-				}
-			});
-			super.getChildren().add(lane.get(lane.size() - 1));
-		}
+		lane.blocks.add(block);
+
+		TranslateTransition anim = new TranslateTransition(Duration.seconds(FALL_TIME + 0.105));
+		anim.setInterpolator(Interpolator.LINEAR);
+		anim.byYProperty().bind(super.heightProperty().add(block.getHeight()).add(75));
+		anim.setNode(block);
+		anim.play();
+		anim.setOnFinished(_ -> {
+			if (lane.pane.getChildren().remove(block) && !done) {
+				scoreCounter.miss();
+				FillTransition ft = new FillTransition(Duration.millis(500), lane.target.rect);
+				ft.setFromValue(Color.RED);
+				ft.setToValue(lane.target.getFillColor());
+				ft.play();
+			}
+		});
+		lane.pane.getChildren().add(block);
 	}
 
 	/**
-	 * Sets up the given button
-	 * 
-	 * @param button
+	 * Binds properties of the target to the screen
+	 * @param target The target to bind
 	 */
-	private void genButton(Target button) {
-		button.rect.heightProperty().bind(super.widthProperty().divide(8));
-		button.rect.widthProperty().bind(super.widthProperty().divide(8));
-		button.rect.arcHeightProperty().bind(super.widthProperty().divide(25));
-		button.rect.arcWidthProperty().bind(super.widthProperty().divide(25));
-		button.rect.strokeWidthProperty().bind(super.widthProperty().divide(120));
+	private void bindTarget(Target target) {
+		bindBlock(target.rect);
+//		target.rect.strokeWidthProperty().bind(super.widthProperty().divide(120));
+	}
+
+	private void bindBlock(Rectangle block) {
+		var sizeBind = super.heightProperty().multiply(87/1080.0);
+		block.heightProperty().bind(sizeBind);
+		block.widthProperty().bind(sizeBind);
+		var arcBind = super.heightProperty().multiply(20/1080.0);
+		block.arcHeightProperty().bind(arcBind);
+		block.arcWidthProperty().bind(arcBind);
 	}
 
 	/**
-	 * The background test that is run on every frame of the game
+	 * starts the gameLoop, a periodic background task runner that runs the methods within it 60 times every second
 	 */
-	AnimationTimer gameLoop = new AnimationTimer() {
-
-		@Override
-		public void handle(long arg0) {
-			for (KeyLane lane : lanes) {
-				sendNote(lane.sends, lane.lane, lane.target);
-			}
-
-			if (timer.time() > songLength) {
-				Driver.setMenu(new GameOver(level, difficulty, pane, scoreCounter.getScore()));
-				cancel();
-			}
-			if (!songIsPlaying && timer.time() > 0.0) {
-				songIsPlaying = true;
-				Sound.playSong(song);
-			}
-		}
-	};
-
-	//starts the gameLoop, a periodic backround task runner that runs the methods within it 60 times every second
-	public void start() 
-	{
-		gameLoop.start();
+	public void start() {
+		timeline.play();
 	}
 
 	/**
-	 * Stops the gameloop
-	 * @throws LineUnavailableException
-	 * @throws IOException
-	 * @throws UnsupportedAudioFileException
+	 * Stops the gameLoop
 	 */
 	public void cancel() {
 		Driver.primaryStage.removeEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
-		missMute = true;
+		done = true;
 		Sound.stopSong();
 		Sound.playSong(Sound.MENU_SONG);
 		Driver.setMenuBackground();
-		gameLoop.stop();
+		timeline.stop();
+		timeline.getKeyFrames().clear(); // for some reason other instances of Timeline will have these keyframes if I don't clear.
 	}
 
 	/**
 	 * returns the pos in the lane array of the closest note to the goal
-	 * 
-	 * @param searchLane
+	 * @param searchLane The list of blocks to search in
 	 * @return the position of the note
 	 */
 	private int getClosestNote(ArrayList<Block> searchLane) {
 		int pos = 0;
 
 		for (int i = 0; i < searchLane.size(); i++) {
-			if (distanceToGoal(searchLane.get(i)) < distanceToGoal(searchLane.get(pos))) {
+			if (distanceToTarget(searchLane.get(i)) < distanceToTarget(searchLane.get(pos))) {
 				pos = i;
 			}
 		}
@@ -273,50 +207,49 @@ public class SongPlayer extends Pane {
 
 	/**
 	 * Returns the distance to the goal of the given note
-	 * 
-	 * @param note
-	 * @return
+	 * @param note Note to check the distance of
+	 * @return The distance between the note and the target in pixels
 	 */
-	private double distanceToGoal(Block note) {
+	private double distanceToTarget(Block note) {
 		return Math.abs((super.getHeight() - note.getTranslateY() + note.getHeight()/2) - lanes[0].target.rect.getLayoutY());
 	}
 
 	/**
 	 * When the player hits the key, checks the quality of the hit
 	 * @param lane the lane checking for a hit
-	 * @param button the button checking for a hit
 	 * @return 2 for a perfect hit, 1 for a good hit, 0 for a miss, and -1 if there are no notes to hit
 	 */
-	private int checkNote(ArrayList<Block> lane, Target button) {
-		if (lane.size() != 0 && super.isVisible())
-		{
-			double distance = distanceToGoal(lane.get(getClosestNote(lane)));
-			if (lane.size() > 0 && distance < super.getHeight() / 3) {
+	private int checkNote(Lane lane) {
+		ArrayList<Block> blocks = lane.blocks;
+        if (blocks.isEmpty() || done) {
+            return -1;
+        }
+        double distance = distanceToTarget(blocks.get(getClosestNote(blocks)));
+        if (distance < super.getHeight() / 3) {
 
-				FillTransition ft = new FillTransition(Duration.millis(500), button.rect);
-				ft.setToValue(button.getFillColor());
+            FillTransition ft = new FillTransition(Duration.millis(500), lane.target.rect);
+            ft.setToValue(lane.target.getFillColor());
 
-				super.getChildren().removeAll(lane.get(getClosestNote(lane)));
-				lane.remove(lane.get(getClosestNote(lane)));
-				if (distance < super.getHeight() / 12) {
-					ft.setFromValue(Color.WHITE);
-					ft.play();
-					scoreCounter.perfect();
-					return 2;
-				}
-				if (distance < super.getHeight() / 4) {
-					ft.setFromValue(Color.CYAN);
-					ft.play();
-					scoreCounter.good();
-					return 1;
-				}
-				ft.setFromValue(Color.RED);
-				ft.play();
-				scoreCounter.miss(false);
-				return 0;
-			}
-		}	
-		return -1;
+            lane.pane.getChildren().removeAll(blocks.get(getClosestNote(blocks)));
+            blocks.remove(blocks.get(getClosestNote(blocks)));
+            if (distance < super.getHeight() / 12) {
+                ft.setFromValue(Color.WHITE);
+                ft.play();
+                scoreCounter.perfect();
+                return 2;
+            }
+            if (distance < super.getHeight() / 4) {
+                ft.setFromValue(Color.CYAN);
+                ft.play();
+                scoreCounter.good();
+                return 1;
+            }
+            ft.setFromValue(Color.RED);
+            ft.play();
+            scoreCounter.miss();
+            return 0;
+        }
+        return -1;
 	}
 
 }

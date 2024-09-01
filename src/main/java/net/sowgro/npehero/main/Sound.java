@@ -28,6 +28,7 @@ public class Sound
         songMediaPlayer = new MediaPlayer(song);
         if (song == MENU_SONG) {
             songMediaPlayer.muteProperty().bind(Settings.enableMenuMusic.not());
+            songMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         }
         songMediaPlayer.volumeProperty().bind(Settings.musicVol);
         songMediaPlayer.play();

@@ -30,7 +30,7 @@ public class Target extends StackPane
         rect.setArcHeight(r);
         rect.setArcWidth(r);
         rect.setStroke(col);
-        rect.setStrokeWidth(5);
+        rect.setStrokeWidth(4);
     }
 
     public void setColor(Color c) {

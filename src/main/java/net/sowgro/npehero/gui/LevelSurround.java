@@ -1,5 +1,6 @@
 package net.sowgro.npehero.gui;
 
+import javafx.animation.AnimationTimer;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gameplay.SongPlayer;
 import javafx.geometry.Insets;
@@ -12,7 +13,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.levelapi.Difficulty;
-import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.gameplay.ScoreController;
 import net.sowgro.npehero.main.Page;
 import net.sowgro.npehero.main.Sound;
@@ -55,10 +55,10 @@ public class LevelSurround extends Page
 
         AnchorPane topBar = new AnchorPane();
         topBar.getChildren().addAll(buttonBox,titleTextBox);
-        topBar.setLeftAnchor(buttonBox, 0.0);
-        topBar.setRightAnchor(titleTextBox, 0.0);
-        topBar.setTopAnchor(buttonBox, 0.0);
-        topBar.setTopAnchor(titleTextBox, 0.0);
+        AnchorPane.setLeftAnchor(buttonBox, 0.0);
+        AnchorPane.setRightAnchor(titleTextBox, 0.0);
+        AnchorPane.setTopAnchor(buttonBox, 0.0);
+        AnchorPane.setTopAnchor(titleTextBox, 0.0);
         topBar.setPadding(new Insets(10));
         
 
@@ -79,8 +79,8 @@ public class LevelSurround extends Page
 
         AnchorPane scoreBox = new AnchorPane();
         scoreBox.getChildren().add(scoreTextBox);
-        scoreBox.setLeftAnchor(scoreTextBox, 0.0);
-        scoreBox.setBottomAnchor(scoreTextBox, 0.0);
+        AnchorPane.setLeftAnchor(scoreTextBox, 0.0);
+        AnchorPane.setBottomAnchor(scoreTextBox, 0.0);
         scoreBox.setPadding(new Insets(10));
 
         Text comboLabel = new Text();
@@ -100,17 +100,17 @@ public class LevelSurround extends Page
 
         AnchorPane comboBox = new AnchorPane();
         comboBox.getChildren().add(comboTextBox);
-        comboBox.setRightAnchor(comboTextBox, 0.0);
-        comboBox.setBottomAnchor(comboTextBox, 0.0);
+        AnchorPane.setRightAnchor(comboTextBox, 0.0);
+        AnchorPane.setBottomAnchor(comboTextBox, 0.0);
         comboBox.setPadding(new Insets(10));
 
-        game.minWidthProperty().bind(content.heightProperty().multiply(0.66));
+        game.minWidthProperty().bind(content.heightProperty().multiply(0.55));
         game.minHeightProperty().bind(content.heightProperty());
         game.getStyleClass().add("box");
 
 
-        comboBox.minWidthProperty().bind(Driver.primaryPane.widthProperty().subtract(game.minWidthProperty()).divide(2));
-        scoreBox.minWidthProperty().bind(Driver.primaryPane.widthProperty().subtract(game.minWidthProperty()).divide(2));
+        comboBox.minWidthProperty().bind(Driver.primaryPane.widthProperty().subtract(game.widthProperty()).divide(2));
+        scoreBox.minWidthProperty().bind(Driver.primaryPane.widthProperty().subtract(game.widthProperty()).divide(2));
 
         HBox centerBox = new HBox();
         centerBox.getChildren().addAll(comboBox, game, scoreBox);
@@ -121,7 +121,12 @@ public class LevelSurround extends Page
 
         content.getChildren().add(root);
 
-        game.start();
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                game.start();
+            }
+        }.start();
     }
 
     @Override
