@@ -171,11 +171,13 @@ public class DiffEditor extends Page
     // Duplicates of NotesEditor2 methods, should be made generic and combined
     private Block drawBlock(Note n) {
         Color color = diff.level.colors[n.lane];
-        Block b = new Block(color,20, 20, 5, false, n);
-        b.heightProperty().bind(scroll.widthProperty().divide(8));
-        b.widthProperty().bind(scroll.widthProperty().divide(8));
-        b.arcHeightProperty().bind(scroll.widthProperty().divide(25));
-        b.arcWidthProperty().bind(scroll.widthProperty().divide(25));
+        Block b = new Block(color, false, n);
+        var sizeBind = scroll.widthProperty().divide(8);
+        b.heightProperty().bind(sizeBind);
+        b.widthProperty().bind(sizeBind);
+        var arcBind = scroll.widthProperty().divide(30);
+        b.arcHeightProperty().bind(arcBind);
+        b.arcWidthProperty().bind(arcBind);
         b.strokeWidthProperty().bind(scroll.widthProperty().divide(120));
         b.layoutYProperty().bind(secondToScreenPos(n.time.add(0)));
         return b;

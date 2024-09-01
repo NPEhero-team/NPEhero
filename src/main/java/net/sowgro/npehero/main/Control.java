@@ -25,12 +25,13 @@ public enum Control {
     PLAY_PAUSE      ("Play / Pause", KeyCode.P),
     CLEAR_SELECTION ("Clear Selection", KeyCode.ESCAPE),
     SELECT_ALL      ("Select All", KeyCode.S),
+    SELECT_MULTIPLE ("Select Multiple (Hold)", KeyCode.CONTROL),
     LEGACY_PRINT    ("Print Time", KeyCode.Q),
     LEGACY_STOP     ("Stop Edit", KeyCode.ESCAPE);
 
     public static final List<Map.Entry<String, List<Control>>> sections = List.of(
                 entry("Gameplay",      List.of(LANE0, LANE1, LANE2, LANE3, LANE4)),
-                entry("Editor",        List.of(DELETE_NOTE, NOTE_UP, NOTE_DOWN, SCROLL_LOCK, PLAY_PAUSE, CLEAR_SELECTION, SELECT_ALL)),
+                entry("Editor",        List.of(DELETE_NOTE, NOTE_UP, NOTE_DOWN, SCROLL_LOCK, PLAY_PAUSE, CLEAR_SELECTION, SELECT_ALL, SELECT_MULTIPLE)),
                 entry("Legacy Editor", List.of(LEGACY_PRINT, LEGACY_STOP))
             );
 

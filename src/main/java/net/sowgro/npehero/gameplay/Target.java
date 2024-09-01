@@ -9,35 +9,24 @@ import javafx.scene.text.Text;
 
 public class Target extends StackPane
 {
-    private Color col;
-    private Color fill;
-    private Text label;
+    private final Color col;
+    private final Color fill;
     public Rectangle rect = new Rectangle();
-    public Target(Color c, double a, double b, int r, String key)
+
+    public Target(Color c, String key)
     {
-        label = new Text(key);
+        Text label = new Text(key);
         label.getStyleClass().add("t3");
         label.scaleXProperty().bind(super.widthProperty().divide(50));
         label.scaleYProperty().bind(label.scaleXProperty());
-        super.getChildren().addAll(rect,label);
+        super.getChildren().addAll(rect, label);
 
 
         col = c;
         fill = new Color(c.darker().getRed(), c.darker().getGreen(), c.darker().getBlue(), 0.45);
         rect.setFill(fill);
-        rect.setWidth(a);
-        rect.setHeight(b);
-        rect.setArcHeight(r);
-        rect.setArcWidth(r);
         rect.setStroke(col);
         rect.setStrokeWidth(4);
-    }
-
-    public void setColor(Color c) {
-        col = c;
-        fill = new Color(c.darker().getRed(), c.darker().getGreen(), c.darker().getBlue(), 0.45);
-        rect.setFill(fill);
-        rect.setStroke(c);
     }
 
     public Color getFillColor() {

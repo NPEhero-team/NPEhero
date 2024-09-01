@@ -1,5 +1,7 @@
 package net.sowgro.npehero.editor;
 
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
@@ -38,17 +40,19 @@ public class NotesEditor2 extends Page {
     Pane[] lanes;
     MediaPlayer m;
     Polygon playhead;
-    ListProperty<Block> activeNotes = new SimpleListProperty<>(FXCollections.observableArrayList());
+    ListProperty<Block> selectedNotes = new SimpleListProperty<>(FXCollections.observableArrayList());
     ListProperty<Note> noteList;
     DiffEditor prev;
     DoubleProperty newEndTime = new SimpleDoubleProperty(0);
+    CheckBox selectMultiple;
 
-    private HBox content = new HBox();
+    private final HBox content = new HBox();
 
     public NotesEditor2(Difficulty diff, DiffEditor prev) {
         this.diff = diff;
         noteList = diff.notes.deepCopyList();
         m = new MediaPlayer(diff.level.song);
+        m.volumeProperty().bind(Settings.musicVol);
         this.prev = prev;
 
         // Buttons
@@ -62,9 +66,10 @@ public class NotesEditor2 extends Page {
         actionBox.getChildren().addAll(noteLabel, addNote, delNote, moveNote);
 
         Label selectionLabel = new Label("Selection");
+        selectMultiple       = new CheckBox("Select multiple");
         Button selectAll     = new Button("Select All");
         Button clearSelect   = new Button("Clear");
-        actionBox.getChildren().addAll(selectionLabel, selectAll, clearSelect);
+        actionBox.getChildren().addAll(selectionLabel, selectMultiple, selectAll, clearSelect);
 
         Label playbackLabel     = new Label("Playback");
         ToggleButton play       = new ToggleButton("Play");
@@ -73,9 +78,9 @@ public class NotesEditor2 extends Page {
         Button setEnd         = new Button("End Here");
         actionBox.getChildren().addAll(playbackLabel, play, reset, scrollLock, setEnd);
 
-        delNote.disableProperty().bind(activeNotes.emptyProperty());
-        moveNote.disableProperty().bind(activeNotes.emptyProperty());
-        clearSelect.disableProperty().bind(activeNotes.emptyProperty());
+        delNote.disableProperty().bind(selectedNotes.emptyProperty());
+        moveNote.disableProperty().bind(selectedNotes.emptyProperty());
+        clearSelect.disableProperty().bind(selectedNotes.emptyProperty());
 
         ToggleGroup tg = new ToggleGroup();
         addNote.setToggleGroup(tg);
@@ -108,10 +113,16 @@ public class NotesEditor2 extends Page {
         );
         playhead.setFill(Color.WHITE);
         playheadLane.getChildren().add(playhead);
+        // TODO
 //        playhead.setOnMouseDragged(e -> {
 //            scroll.get
 //            playhead.layoutYProperty().bind(secondToScreenPos());
 //        });
+
+        Block trailBlazer = new Block(Color.BLACK, false, null);
+        trailBlazer.layoutYProperty().bind(playhead.translateYProperty().add(scroll.heightProperty().divide(2)));
+        trailBlazer.setVisible(false);
+        playheadLane.getChildren().add(trailBlazer);
 
         HBox scrollContent = new HBox();
         scrollContent.setAlignment(Pos.CENTER);
@@ -125,7 +136,11 @@ public class NotesEditor2 extends Page {
         playheadLine.setStartY(0);
         playheadLine.setEndY(0);
         playheadLine.setStroke(Color.WHITE);
-        playheadLine.layoutYProperty().bind(playhead.layoutYProperty());
+        playheadLine.layoutYProperty().bind(playhead.translateYProperty());
+//        playheadLine.layoutYProperty().bind(secondToScreenPos(m.getCurrentTime().toSeconds()));
+//        m.currentTimeProperty().addListener((_, _, _) -> {
+//            playheadLine.layoutYProperty().bind(secondToScreenPos(m.getCurrentTime().toSeconds()));
+//        });
 
         Line endLine = new Line();
         endLine.setStartX(0);
@@ -141,10 +156,9 @@ public class NotesEditor2 extends Page {
         stackPane.getChildren().addAll(scrollContent, contentOverlay);
 
         scroll.setContent(stackPane);
-//        scroll.prefWidthProperty().bind(super.prefWidthProperty().multiply(0.35));
-//        scroll.setMinWidth(400);
         scroll.prefHeightProperty().bind(content.heightProperty().multiply(0.75));
-        scroll.prefWidthProperty().bind(scroll.prefHeightProperty().multiply(0.70));
+        scroll.prefWidthProperty().bind(scroll.heightProperty().multiply(0.72));
+        scroll.minWidthProperty().bind(scroll.heightProperty().multiply(0.72));
         scroll.getStyleClass().remove("scroll-pane");
         scroll.getStyleClass().add("box");
         scroll.setPadding(new Insets(5));
@@ -176,8 +190,9 @@ public class NotesEditor2 extends Page {
             diff.endTime = newEndTime.get();
             diff.bpm = 0.0;
             try {
-                diff.readMetadata();
+                diff.writeMetadata();
             } catch (IOException e) {
+                e.printStackTrace();
                 // TODO
             }
             Sound.playSfx(Sound.BACKWARD);
@@ -236,24 +251,31 @@ public class NotesEditor2 extends Page {
         // write notes on key press
         content.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             KeyCode k = e.getCode();
-            if (k == Control.LANE0.getKey())           { WriteNote(0); }
-            if (k == Control.LANE1.getKey())           { WriteNote(1); }
-            if (k == Control.LANE2.getKey())           { WriteNote(2); }
-            if (k == Control.LANE3.getKey())           { WriteNote(3); }
-            if (k == Control.LANE4.getKey())           { WriteNote(4); }
-            if (k == Control.NOTE_DOWN.getKey())       { MoveNoteDown(); }
-            if (k == Control.NOTE_UP.getKey())         { MoveNoteUp(); }
-            if (k == Control.DELETE_NOTE.getKey())     { delNote.fire(); }
-            if (k == Control.CLEAR_SELECTION.getKey()) { clearSelect.fire(); }
-            if (k == Control.SCROLL_LOCK.getKey())     { scrollLock.fire(); }
-            if (k == Control.PLAY_PAUSE.getKey())      { play.fire(); }
-            if (k == Control.SELECT_ALL.getKey())      { selectAll.fire(); }
-            e.consume();
+            if (k == Control.LANE0.getKey())           { e.consume(); WriteNote(0); }
+            if (k == Control.LANE1.getKey())           { e.consume(); WriteNote(1); }
+            if (k == Control.LANE2.getKey())           { e.consume(); WriteNote(2); }
+            if (k == Control.LANE3.getKey())           { e.consume(); WriteNote(3); }
+            if (k == Control.LANE4.getKey())           { e.consume(); WriteNote(4); }
+            if (k == Control.NOTE_DOWN.getKey())       { e.consume(); MoveNoteDown(); }
+            if (k == Control.NOTE_UP.getKey())         { e.consume(); MoveNoteUp(); }
+            if (k == Control.DELETE_NOTE.getKey())     { e.consume(); delNote.fire(); }
+            if (k == Control.CLEAR_SELECTION.getKey()) { e.consume(); clearSelect.fire(); }
+            if (k == Control.SCROLL_LOCK.getKey())     { e.consume(); scrollLock.fire(); }
+            if (k == Control.PLAY_PAUSE.getKey())      { e.consume(); play.fire(); }
+            if (k == Control.SELECT_ALL.getKey())      { e.consume(); selectAll.fire(); }
+            if (k == Control.SELECT_MULTIPLE.getKey()) { e.consume(); selectMultiple.fire(); }
+        });
+        content.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+            KeyCode k = e.getCode();
+            if (k == Control.SELECT_MULTIPLE.getKey()) { e.consume(); selectMultiple.fire(); }
         });
 
-        m.currentTimeProperty().addListener(_ -> {
-            // TODO
-            playhead.layoutYProperty().bind(secondToScreenPos(m.getCurrentTime().toSeconds()));
+        m.currentTimeProperty().addListener((_ ,oldValue ,newValue) -> {
+            var diffr = newValue.toSeconds() - oldValue.toSeconds();
+            TranslateTransition anim = new TranslateTransition(Duration.seconds(0.09), playhead);
+            anim.byYProperty().bind(secondToScreenPos(diffr));
+            anim.setInterpolator(Interpolator.LINEAR);
+            anim.play();
         });
 
         play.setOnAction(_ -> {
@@ -271,7 +293,7 @@ public class NotesEditor2 extends Page {
             Sound.playSfx(Sound.FORWARD);
             if (scrollLock.isSelected()) {
                 // vvalue takes in a value between 0 and 1 NOT a pixel value
-                scroll.vvalueProperty().bind(playhead.layoutYProperty().subtract(scroll.heightProperty().divide(2)).divide(scrollContent.heightProperty().subtract(scroll.heightProperty())));
+                scroll.vvalueProperty().bind(playhead.translateYProperty().subtract(scroll.heightProperty().divide(2)).divide(scrollContent.heightProperty().subtract(scroll.heightProperty())));
             }
             else {
                 scroll.vvalueProperty().unbind();
@@ -287,25 +309,25 @@ public class NotesEditor2 extends Page {
 
         delNote.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
-            activeNotes.forEach(e -> {
+            selectedNotes.forEach(e -> {
                 noteList.remove(e.note);
             });
-            activeNotes.clear();
+            selectedNotes.clear();
         });
 
         clearSelect.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
-            activeNotes.forEach(e -> e.setFill(e.color));
-            activeNotes.clear();
+//            selectedNotes.forEach(e -> e.setStroke(Color.TRANSPARENT));
+            selectedNotes.clear();
         });
 
         selectAll.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
-            activeNotes.clear();
+            selectedNotes.clear();
             for (Pane lane : lanes) {
-                lane.getChildren().forEach(e -> activeNotes.add((Block) e));
+                lane.getChildren().forEach(e -> selectedNotes.add((Block) e));
             }
-            activeNotes.forEach(e -> e.setFill(Color.WHITE));
+//            selectedNotes.forEach(e -> e.setStroke(Color.WHITE));
         });
 
         Pane addHelp = addHelp();
@@ -341,7 +363,7 @@ public class NotesEditor2 extends Page {
 
         setEnd.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
-            double tmp = screenPosToSecond(playhead.getLayoutY());
+            double tmp = screenPosToSecond(playhead.getTranslateY());
             if (Math.round(tmp*10)/10 == Math.round(m.getTotalDuration().toSeconds() * 10)/10) {
                 newEndTime.set(0);
             }
@@ -350,12 +372,11 @@ public class NotesEditor2 extends Page {
             }
         });
 
-        activeNotes.addListener((_, _, _) -> {
-            if (activeNotes.isEmpty()) {
-                selectionLabel.setText("Selection");
-            }
-            else {
-                selectionLabel.setText("Selection (" + activeNotes.size() + ")");
+        selectedNotes.addListener((ListChangeListener<? super Block>) (arg) -> {
+            selectionLabel.setText("Selection (" + selectedNotes.size() + ")");
+            while (arg.next()) {
+                arg.getAddedSubList().forEach(n -> n.setStroke(Color.WHITE));
+                arg.getRemoved().forEach(n -> n.setStroke(Color.TRANSPARENT));
             }
         });
     }
@@ -381,21 +402,27 @@ public class NotesEditor2 extends Page {
 
     private Block drawBlock(Note n) {
         Color color = diff.level.colors[n.lane];
-        Block b = new Block(color,20, 20, 5, false, n);
-        b.heightProperty().bind(scroll.widthProperty().divide(8));
-        b.widthProperty().bind(scroll.widthProperty().divide(8));
-        b.arcHeightProperty().bind(scroll.widthProperty().divide(25));
-        b.arcWidthProperty().bind(scroll.widthProperty().divide(25));
+        Block b = new Block(color, false, n);
+        var sizeBind = scroll.widthProperty().divide(8);
+        b.heightProperty().bind(sizeBind);
+        b.widthProperty().bind(sizeBind);
+        var arcBind = scroll.widthProperty().divide(30);
+        b.arcHeightProperty().bind(arcBind);
+        b.arcWidthProperty().bind(arcBind);
         b.strokeWidthProperty().bind(scroll.widthProperty().divide(120));
         b.layoutYProperty().bind(secondToScreenPos(n.time.add(0)));
         b.setOnMouseClicked(_ -> {
-            if (activeNotes.contains(b)) {
-                activeNotes.remove(b);
-                b.setFill(b.color);
+            if (selectedNotes.contains(b)) {
+                selectedNotes.remove(b);
+//                b.setStroke(Color.TRANSPARENT);
             }
             else {
-                activeNotes.add(b);
-                b.setFill(Color.WHITE);
+                if (!selectMultiple.isSelected()) {
+//                    selectedNotes.forEach(e -> e.setStroke(Color.TRANSPARENT));
+                    selectedNotes.clear();
+                }
+                selectedNotes.add(b);
+//                b.setStroke(Color.WHITE);
             }
         });
         return b;
@@ -429,26 +456,26 @@ public class NotesEditor2 extends Page {
     }
 
     private void WriteNote(int col) {
-        Note tmp = new Note(screenPosToSecond(playhead.getLayoutY()), col);
+        Note tmp = new Note(screenPosToSecond(playhead.getTranslateY()), col);
         noteList.add(tmp);
     }
 
     private void MoveNoteUp() {
-        activeNotes.forEach(n -> n.note.time.setValue(n.note.time.get() - 0.01));
+        selectedNotes.forEach(n -> n.note.time.setValue(n.note.time.get() - 0.01));
     }
 
     private void MoveNoteDown() {
-        activeNotes.forEach(n -> n.note.time.setValue(n.note.time.get() + 0.01));
+        selectedNotes.forEach(n -> n.note.time.setValue(n.note.time.get() + 0.01));
     }
 
     private Pane addHelp() {
         Label l1 = new Label("Use the following keys");
         HBox hb = new HBox(
-                new Target(diff.level.colors[0], 40, 40, 10, Control.LANE0.targetString()),
-                new Target(diff.level.colors[1], 40, 40, 10, Control.LANE1.targetString()),
-                new Target(diff.level.colors[2], 40, 40, 10, Control.LANE2.targetString()),
-                new Target(diff.level.colors[3], 40, 40, 10, Control.LANE3.targetString()),
-                new Target(diff.level.colors[4], 40, 40, 10, Control.LANE4.targetString())
+                createTarget(diff.level.colors[0], Control.LANE0),
+                createTarget(diff.level.colors[1], Control.LANE1),
+                createTarget(diff.level.colors[2], Control.LANE2),
+                createTarget(diff.level.colors[3], Control.LANE3),
+                createTarget(diff.level.colors[4], Control.LANE4)
         );
         hb.setSpacing(10);
         hb.setAlignment(Pos.CENTER_LEFT);
@@ -462,7 +489,12 @@ public class NotesEditor2 extends Page {
 
     private Pane moveHelp() {
         Label l1 = new Label("Use the");
-        HBox hb = new HBox(new Target(Color.BLACK, 40, 40, 10, Control.NOTE_UP.targetString()), new Label("and"), new Target(Color.BLACK, 40, 40, 10, Control.NOTE_DOWN.targetString()), new Label("keys"));
+        HBox hb = new HBox(
+                createTarget(Color.BLACK, Control.NOTE_UP),
+                new Label("and"),
+                createTarget(Color.BLACK, Control.NOTE_DOWN),
+                new Label("keys")
+        );
         hb.setSpacing(10);
         hb.setAlignment(Pos.CENTER_LEFT);
         Label l2 = new Label("to move the selected \nnote(s) up and down.");
@@ -472,5 +504,15 @@ public class NotesEditor2 extends Page {
         ret.getStyleClass().add("box");
         ret.setLayoutY(120);
         return ret;
+    }
+
+    private Target createTarget(Color color, Control control) {
+        Target target = new Target(color, control.targetString());
+        target.rect.setWidth(40);
+        target.rect.setHeight(40);
+        target.rect.setArcHeight(5);
+        target.rect.setArcWidth(5);
+        target.rect.setStrokeWidth(3);
+        return target;
     }
 }

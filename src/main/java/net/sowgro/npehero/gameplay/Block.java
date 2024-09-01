@@ -16,24 +16,20 @@ public class Block extends Rectangle
     public Color color;
     public Note note;
 
-    public Block(Color color, double width, double height, int cornerRadius, boolean useDropShadow, Note note)
+    public Block(Color color, boolean useDropShadow, Note note)
     {
         this.note = note;
         this.color = color;
        
         super.setFill(color);
-        super.setWidth(width);
-        super.setHeight(height);
-        super.setArcHeight(cornerRadius);
-        super.setArcWidth(cornerRadius);
 
         if (useDropShadow) {
             enableDropShadow();
         }
     }
 
-    public Block(Color color, double width, double height, int cornerRadius) {
-        this(color, width, height, cornerRadius, true, null);
+    public Block(Color color, Note note) {
+        this(color, true, note);
     }
 
     public void enableDropShadow() {

@@ -36,7 +36,7 @@ public class DiffList extends Page
         TableColumn<Difficulty,String> titleCol = new TableColumn<>("Name");
         TableColumn<Difficulty,String> validCol = new TableColumn<>("Valid?");
 
-        titleCol.prefWidthProperty().bind(diffs.widthProperty().multiply(0.4));
+        titleCol.prefWidthProperty().bind(diffs.widthProperty().multiply(0.5));
         validCol.prefWidthProperty().bind(diffs.widthProperty().multiply(0.4));
 
         diffs.getColumns().add(titleCol);

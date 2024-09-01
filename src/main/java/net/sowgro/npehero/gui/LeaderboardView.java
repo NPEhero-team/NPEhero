@@ -16,7 +16,7 @@ import net.sowgro.npehero.main.*;
 
 public class LeaderboardView extends Page
 {
-    private HBox content = new HBox();
+    private final HBox content = new HBox();
 
     public LeaderboardView(Difficulty diff, Page prev)
     {
@@ -46,12 +46,12 @@ public class LeaderboardView extends Page
         scores.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.30));
         scores.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
 
-        scoreCol.setSortType(SortType.DESCENDING);
+        scoreCol.setSortType(SortType.ASCENDING);
         scores.getSortOrder().add(scoreCol);
 
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> {
+        exit.setOnAction(_ -> {
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
         });

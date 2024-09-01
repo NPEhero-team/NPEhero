@@ -249,7 +249,7 @@ Slider:focused .thumb{
     -fx-text-fill: #a8a8a8;
 }
 
-CheckBox {
+.box CheckBox {
     -fx-text-fill: white;
 }
 

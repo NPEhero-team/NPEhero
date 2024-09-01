@@ -60,7 +60,7 @@ public class SongPlayer extends HBox {
         // create targets
         for (int i = 0; i < lanes.length; i++) {
             lanes[i] = new Lane();
-            var tmp = new Target(level.colors[i], 50, 50, 20, Control.lanes[i].targetString());
+            var tmp = new Target(level.colors[i], Control.lanes[i].targetString());
             bindTarget(tmp);
             lanes[i].target = tmp;
         }
@@ -79,7 +79,7 @@ public class SongPlayer extends HBox {
             }
         }));
         // schedule the game over screen to show at the end
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(songLength + START_DELAY), _ -> {
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(songLength + FALL_TIME + START_DELAY), _ -> {
             Driver.setMenu(new GameOver(level, diff, prev, scoreCounter.getScore()));
             cancel();
         }));
@@ -125,7 +125,7 @@ public class SongPlayer extends HBox {
     public void sendNote(Note note) {
         Lane lane = lanes[note.lane];
 
-        Block block = new Block(lane.target.getColor(), 50, 50, 15);
+        Block block = new Block(lane.target.getColor(), note);
         block.setCache(true);
         block.setCacheHint(CacheHint.SPEED);
         block.xProperty().bind(lane.pane.widthProperty().subtract(block.widthProperty()).divide(2));
@@ -136,7 +136,7 @@ public class SongPlayer extends HBox {
 
         TranslateTransition anim = new TranslateTransition(Duration.seconds(FALL_TIME + 0.105));
         anim.setInterpolator(Interpolator.LINEAR);
-        anim.byYProperty().bind(super.heightProperty().add(block.getHeight()).add(75));
+        anim.byYProperty().bind(lane.pane.heightProperty().add(block.getHeight()).add(75));
         anim.setNode(block);
         anim.play();
         anim.setOnFinished(_ -> {
@@ -157,7 +157,7 @@ public class SongPlayer extends HBox {
      */
     private void bindTarget(Target target) {
         bindBlock(target.rect);
-//		target.rect.strokeWidthProperty().bind(super.widthProperty().divide(120));
+		target.rect.strokeWidthProperty().bind(super.heightProperty().multiply(4/1080.0));
     }
 
     private void bindBlock(Rectangle block) {
