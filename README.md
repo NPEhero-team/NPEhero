@@ -10,7 +10,6 @@ Goals:
 - [ ] Installer / Linux package
 
 Todo - needs design:
-- Tweak design of songPlayer
 - Redesign level editor menus
 - Improve errorList and error handling
 

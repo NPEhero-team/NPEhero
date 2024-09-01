@@ -9,7 +9,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
-import net.sowgro.npehero.gameplay.Timer;
 import net.sowgro.npehero.Driver;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,7 +25,6 @@ public class NotesEditor extends Page
     String t1 = "Press Start to begin recording. Use the same keys. Note: existing notes will be overwritten.";
     String t2 = "Now recording. Press Stop or " + Control.LEGACY_STOP.getKey().toString() + " to finish";
     Difficulty diff;
-    Timer timer;
     PrintWriter writer;
 
     private HBox content = new HBox();
@@ -71,33 +69,33 @@ public class NotesEditor extends Page
 //        }
 
         Scene scene = Driver.primaryStage.getScene();
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-			if (e.getCode() == Control.LANE0.getKey()) {
-				writer.println("d"+timer);
-                cur.setText("d"+timer);
-			}
-			if (e.getCode() == Control.LANE1.getKey()) {
-				writer.println("f"+timer);
-                cur.setText("f"+timer);
-			}
-			if (e.getCode() == Control.LANE2.getKey()) {
-				writer.println("s"+timer);
-                cur.setText("s"+timer);
-			}
-			if (e.getCode() == Control.LANE3.getKey()) {
-				writer.println("j"+timer);
-                cur.setText("j"+timer);
-			}
-			if (e.getCode() == Control.LANE4.getKey()) {
-				writer.println("k"+timer);
-                cur.setText("k"+timer);
-			}
-            if (e.getCode() == Control.LEGACY_STOP.getKey())
-            {
-                stop();
-            }
-            e.consume();
-		});
+//        scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+//			if (e.getCode() == Control.LANE0.getKey()) {
+//				writer.println("d"+timer);
+//                cur.setText("d"+timer);
+//			}
+//			if (e.getCode() == Control.LANE1.getKey()) {
+//				writer.println("f"+timer);
+//                cur.setText("f"+timer);
+//			}
+//			if (e.getCode() == Control.LANE2.getKey()) {
+//				writer.println("s"+timer);
+//                cur.setText("s"+timer);
+//			}
+//			if (e.getCode() == Control.LANE3.getKey()) {
+//				writer.println("j"+timer);
+//                cur.setText("j"+timer);
+//			}
+//			if (e.getCode() == Control.LANE4.getKey()) {
+//				writer.println("k"+timer);
+//                cur.setText("k"+timer);
+//			}
+//            if (e.getCode() == Control.LEGACY_STOP.getKey())
+//            {
+//                stop();
+//            }
+//            e.consume();
+//		});
 
         Driver.primaryStage.setOnCloseRequest(e -> stop());
     }
@@ -110,17 +108,17 @@ public class NotesEditor extends Page
     private void start()
     {
         Sound.playSong(new Media(diff.level.song.toString()));
-        timer = new Timer(diff.bpm);
+//        timer = new Timer(diff.bpm);
         help.setText(t2);
     }
 
     private void stop()
     {
-        try 
+        try
         {
             Sound.stopSong();
 //            diff.numBeats = (int)Double.parseDouble(timer.toString());
-            timer = null;
+//            timer = null;
             writer.close();
             help.setText(t1);
         }
