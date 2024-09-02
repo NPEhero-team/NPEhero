@@ -1,6 +1,7 @@
 package net.sowgro.npehero.editor;
 
 import javafx.beans.binding.DoubleBinding;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -18,6 +19,7 @@ import java.io.IOException;
 
 public class DiffEditor extends Page
 {
+    private final TextField titleEntry;
     Difficulty diff;
     ScrollPane scroll;
 
@@ -29,12 +31,45 @@ public class DiffEditor extends Page
         this.diff = diff;
         this.prev = prev;
 
+        Label optionsLabel = new Label("Options");
+
         Label folderNameLabel = new Label("Folder name");
         TextField folderName = new TextField(diff.thisDir.getName());
         folderName.setDisable(true);
 
         Label titleLabel = new Label("Title");
-        TextField title = new TextField(diff.title);
+        titleEntry = new TextField(diff.title);
+
+        Label scoresLabel = new Label("Scores");
+        Button clearScores = new Button("Clear leaderboard");
+        clearScores.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            diff.leaderboard.entries.clear();
+            try {
+                diff.leaderboard.save();
+            } catch (IOException e) {
+                Driver.setMenu(new ErrorDisplay("Failed to clear the leaderboard:\n"+e, this));
+            }
+        });
+
+        Label playLabel = new Label("Play");
+        Button playLevel = new Button("Play level");
+        playLevel.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
+            if (diff.isValid() && diff.level.isValid()) {
+                Driver.setMenu(new LevelSurround(diff, this));
+            }
+            else {
+                Driver.setMenu(new ErrorDisplay("This Level is not valid!\nCheck that all required fields\nare populated.", this));
+            }
+        });
+
+        VBox options = new VBox(folderNameLabel, folderName, titleLabel, titleEntry, scoresLabel, clearScores, playLabel, playLevel);
+        options.setSpacing(10);
+//        options.getStyleClass().add("box");
+        options.setPadding(new Insets(5));
+
+        ScrollPane optionsScroll = new ScrollPane(options);
 
         Button editNotes = new Button("Edit notes");
         editNotes.setOnAction(_ -> {
@@ -62,43 +97,6 @@ public class DiffEditor extends Page
                 this,
                 new NotesEditor(diff, this))
             );
-        });
-
-        Label scoresLable = new Label("Scores");
-        Button editScores = new Button("Clear leaderboard");
-        editScores.setOnAction(_ -> {
-            Sound.playSfx(Sound.FORWARD);
-            diff.leaderboard.entries.clear();
-            try {
-                diff.leaderboard.save();
-            } catch (IOException e) {
-                Driver.setMenu(new ErrorDisplay("Failed to clear the leaderboard:\n"+e, this));
-            }
-        });
-
-        Button playLevel = new Button("Play level");
-        playLevel.setOnAction(_ -> {
-            Sound.playSfx(Sound.FORWARD);
-            if (diff.isValid() && diff.level.isValid()) {
-                Driver.setMenu(new LevelSurround(diff, this));
-            }
-            else {
-                Driver.setMenu(new ErrorDisplay("This Level is not valid!\nCheck that all required fields\nare populated.", this));
-            }
-        });
-
-        Button save = new Button("Save");
-        save.setOnAction(_ -> { //assigns text fields to values
-            Sound.playSfx(Sound.FORWARD);
-            diff.title = title.getText();
-//            diff.bpm = Double.parseDouble(bpm.getText());
-//            diff.numBeats = Integer.parseInt(numBeats.getText());
-            try {
-                diff.writeMetadata();
-            } catch (IOException e) {
-                //TODO
-                throw new RuntimeException(e);
-            }
         });
 
         HBox scrollContent = new HBox();
@@ -136,12 +134,21 @@ public class DiffEditor extends Page
         notePreview.setSpacing(10);
 
         VBox left = new VBox();
-        left.getChildren().addAll(folderNameLabel,folderName,titleLabel,title,scoresLable,editScores,playLevel);
-        left.setSpacing(10);
+        left.getChildren().addAll(/*optionsLabel, */optionsScroll);
+        options.setSpacing(10);
+        optionsScroll.setPrefWidth(500);
+        optionsScroll.getStyleClass().remove("scroll-pane");
+        optionsScroll.getStyleClass().add("box");
+        optionsScroll.setFitToWidth(true);
+        optionsScroll.setPadding(new Insets(5));
+//        optionsft.setPrefHeight();
 
         HBox main = new HBox();
         main.getChildren().addAll(left, notePreview);
-        main.setSpacing(30);
+        main.setSpacing(10);
+        main.prefHeightProperty().bind(content.heightProperty().multiply(0.75));
+        main.maxWidthProperty().bind(content.widthProperty().multiply(0.95));
+        optionsScroll.prefHeightProperty().bind(main.heightProperty());
 
         Button exit = new Button();
         exit.setText("Back");
@@ -150,7 +157,7 @@ public class DiffEditor extends Page
             Driver.setMenu(prev);
         });
 
-        HBox bottom = new HBox(exit,save);
+        HBox bottom = new HBox(exit);
         bottom.setSpacing(10);
         bottom.setAlignment(Pos.CENTER);
 
@@ -166,6 +173,16 @@ public class DiffEditor extends Page
     @Override
     public Pane getContent() {
         return content;
+    }
+
+    @Override
+    public void onLeave() {
+        diff.title = titleEntry.getText();
+        try {
+            diff.writeMetadata();
+        } catch (IOException e) {
+            e.printStackTrace(); //TODO
+        }
     }
 
     // Duplicates of NotesEditor2 methods, should be made generic and combined

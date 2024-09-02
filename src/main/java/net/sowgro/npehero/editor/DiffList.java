@@ -59,7 +59,6 @@ public class DiffList extends Page
         });
 
         diffs.setPrefWidth(400);
-        diffs.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.67));
 
         error = new Label();
         errorBox = new HBox(error);
@@ -150,6 +149,8 @@ public class DiffList extends Page
         HBox main = new HBox();
         main.getChildren().addAll(new VBox(diffs, errorBox),buttons);
         main.setSpacing(10);
+        main.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.67));
+        diffs.prefHeightProperty().bind(main.heightProperty());
 
         Button exit = new Button();
         exit.setText("Back");

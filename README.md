@@ -10,15 +10,15 @@ Goals:
 - [ ] Installer / Linux package
 
 Todo - needs design:
-- Redesign level editor menus
 - Improve errorList and error handling
+- tweak game end
+- make noteseditor2 resizeable
 
 Todo - bugs:
+- fix noteseditor1
 - fix reliance on local font
 - Fix notesEditor note preview being too small with no notes
 - Properly center background image
-- NotesEditor2: Clicking with the playhead requires pressing play first
-
 
 # Installation
 Coming soon.

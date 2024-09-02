@@ -82,7 +82,7 @@ public class Difficulty implements Comparable<Difficulty>
      * @throws IOException If there is a problem writing to the file
      */
     public void writeMetadata() throws IOException {
-        if (!jsonFile.createNewFile()) {
+        if (!jsonFile.exists() && !jsonFile.createNewFile()) {
             throw new IOException("Could not create file " + jsonFile.getAbsolutePath());
         }
         Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class); // start with previous values

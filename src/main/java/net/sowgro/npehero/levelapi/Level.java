@@ -14,6 +14,10 @@ import java.util.Map;
 
 public class Level implements Comparable<Level>{
 
+    public static final String SONG_FILE = "song";
+    public static final String BACKGROUND_FILE = "background";
+    public static final String PREVIEW_FILE = "preview";
+
     public final File dir;
 
     public String title = "Unnamed";
@@ -28,6 +32,9 @@ public class Level implements Comparable<Level>{
 
     private final File jsonFile;
     private final Gson jsonParser = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+    private File songFile;
+    private File previewFile;
+    private File backgroundFile;
 
     /**
      * Creates a new level
@@ -47,20 +54,28 @@ public class Level implements Comparable<Level>{
      * Check for a song file, background file and preview image file
      */
     public void readFiles() {
-
+        songFile = null;
+        previewFile = null;
+        backgroundFile = null;
+        song = null;
+        background = null;
+        preview = null;
         File[] fileList = dir.listFiles();
         if (fileList == null) {
             return;
         }
         for (File file : fileList) {
             String fileName = file.getName();
-            if (fileName.contains("song")) {
+            if (fileName.contains(SONG_FILE)) {
+                songFile = file;
                 song = new Media(file.toURI().toString());
             }
-            else if (fileName.contains("background")) {
+            else if (fileName.contains(BACKGROUND_FILE)) {
+                backgroundFile = file;
                 background = new Image(file.toURI().toString());
             }
-            else if (fileName.contains("preview")) {
+            else if (fileName.contains(PREVIEW_FILE)) {
+                previewFile = file;
                 preview = new Image(file.toURI().toString());
             }
         }
@@ -108,7 +123,9 @@ public class Level implements Comparable<Level>{
      * @throws IOException If there is a problem writing to the file.
      */
     public void writeMetadata() throws IOException {
-        jsonFile.createNewFile();
+        if (!jsonFile.exists() && !jsonFile.createNewFile()) {
+            throw new IOException("Could not create file " + jsonFile.getAbsolutePath());
+        }
         Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
         data.put("title", title);
         data.put("artist", artist);
@@ -133,6 +150,24 @@ public class Level implements Comparable<Level>{
     public void addFile(File source, String name) throws IOException {
         name = name + "." + getFileExtension(source);
         Files.copy(source.toPath(), new File(dir, name).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        readFiles();
+    }
+
+    /**
+     * Deletes a file from the level's directory
+     * @param name the new file name EXCLUDING the extension.
+     * @throws IOException If there is a problem deleting the file
+     */
+    public void removeFile(String name) throws IOException {
+        File f = switch (name) {
+            case SONG_FILE -> songFile;
+            case BACKGROUND_FILE -> backgroundFile;
+            case PREVIEW_FILE -> previewFile;
+            default -> throw new IllegalArgumentException("Invalid file name " + name);
+        };
+        if (!f.delete()) {
+            throw new IOException("Failed to delete file " + f.getAbsolutePath());
+        }
         readFiles();
     }
 

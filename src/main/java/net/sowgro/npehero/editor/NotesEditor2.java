@@ -165,8 +165,12 @@ public class NotesEditor2 extends Page {
 
         Pane helpBox = new Pane();
 
+        ScrollPane actionScroll = new ScrollPane(actionBox);
+        actionScroll.getStyleClass().remove("scroll-pane");
+        actionScroll.prefWidthProperty().bind(actionBox.widthProperty().add(20));
+
         HBox main = new HBox();
-        main.getChildren().addAll(scroll, actionBox, helpBox);
+        main.getChildren().addAll(scroll, actionScroll, helpBox);
         main.setSpacing(10);
 
         Button exit = new Button();
