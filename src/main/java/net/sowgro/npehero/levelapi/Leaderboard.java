@@ -42,6 +42,7 @@ public class Leaderboard {
      */
     public void save() throws IOException {
         file.createNewFile();
+        @SuppressWarnings("unchecked")
         List<Map<String, Object>> data = json.fromJson(new FileReader(file), List.class);
         for (LeaderboardEntry cur : entries) {
             Map<String, Object> obj = new HashMap<>();
@@ -63,6 +64,7 @@ public class Leaderboard {
         if (!file.exists()) {
             return;
         }
+        @SuppressWarnings("unchecked")
         List<Map<String, Object>> data = json.fromJson(new FileReader(file), List.class);
         if (data == null) {
             return;

@@ -50,6 +50,7 @@ public class Difficulty implements Comparable<Difficulty>
         if (!jsonFile.exists()) {
             return;
         }
+        @SuppressWarnings("unchecked")
         Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
         if (data == null) {
             data = new HashMap<>();
@@ -85,6 +86,7 @@ public class Difficulty implements Comparable<Difficulty>
         if (!jsonFile.exists() && !jsonFile.createNewFile()) {
             throw new IOException("Could not create file " + jsonFile.getAbsolutePath());
         }
+        @SuppressWarnings("unchecked")
         Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class); // start with previous values
         if (data == null) {
             data = new HashMap<>();

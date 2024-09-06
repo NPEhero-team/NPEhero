@@ -2,9 +2,7 @@ package net.sowgro.npehero.gui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -89,6 +87,33 @@ public class SettingsEditor extends Page
         controlsBox.getChildren().addAll(controlsLabel, controlsButton);
         controlsBox.setPadding(new Insets(10));
 
+        Label scaleLabel = new Label("UI Scale");
+
+        ToggleButton[] scaleOptions = new ToggleButton[4];
+        for (int i = 0; i < scaleOptions.length; i++) {
+            var val = i * 0.5 + 0.5;
+            ToggleButton tb = new ToggleButton((int)(val * 100) + "%");
+            tb.setUserData(val);
+            tb.getStyleClass().remove("radio-button");
+            tb.getStyleClass().add("button");
+            if (val == Settings.guiScale.get()) {
+                tb.setSelected(true);
+            }
+            scaleOptions[i] = tb;
+        }
+
+        ToggleGroup tg = new ToggleGroup();
+        tg.getToggles().addAll(scaleOptions);
+        tg.selectedToggleProperty().addListener((_, _, newt) -> {
+            Settings.guiScale.set((Double)newt.getUserData());
+        });
+
+        HBox scaleSlider = new HBox(scaleOptions);
+
+        VBox scaleBox = new VBox(scaleLabel, scaleSlider);
+        scaleBox.getStyleClass().add("box");
+        scaleBox.setPadding(new Insets(10));
+
         Button exit = new Button();
         exit.setText("Back");
         exit.setOnAction(e -> {
@@ -107,9 +132,8 @@ public class SettingsEditor extends Page
         VBox options = new VBox();
         options.setSpacing(10);
         options.setAlignment(Pos.CENTER);
-        options.getChildren().addAll(musicBox,SFXBox,fullBox,controlsBox,buttonBox);
-        options.maxWidthProperty().bind(content.prefWidthProperty().multiply(0.25));
-        options.setMinWidth(400);
+        options.getChildren().addAll(musicBox,SFXBox,fullBox,controlsBox, scaleBox, buttonBox);
+//        options.setPrefWidth(450);
         options.prefHeightProperty().bind(content.prefHeightProperty());
 
         content.getChildren().add(options);

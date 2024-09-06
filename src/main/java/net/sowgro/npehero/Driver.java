@@ -54,6 +54,13 @@ public class Driver extends Application
         StackPane root = new StackPane(backgroundImage2, backgroundImage, primaryPane);
         Scene primaryScene = new Scene(root, 800,600);
 
+        primaryPane.scaleXProperty().bind(Settings.guiScale);
+        primaryPane.scaleYProperty().bind(Settings.guiScale);
+        primaryPane.minHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
+        primaryPane.minWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
+        primaryPane.maxHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
+        primaryPane.maxWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
+
 //        Cant figure out how to center this
         backgroundImage.fitHeightProperty().bind(primaryScene.heightProperty());
         backgroundImage2.fitHeightProperty().bind(primaryScene.heightProperty());

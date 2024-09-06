@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
 import java.nio.file.Files;
@@ -69,6 +70,7 @@ public class Level implements Comparable<Level>{
             if (fileName.contains(SONG_FILE)) {
                 songFile = file;
                 song = new Media(file.toURI().toString());
+                new MediaPlayer(song); // allows song.getDuration() to return
             }
             else if (fileName.contains(BACKGROUND_FILE)) {
                 backgroundFile = file;
@@ -90,6 +92,7 @@ public class Level implements Comparable<Level>{
         if (!jsonFile.exists()) {
             return;
         }
+        @SuppressWarnings("unchecked")
         Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
         title = (String) data.getOrDefault("title", title);
         artist = (String) data.getOrDefault("artist", artist);
@@ -126,6 +129,7 @@ public class Level implements Comparable<Level>{
         if (!jsonFile.exists() && !jsonFile.createNewFile()) {
             throw new IOException("Could not create file " + jsonFile.getAbsolutePath());
         }
+        @SuppressWarnings("unchecked")
         Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
         data.put("title", title);
         data.put("artist", artist);

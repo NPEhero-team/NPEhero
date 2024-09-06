@@ -17,6 +17,7 @@ public class Settings
 	public static SimpleDoubleProperty effectsVol = new SimpleDoubleProperty(1);
 	public static SimpleDoubleProperty musicVol = new SimpleDoubleProperty(1);
 	public static SimpleBooleanProperty enableMenuMusic = new SimpleBooleanProperty(true);
+	public static SimpleDoubleProperty guiScale = new SimpleDoubleProperty(1);
 
 	private static final Gson jsonParser = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
 	private static final File jsonFile = new File("settings.json");
@@ -25,10 +26,12 @@ public class Settings
 	 * Reads json data from settings.json
 	 */
 	public static void read() throws Exception {
+		@SuppressWarnings("unchecked")
 		Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
         effectsVol.set((Double) data.getOrDefault("effectsVol", 1.0));
 		musicVol.set((Double) data.getOrDefault("musicVol", 1.0));
 		enableMenuMusic.set((Boolean) data.getOrDefault("enableMenuMusic", true));
+		guiScale.set((Double) data.getOrDefault("guiScale", 1.0));
 	}
 
 	/**
@@ -39,6 +42,7 @@ public class Settings
 		data.put("effectsVol", effectsVol.get());
 		data.put("musicVol", musicVol.get());
 		data.put("enableMenuMusic", enableMenuMusic.get());
+		data.put("guiScale", guiScale.get());
 		FileWriter fileWriter = new FileWriter(jsonFile);
 		jsonParser.toJson(data, fileWriter);
 		fileWriter.close();
