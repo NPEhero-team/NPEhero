@@ -1,115 +1,43 @@
 package net.sowgro.npehero.gameplay;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import net.sowgro.npehero.main.Sound;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
-public class ScoreController{
+public class ScoreController {
 
-    private int score = 0;
-    private int combo = 0;
-    private int comboMultiplier=1;
-    public StringProperty scoreProperty = new SimpleStringProperty("0");
-    public StringProperty comboProperty = new SimpleStringProperty("0");
+    public IntegerProperty combo = new SimpleIntegerProperty(0);
+    public IntegerProperty comboMultiplier = new SimpleIntegerProperty(1);
+    public IntegerProperty score = new SimpleIntegerProperty(0);
+
+    public ScoreController() {
+        combo.addListener((_, _, _) -> {
+            if      (combo.get() >= 30) { comboMultiplier.set(4); }
+            else if (combo.get() >= 20) { comboMultiplier.set(3); }
+            else if (combo.get() >= 10) { comboMultiplier.set(2); }
+            else                        { comboMultiplier.set(1); }
+        });
+    }
 
     /**
      * Called when the user performs a perfect hit
      */
     public void perfect() {
-        combo();
-        score += 300*comboMultiplier;
-        scoreProperty.setValue(score+"");
-        comboProperty.setValue(combo +"");
-        // System.out.println("Perfect!");
+        combo.set(combo.get() + 1);
+        score.set(score.get() + 300 * comboMultiplier.get());
     }
 
     /**
      * called when the user performs an okay hit
      */
     public void good() {
-        combo();
-        score += 100*comboMultiplier;
-        scoreProperty.setValue(score+"");
-        comboProperty.setValue(combo+"");
-        // System.out.println("Good");
+        combo.set(combo.get() + 1);
+        score.set(score.get() + 100 * comboMultiplier.get());
     }
 
     /**
      * Called when the user misses a note
      */
     public void miss() {
-        Sound.playSfx(Sound.MISS);
-        combo = 0;
-        comboMultiplier = 1;
-        scoreProperty.setValue(score+"");
-        comboProperty.setValue(combo+"");
-        // System.out.println("Miss");
-    }
-
-    /**
-     * Increments the combo by one
-     */
-    private void combo() {
-        Sound.playSfx(Sound.HIT);
-        combo++;
-        
-        if (combo == 2) {
-            comboMultiplier = 2;
-        }
-        
-        if (combo == 4) {
-            comboMultiplier = 4;
-        }
-        
-        if (combo == 8) {
-            comboMultiplier = 8;
-        }
-    }
-
-    /**
-     * @return current score
-     */
-    public int getScore()
-    {
-        return score;
-    }
-
-    /**
-     * @return current combo
-     */
-    public int getCombo()
-    {
-        return combo;
-    }
-
-    /**
-     * @param newScore: the score to be set, only used in debug
-     */
-    public void setScore(int newScore)
-    {
-        score = newScore;
-        scoreProperty.setValue(newScore+"");
-    }
-
-    /**
-     * @param newCombo: the combo to be set, only used in debug
-     */
-    public void setCombo(int newCombo)
-    {
-        combo = newCombo;
-        comboProperty.setValue(newCombo+"");
-    }
-
-    /**
-     * prints values into console
-     */
-    public void print()
-    {
-        System.out.println("--");
-        System.out.println(combo);
-        System.out.println(score);
-        System.out.println("");
-        System.out.println(scoreProperty);
-        System.out.println(comboProperty);
+        combo.set(0);
     }
 }

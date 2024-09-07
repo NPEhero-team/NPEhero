@@ -3,6 +3,7 @@ package net.sowgro.npehero.gui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -10,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.Driver;
+import net.sowgro.npehero.gameplay.ScoreController;
 import net.sowgro.npehero.main.ErrorDisplay;
 import net.sowgro.npehero.levelapi.Difficulty;
 import net.sowgro.npehero.levelapi.Level;
@@ -22,7 +24,7 @@ public class GameOver extends Page
 {
     HBox content = new HBox();
 
-    public GameOver(Level level, Difficulty diff, Page prev, int score2)
+    public GameOver(Level level, Difficulty diff, Page prev, ScoreController score2)
     {
         Text topText = new Text();
         topText.setText("Level Complete");
@@ -45,15 +47,21 @@ public class GameOver extends Page
         Text scoreLabel = new Text();
         scoreLabel.setText("Final score");
         scoreLabel.getStyleClass().add("t3");
+        Label maxScoreLabel = new Label("Max possible score");
+        ScoreController maxScoreController = new ScoreController();
+        for (int i = 0; i < diff.notes.list.size(); i++) {
+            maxScoreController.perfect();
+        }
+        Label maxScore = new Label(maxScoreController.score.get() + "");
 
         Text score = new Text();
-        score.setText(score2+"");
+        score.setText(score2.score.get()+"");
         score.getStyleClass().add("t2");
         score.setStyle("-fx-font-size: 30;");
 
         VBox scoreBox = new VBox();
         scoreBox.getStyleClass().add("box");
-        scoreBox.getChildren().addAll(scoreLabel,score);
+        scoreBox.getChildren().addAll(scoreLabel,score, maxScoreLabel, maxScore);
         scoreBox.setPadding(new Insets(5));
 
 
@@ -71,7 +79,7 @@ public class GameOver extends Page
             save.setDisable(true);
             name.setDisable(true);
             try {
-                diff.leaderboard.add(name.getText(), score2);
+                diff.leaderboard.add(name.getText(), score2.score.get());
             } catch (IOException e) {
                 Driver.setMenu(new ErrorDisplay("Failed to save score to leaderboard", e, this));
             }
@@ -110,6 +118,7 @@ public class GameOver extends Page
         centerBox.getChildren().addAll(topText,levelDetailsBox,scoreBox,nameBox,buttonBox);
         centerBox.setSpacing(10);
         centerBox.setAlignment(Pos.CENTER);
+        centerBox.setMaxWidth(300);
 
         content.getChildren().add(centerBox);
         content.setAlignment(Pos.CENTER);

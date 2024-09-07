@@ -1,10 +1,8 @@
 package net.sowgro.npehero.editor;
 
-import java.io.File;
 import java.io.IOException;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -201,14 +199,14 @@ public class LevelEditor extends Page
                 songLabel, b1, previewLabel, b2, backgroundLabel, b3, colorsLabel, colorPickerBox/*, new Separator(Orientation.HORIZONTAL), save*/);
         optionsBox.setSpacing(10);
 //        left.setPrefWidth(300);
-        optionsBox.setPadding(new Insets(5));
+//        optionsBox.setPadding(new Insets(5));
 
         ScrollPane leftScroll = new ScrollPane(optionsBox);
         leftScroll.getStyleClass().remove("scroll-pane");
-        leftScroll.getStyleClass().add("box");
-        leftScroll.setPadding(new Insets(5));
+//        leftScroll.getStyleClass().add("box");
+//        leftScroll.setPadding(new Insets(5));
         leftScroll.setFitToWidth(true);
-        leftScroll.setPrefWidth(500);
+        leftScroll.setPrefWidth(400);
 
 //        VBox center = new VBox();
 //        center.setSpacing(10);
@@ -261,7 +259,6 @@ public class LevelEditor extends Page
 
     @Override
     public void onLeave() {
-        Sound.playSfx(Sound.FORWARD);
         level.title = titleEntry.getText();
         level.artist = artistEntry.getText();
         level.desc = descEntry.getText();

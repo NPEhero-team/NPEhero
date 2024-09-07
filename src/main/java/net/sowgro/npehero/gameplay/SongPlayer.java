@@ -80,7 +80,7 @@ public class SongPlayer extends HBox {
         }));
         // schedule the game over screen to show at the end
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(songLength + FALL_TIME + START_DELAY), _ -> {
-            Driver.setMenu(new GameOver(level, diff, prev, scoreCounter.getScore()));
+            Driver.setMenu(new GameOver(level, diff, prev, scoreCounter));
             cancel();
         }));
 
@@ -89,12 +89,13 @@ public class SongPlayer extends HBox {
             for (int i = 0; i < lanes.length; i++) {
                 if (e.getCode() == Control.lanes[i].getKey()) {
                     checkNote(lanes[i]);
+                    e.consume();
                 }
             }
             if (e.getCode() == Control.LEGACY_PRINT.getKey()) {
                 System.out.println("" + timeline.getCurrentTime());
+                e.consume();
             }
-            e.consume();
         };
         Driver.primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
 
@@ -142,6 +143,7 @@ public class SongPlayer extends HBox {
         anim.setOnFinished(_ -> {
             if (lane.pane.getChildren().remove(block) && !done) {
                 scoreCounter.miss();
+                Sound.playSfx(Sound.MISS);
                 FillTransition ft = new FillTransition(Duration.millis(500), lane.target.rect);
                 ft.setFromValue(Color.RED);
                 ft.setToValue(lane.target.getFillColor());
@@ -236,17 +238,20 @@ public class SongPlayer extends HBox {
                 ft.setFromValue(Color.WHITE);
                 ft.play();
                 scoreCounter.perfect();
+                Sound.playSfx(Sound.HIT);
                 return 2;
             }
             if (distance < super.getHeight() / 4) {
                 ft.setFromValue(Color.CYAN);
                 ft.play();
                 scoreCounter.good();
+                Sound.playSfx(Sound.HIT);
                 return 1;
             }
             ft.setFromValue(Color.RED);
             ft.play();
             scoreCounter.miss();
+            Sound.playSfx(Sound.MISS);
             return 0;
         }
         return -1;

@@ -67,7 +67,7 @@ public class DiffEditor extends Page
         VBox options = new VBox(folderNameLabel, folderName, titleLabel, titleEntry, scoresLabel, clearScores, playLabel, playLevel);
         options.setSpacing(10);
 //        options.getStyleClass().add("box");
-        options.setPadding(new Insets(5));
+//        options.setPadding(new Insets(5));
 
         ScrollPane optionsScroll = new ScrollPane(options);
 
@@ -136,19 +136,19 @@ public class DiffEditor extends Page
         VBox left = new VBox();
         left.getChildren().addAll(/*optionsLabel, */optionsScroll);
         options.setSpacing(10);
-        optionsScroll.setPrefWidth(500);
+        optionsScroll.setPrefWidth(350);
         optionsScroll.getStyleClass().remove("scroll-pane");
-        optionsScroll.getStyleClass().add("box");
+//        optionsScroll.getStyleClass().add("box");
         optionsScroll.setFitToWidth(true);
-        optionsScroll.setPadding(new Insets(5));
+//        optionsScroll.setPadding(new Insets(5));
 //        optionsft.setPrefHeight();
 
         HBox main = new HBox();
         main.getChildren().addAll(left, notePreview);
         main.setSpacing(10);
-        main.prefHeightProperty().bind(content.heightProperty().multiply(0.75));
+//        main.prefHeightProperty().bind(content.heightProperty().multiply(0.75));
         main.maxWidthProperty().bind(content.widthProperty().multiply(0.95));
-        optionsScroll.prefHeightProperty().bind(main.heightProperty());
+//        optionsScroll.prefHeightProperty().bind(main.heightProperty());
 
         Button exit = new Button();
         exit.setText("Back");

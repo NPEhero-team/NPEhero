@@ -1,6 +1,7 @@
 package net.sowgro.npehero.gui;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gameplay.SongPlayer;
@@ -63,7 +64,7 @@ public class LevelSurround extends Page
         scoreLabel.getStyleClass().add("t3");
 
         Text scoreDisplay = new Text();
-        scoreDisplay.textProperty().bind(sc.scoreProperty);
+        scoreDisplay.textProperty().bind(sc.score.asString());
         scoreDisplay.getStyleClass().add("t1");
 
         VBox scoreTextBox = new VBox();
@@ -84,12 +85,16 @@ public class LevelSurround extends Page
         comboLabel.getStyleClass().add("t3");
 
         Text comboDisplay = new Text();
-        comboDisplay.textProperty().bind(sc.comboProperty);
+        comboDisplay.textProperty().bind(sc.combo.asString());
         comboDisplay.getStyleClass().add("t1");
+
+        Label comboMultiplier = new Label();
+        comboMultiplier.getStyleClass().add("gray");
+        comboMultiplier.textProperty().bind(sc.comboMultiplier.asString().concat("x score multiplier"));
 
         VBox comboTextBox = new VBox();
         comboTextBox.setAlignment(Pos.BOTTOM_RIGHT);
-        comboTextBox.getChildren().addAll(comboLabel,comboDisplay);
+        comboTextBox.getChildren().addAll(comboLabel,comboDisplay, comboMultiplier);
         comboTextBox.setPadding(new Insets(10));
         comboTextBox.getStyleClass().add("box");
         comboTextBox.minWidthProperty().bind(comboTextBox.heightProperty());
@@ -117,10 +122,10 @@ public class LevelSurround extends Page
 
         var widthBind = content.widthProperty().subtract(gameHolder.widthProperty()).divide(2);
         scoreBox.prefWidthProperty().bind(widthBind);
-        scoreBox.prefWidthProperty().bind(widthBind);
+        comboBox.prefWidthProperty().bind(widthBind);
 
         HBox centerBox = new HBox();
-        HBox.setHgrow(gameHolder, Priority.NEVER);
+//        HBox.setHgrow(gameHolder, Priority.NEVER);
         centerBox.getChildren().addAll(comboBox, gameHolder, scoreBox);
         centerBox.setAlignment(Pos.BOTTOM_CENTER);
 

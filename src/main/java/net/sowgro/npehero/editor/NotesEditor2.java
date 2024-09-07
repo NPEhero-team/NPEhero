@@ -11,13 +11,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -32,9 +30,11 @@ import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.main.Control;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NotesEditor2 extends Page {
+    private final DoubleBinding scaleBind;
     Difficulty diff;
     ScrollPane scroll = new ScrollPane();
     Pane[] lanes;
@@ -101,6 +101,7 @@ public class NotesEditor2 extends Page {
         Pane playheadLane = new Pane();
         playheadLane.setOnMouseClicked(e -> {
             m.seek(new Duration(screenPosToSecond(e.getY()) * 1000));
+//            System.out.println("dbg: "+e.getY());
         });
 
         this.playhead = new Polygon();
@@ -149,19 +150,39 @@ public class NotesEditor2 extends Page {
         endLine.setEndY(0);
         endLine.setStroke(Color.RED);
 
+        HBox main = new HBox();
+
         Pane contentOverlay = new Pane(playheadLine, endLine);
         contentOverlay.setPickOnBounds(false);
 
         StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(scrollContent, contentOverlay);
 
+//        var contentHeight = content.heightProperty().multiply(0.75);
+        BorderPane scrollHolder = new BorderPane(scroll);
         scroll.setContent(stackPane);
-        scroll.prefHeightProperty().bind(content.heightProperty().multiply(0.75));
-        scroll.prefWidthProperty().bind(scroll.heightProperty().multiply(0.72));
-        scroll.minWidthProperty().bind(scroll.heightProperty().multiply(0.72));
+//        scroll.prefHeightProperty().bind(content.heightProperty().multiply(0.75));
+        final int SCROLLPORT_NATIVE_HEIGHT = 864;
+        scroll.setMinHeight(SCROLLPORT_NATIVE_HEIGHT);
+        scroll.setMinWidth(SCROLLPORT_NATIVE_HEIGHT * 0.72);
+        scroll.setMaxHeight(SCROLLPORT_NATIVE_HEIGHT);
+        scroll.setMaxWidth(SCROLLPORT_NATIVE_HEIGHT * 0.72);
+        scaleBind = scrollHolder.heightProperty().divide(SCROLLPORT_NATIVE_HEIGHT);
+        scroll.scaleXProperty().bind(scaleBind);
+        scroll.scaleYProperty().bind(scaleBind);
+//        scroll.prefWidthProperty().bind(scroll.heightProperty().multiply(0.72));
+//        scroll.minWidthProperty().bind(scroll.heightProperty().multiply(0.72));
         scroll.getStyleClass().remove("scroll-pane");
         scroll.getStyleClass().add("box");
         scroll.setPadding(new Insets(5));
+//        scaleBind.addListener((_, _, v) -> {
+//            scroll.setStyle("-fx-font-size: " + (1/v.doubleValue()) * 10);
+//        });
+
+        scrollHolder.minHeightProperty().bind(main.prefHeightProperty());
+        scrollHolder.minWidthProperty() .bind(main.prefHeightProperty().multiply(0.72));
+        scrollHolder.maxHeightProperty().bind(main.prefHeightProperty());
+        scrollHolder.maxWidthProperty() .bind(main.prefHeightProperty().multiply(0.72));
 
         Pane helpBox = new Pane();
 
@@ -169,9 +190,10 @@ public class NotesEditor2 extends Page {
         actionScroll.getStyleClass().remove("scroll-pane");
         actionScroll.prefWidthProperty().bind(actionBox.widthProperty().add(20));
 
-        HBox main = new HBox();
-        main.getChildren().addAll(scroll, actionScroll, helpBox);
+        main.getChildren().addAll(scrollHolder, actionScroll, helpBox);
         main.setSpacing(10);
+        main.maxWidthProperty().bind(content.widthProperty().multiply(0.95));
+        main.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.80));
 
         Button exit = new Button();
         exit.setText("Cancel");
@@ -234,11 +256,17 @@ public class NotesEditor2 extends Page {
         // Draw and update ruler
         AtomicInteger lastRuler = new AtomicInteger(-1);
         scrollContent.heightProperty().addListener(_ -> {
-            int ruler1 = (int) screenPosToSecond(scrollContent.getHeight());
+            int ruler1 = (int) (screenPosToSecond(scrollContent.getHeight()) * 10);
             for (int i = lastRuler.get() + 1; i <= ruler1; i++) {
-                Label l = new Label(toMinAndSec(i)+" -");
-                l.layoutYProperty().bind(secondToScreenPos(i));
-                l.setTextFill(Color.WHITE);
+                Label l= new Label();
+                if (i % 10 == 0) {
+                    l.setText(toMinAndSec(i / 10) + " - ");
+                }
+                else {
+                    l.setText("-");
+                    l.getStyleClass().add("gray");
+                }
+                l.layoutYProperty().bind(secondToScreenPos(i / 10.0));
                 rulerLane.getChildren().add(l);
             }
             lastRuler.set(ruler1);
@@ -392,6 +420,12 @@ public class NotesEditor2 extends Page {
 
     @Override
     public void onView() {
+        var sb = getScrollBar(scroll);
+        if (sb != null) {
+            sb.prefWidthProperty().bind(scaleBind.multiply(1 / 17.0));
+        } else {
+            System.out.println("No scrollbar :(");
+        }
         Sound.stopSong();
         m.play();
         m.pause();
@@ -407,26 +441,34 @@ public class NotesEditor2 extends Page {
     private Block drawBlock(Note n) {
         Color color = diff.level.colors[n.lane];
         Block b = new Block(color, false, n);
-        var sizeBind = scroll.widthProperty().divide(8);
+//        var sizeBind = scroll.widthProperty().divide(8);
+//        b.heightProperty().bind(sizeBind);
+//        b.widthProperty().bind(sizeBind);
+//        var arcBind = scroll.widthProperty().divide(30);
+//        b.arcHeightProperty().bind(arcBind);
+//        b.arcWidthProperty().bind(arcBind);
+        var sizeBind = scroll.heightProperty().multiply(87/1080.0);
         b.heightProperty().bind(sizeBind);
         b.widthProperty().bind(sizeBind);
-        var arcBind = scroll.widthProperty().divide(30);
+        var arcBind = scroll.heightProperty().multiply(20/1080.0);
         b.arcHeightProperty().bind(arcBind);
         b.arcWidthProperty().bind(arcBind);
-        b.strokeWidthProperty().bind(scroll.widthProperty().divide(120));
+        b.strokeWidthProperty().bind(scroll.heightProperty().multiply(5/1080.0));
         b.layoutYProperty().bind(secondToScreenPos(n.time.add(0)));
         b.setOnMouseClicked(_ -> {
             if (selectedNotes.contains(b)) {
-                selectedNotes.remove(b);
-//                b.setStroke(Color.TRANSPARENT);
+                if (selectMultiple.isSelected() || selectedNotes.size() == 1) {
+                    selectedNotes.remove(b);
+                } else {
+                    selectedNotes.clear();
+                    selectedNotes.add(b);
+                }
             }
             else {
                 if (!selectMultiple.isSelected()) {
-//                    selectedNotes.forEach(e -> e.setStroke(Color.TRANSPARENT));
                     selectedNotes.clear();
                 }
                 selectedNotes.add(b);
-//                b.setStroke(Color.WHITE);
             }
         });
         return b;
@@ -518,5 +560,15 @@ public class NotesEditor2 extends Page {
         target.rect.setArcWidth(5);
         target.rect.setStrokeWidth(3);
         return target;
+    }
+
+    private ScrollBar getScrollBar(ScrollPane s) {
+        Set<Node> nodes = s.lookupAll(".scroll-bar");
+        for (final Node node : nodes) {
+            if (node instanceof ScrollBar sb) {
+                return sb;
+            }
+        }
+        return null;
     }
 }
