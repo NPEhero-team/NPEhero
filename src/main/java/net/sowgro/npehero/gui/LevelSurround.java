@@ -1,16 +1,12 @@
 package net.sowgro.npehero.gui;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.layout.*;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gameplay.SongPlayer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.sowgro.npehero.levelapi.Difficulty;
 import net.sowgro.npehero.gameplay.ScoreController;
@@ -19,7 +15,7 @@ import net.sowgro.npehero.main.Sound;
 
 public class LevelSurround extends Page
 {
-    private final HBox content = new HBox();
+    private final StackPane content = new StackPane();
 
     public LevelSurround(Difficulty difficulty, Page prev)
     {
@@ -104,22 +100,31 @@ public class LevelSurround extends Page
         AnchorPane.setBottomAnchor(comboTextBox, 0.0);
         comboBox.setPadding(new Insets(10));
 
-        game.minWidthProperty().bind(content.heightProperty().multiply(0.55));
-        game.minHeightProperty().bind(content.heightProperty());
+        game.setMinHeight(1080);
+        game.setMinWidth(1080 * 0.55);
+        game.setMaxHeight(1080);
+        game.setMaxWidth(1080 * 0.55);
+        var scale = content.prefHeightProperty().divide(1080);
+        game.scaleXProperty().bind(scale);
+        game.scaleYProperty().bind(scale);
         game.getStyleClass().add("box");
 
+        BorderPane gameHolder = new BorderPane(game);
+        gameHolder.maxHeightProperty().bind(content.prefHeightProperty());
+        gameHolder.maxWidthProperty().bind(content.prefHeightProperty().multiply(0.55));
+        gameHolder.minHeightProperty().bind(content.prefHeightProperty());
+        gameHolder.minWidthProperty().bind(content.prefHeightProperty().multiply(0.55));
 
-        comboBox.minWidthProperty().bind(Driver.primaryPane.widthProperty().subtract(game.widthProperty()).divide(2));
-        scoreBox.minWidthProperty().bind(Driver.primaryPane.widthProperty().subtract(game.widthProperty()).divide(2));
+        var widthBind = content.widthProperty().subtract(gameHolder.widthProperty()).divide(2);
+        scoreBox.prefWidthProperty().bind(widthBind);
+        scoreBox.prefWidthProperty().bind(widthBind);
 
         HBox centerBox = new HBox();
-        centerBox.getChildren().addAll(comboBox, game, scoreBox);
+        HBox.setHgrow(gameHolder, Priority.NEVER);
+        centerBox.getChildren().addAll(comboBox, gameHolder, scoreBox);
         centerBox.setAlignment(Pos.BOTTOM_CENTER);
 
-        StackPane root = new StackPane();
-        root.getChildren().addAll(centerBox, topBar);
-
-        content.getChildren().add(root);
+        content.getChildren().addAll(centerBox, topBar);
 
         new AnimationTimer() {
             @Override
