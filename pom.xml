@@ -101,7 +101,7 @@
                     <noHeaderFiles>true</noHeaderFiles>
                     <jmodsPath>/home/sowgro/Code/jdk-22_windows-x64_bin/jdk-22.0.2</jmodsPath>
                     <options>-Dprism.forceGPU=true</options>
-                    <compress>2</compress>
+                    <compress>0</compress>
                 </configuration>
 
                 <executions>
@@ -127,26 +127,41 @@
                     <runtimeImage>target/app</runtimeImage>
                     <module>net.sowgro.npehero/net.sowgro.npehero.Driver</module>
                     <destination>target/dist</destination>
-                    <!-- <icon>icons/icon.png</icon> in profile -->
-
-                    <linuxShortcut>true</linuxShortcut>
-                    <linuxMenuGroup>Game</linuxMenuGroup>
-                    <linuxRpmLicenseType>MIT</linuxRpmLicenseType>
-
-                    <winShortcut>true</winShortcut>
-                    <winDirChooser>true</winDirChooser>
-                    <winShortcut>true</winShortcut>
-
-                    <macPackageIdentifier>net.sowgro.npehero</macPackageIdentifier>
-                    <macAppCategory>music-games</macAppCategory>
                 </configuration>
 
                 <executions>
                     <execution>
+                        <id>portable</id>
                         <goals>
                             <goal>jpackage</goal>
                         </goals>
                         <phase>package</phase>
+                        <configuration>
+                            <type>APP_IMAGE</type>
+                            <name>npehero_portable</name>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>installer</id>
+                        <goals>
+                            <goal>jpackage</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <name>npehero_installer</name>
+
+                            <linuxShortcut>true</linuxShortcut>
+                            <linuxMenuGroup>Game</linuxMenuGroup>
+                            <linuxRpmLicenseType>MIT</linuxRpmLicenseType>
+
+                            <winShortcut>true</winShortcut>
+                            <winDirChooser>true</winDirChooser>
+                            <winShortcut>true</winShortcut>
+
+                            <macPackageIdentifier>net.sowgro.npehero</macPackageIdentifier>
+                            <macAppCategory>music-games</macAppCategory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
