@@ -7,7 +7,7 @@ Goals:
 - [X] Accept mp3 song files
 - [ ] UI improvements
 - [ ] Code cleanup
-- [ ] Installer / Linux package
+- [X] Installer / Linux package
 
 Todo - needs design:
 - Improve errorList and error handling
@@ -20,8 +20,22 @@ Todo - bugs:
 - Fix notesEditor note preview being too small with no notes
 - Properly center background image
 
-# Installation
-Coming soon.
+# Building
+### Run the app
+Run the Driver class from your IDE (known to work with Intellij)
+
+OR
+
+Execute the maven goal javafx:run
+- windows: `mvnw.cmd javafx:run`
+- linux: `./mvnw javafx:run`
+
+### Create an installer for your OS
+Execute the maven package phase
+- windows: `mvnw.cmd package`
+- linux: `./mvnw package`
+
+The installer executables should output to `target/dist`
 
 # Development Links
 
