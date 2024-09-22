@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.input.KeyCode;
+import net.sowgro.npehero.Driver;
 
 import java.io.*;
 import java.util.*;
@@ -43,7 +44,7 @@ public enum Control {
             LANE4,
     };
 
-    private static final File file = new File("controls.json");
+    private static final File file = new File(Driver.BASE_DIR, "controls.json");
     private static final Gson json = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
 
     public static void writeToFile() throws IOException {
@@ -57,6 +58,7 @@ public enum Control {
     }
 
     public static void readFromFile() throws Exception {
+        @SuppressWarnings("unchecked")
         Map<String, Object> data = json.fromJson(new FileReader(file), Map.class);
         for (Control control : Control.values()) {
             if (data.containsKey(control.toString())) {

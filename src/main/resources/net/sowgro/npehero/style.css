@@ -168,8 +168,7 @@ Slider:focused .thumb{
 
 /* scroll bars */
  
-.scroll-bar:horizontal ,
-.scroll-bar:vertical{
+.scroll-bar:horizontal, .scroll-bar:vertical {
     -fx-font-size: 10px;
     -fx-background-color :transparent;
     -fx-border-color :transparent;
@@ -177,7 +176,7 @@ Slider:focused .thumb{
     -fx-border-radius :2.0em;
 }
 
-.increment-button ,.decrement-button {
+.increment-button, .decrement-button {
     -fx-background-color:transparent;
 	-fx-border-color:transparent;
 }

@@ -17,6 +17,7 @@ import net.sowgro.npehero.levelapi.Levels;
 import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.gui.MainMenu;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Stack;
@@ -25,6 +26,7 @@ import java.util.Stack;
 public class Driver extends Application
 {
     public static final Image MENU_BACKGROUND = new Image(Driver.class.getResource("mountains.png").toExternalForm());
+    public static final File BASE_DIR = new File(".npehero");
 
     public static Stage primaryStage;
     public static ScrollPane primaryPane = new ScrollPane();
@@ -88,6 +90,17 @@ public class Driver extends Application
         primaryStage.show();
 
         Stack<String> errors = new Stack<>();
+        System.out.println("Loading .npehero...");
+        try {
+            if (!BASE_DIR.exists() && !BASE_DIR.mkdir()) {
+                throw new IOException();
+            }
+            if (!BASE_DIR.isDirectory()) {
+                throw new IOException();
+            }
+        } catch (Exception e) {
+            errors.push("Failed to locate .npehero\n"+e);
+        }
         System.out.println("Loading settings...");
         try {
             Settings.read();

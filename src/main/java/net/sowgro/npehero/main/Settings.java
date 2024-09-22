@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import net.sowgro.npehero.Driver;
 
 public class Settings
 {
@@ -20,7 +21,7 @@ public class Settings
 	public static SimpleDoubleProperty guiScale = new SimpleDoubleProperty(1);
 
 	private static final Gson jsonParser = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-	private static final File jsonFile = new File("settings.json");
+	private static final File jsonFile = new File(Driver.BASE_DIR, "settings.json");
 
 	/**
 	 * Reads json data from settings.json

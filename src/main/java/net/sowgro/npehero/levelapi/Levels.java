@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import net.sowgro.npehero.Driver;
 
 /**
  * Stores a list of all the levels
@@ -20,7 +21,7 @@ public class Levels {
     public static final ObservableList<Level> list = FXCollections.observableArrayList();
     public static final HashMap<String, Exception> problems = new HashMap<>();
 
-    public static final File dir = new File("levels");
+    public static final File dir = new File(Driver.BASE_DIR, "levels");
 
     /**
      * Reads contents of the levels folder and creates a level form each subfolder
