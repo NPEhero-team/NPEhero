@@ -31,6 +31,26 @@ Execute the maven goal javafx:run
 - linux: `./mvnw javafx:run`
 
 ### Create an installer for your OS
+Prerequisites:
+
+Ensure that all the following packages are installed and the correct version
+
+- java version >= 22
+- jmod >= 22
+- jlink version >= 22
+- jpackage version >= 22
+
+note: check the version of these with `<package> --version`
+
+You will also need OS specific jpackage prereqs to create the executable
+
+- RPM, DEB on Linux: On Red Hat Linux, we need the rpm-build package; on Ubuntu Linux, we need the fakeroot package
+- PKG, DMG on macOS: Xcode command line tools are required when the –mac-sign option is used to request that the package be signed, and when the –icon option is used to customize the DMG image
+- EXE, MSI on Windows: On Windows, we need the third party tool WiX 3.0 or later
+
+[source](https://www.baeldung.com/java14-jpackage#packaging-prerequisite)
+
+
 Execute the maven package phase
 - windows: `mvnw.cmd package`
 - linux: `./mvnw package`
