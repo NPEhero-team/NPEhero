@@ -2,15 +2,31 @@ package net.sowgro.npehero;
 
 import javafx.animation.*;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import net.sowgro.npehero.main.ErrorDisplay;
 import net.sowgro.npehero.levelapi.Levels;
@@ -41,92 +57,118 @@ public class Driver extends Application
     public static void main(String[] args) {
         launch(args);
     }
-    
+
     /*
      * sets up game windows and starts controllers
      * (automatically called by javafx on start)
      */
     @Override
-    public void start(Stage newPrimaryStage) {
-
-        primaryStage = newPrimaryStage;
-
-        primaryPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
-        StackPane root = new StackPane(backgroundImage2, backgroundImage, primaryPane);
-        Scene primaryScene = new Scene(root, 800,600);
-
-        primaryPane.scaleXProperty().bind(Settings.guiScale);
-        primaryPane.scaleYProperty().bind(Settings.guiScale);
-        primaryPane.minHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
-        primaryPane.minWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
-        primaryPane.maxHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
-        primaryPane.maxWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
-
-//        Cant figure out how to center this
-        backgroundImage.fitHeightProperty().bind(primaryScene.heightProperty());
-        backgroundImage2.fitHeightProperty().bind(primaryScene.heightProperty());
-        backgroundImage.setPreserveRatio(true);
-        backgroundImage2.setPreserveRatio(true);
-
-        primaryScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-
-        primaryStage.setScene(primaryScene);
-        primaryStage.setTitle("NPE Hero");
-
-        primaryPane.getStyleClass().remove("scroll-pane");
-
-        setMenuBackground();
-
-        Sound.playSong(Sound.MENU_SONG);
-
-        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> { //full screen stuff
-            if (KeyCode.F11.equals(event.getCode())) {
-                primaryStage.setFullScreen(!primaryStage.isFullScreen());
-            }
-        });
-        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        primaryStage.setFullScreenExitHint("");
-        primaryStage.show();
+    public void start(Stage initStage) {
+        Label npehero = new Label("NPEHero");
+        Label loading = new Label("Please Wait...           ");
+        VBox splashBox = new VBox(npehero, loading);
+        splashBox.setPadding(new Insets(30));
+        Scene splashScene = new Scene(splashBox);
+        initStage.setScene(splashScene);
+        initStage.initStyle(StageStyle.UNDECORATED);
+        initStage.show();
 
         Stack<String> errors = new Stack<>();
-        System.out.println("Loading .npehero...");
-        try {
-            if (!BASE_DIR.exists() && !BASE_DIR.mkdir()) {
-                throw new IOException();
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                System.out.println("Loading .npehero...");
+                this.updateMessage("Loading .npehero...");
+                try {
+                    if (!BASE_DIR.exists() && !BASE_DIR.mkdir()) {
+                        throw new IOException();
+                    }
+                    if (!BASE_DIR.isDirectory()) {
+                        throw new IOException();
+                    }
+                } catch (Exception e) {
+                    errors.push("Failed to locate .npehero\n" + e);
+                }
+                System.out.println("Loading settings...");
+                this.updateMessage("Loading settings...");
+                try {
+                    Settings.read();
+                    System.out.println("Settings loaded");
+                } catch (Exception e) {
+                    errors.push("Failed to load settings from file\n" + e);
+                }
+                System.out.println("Loading controls...");
+                this.updateMessage("Loading controls...");
+                try {
+                    Control.readFromFile();
+                    System.out.println("Controls loaded");
+                } catch (Exception e) {
+                    errors.push("Failed to load controls from file\n" + e);
+                }
+                System.out.println("Loading levels...");
+                this.updateMessage("Loading levels...");
+                try {
+                    Levels.readData();
+                    System.out.println("Loaded " + Levels.list.size() + " levels (" + Levels.getValidList().size() + " valid)");
+                } catch (IOException e) {
+                    errors.push("Failed to load levels\n");
+                }
+                return null;
             }
-            if (!BASE_DIR.isDirectory()) {
-                throw new IOException();
+        };
+
+        task.setOnSucceeded(_ -> {
+            initStage.close();
+
+            Page last = new MainMenu();
+            while (!errors.empty()) {
+                last = new ErrorDisplay(errors.pop(), last);
             }
-        } catch (Exception e) {
-            errors.push("Failed to locate .npehero\n"+e);
-        }
-        System.out.println("Loading settings...");
-        try {
-            Settings.read();
-            System.out.println("Settings loaded");
-        } catch (Exception e) {
-            errors.push("Failed to load settings from file\n"+e);
-        }
-        System.out.println("Loading controls...");
-        try {
-            Control.readFromFile();
-            System.out.println("Controls loaded");
-        } catch (Exception e) {
-            errors.push("Failed to load controls from file\n"+e);
-        }
-        System.out.println("Loading levels...");
-        try {
-            Levels.readData();
-            System.out.println("Loaded " + Levels.list.size() + " levels (" + Levels.getValidList().size() + " valid)");
-        } catch (IOException e) {
-            errors.push("Failed to load levels\n");
-        }
-        Page last = new MainMenu();
-        while (!errors.empty()) {
-            last = new ErrorDisplay(errors.pop(), last);
-        }
-        Driver.setMenu(last);
+            Driver.setMenu(last);
+
+            primaryStage = new Stage();
+
+            primaryPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+            StackPane root = new StackPane(backgroundImage2, backgroundImage, primaryPane);
+            Scene primaryScene = new Scene(root, 800,600);
+
+            primaryPane.scaleXProperty().bind(Settings.guiScale);
+            primaryPane.scaleYProperty().bind(Settings.guiScale);
+            primaryPane.minHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
+            primaryPane.minWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
+            primaryPane.maxHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
+            primaryPane.maxWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
+
+//        Cant figure out how to center this
+            backgroundImage.fitHeightProperty().bind(primaryScene.heightProperty());
+            backgroundImage2.fitHeightProperty().bind(primaryScene.heightProperty());
+            backgroundImage.setPreserveRatio(true);
+            backgroundImage2.setPreserveRatio(true);
+
+            primaryScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
+            primaryStage.setScene(primaryScene);
+            primaryStage.setTitle("NPE Hero");
+
+            primaryPane.getStyleClass().remove("scroll-pane");
+
+            setMenuBackground();
+
+            Sound.playSong(Sound.MENU_SONG);
+
+            primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> { //full screen stuff
+                if (KeyCode.F11.equals(event.getCode())) {
+                    primaryStage.setFullScreen(!primaryStage.isFullScreen());
+                }
+            });
+            primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            primaryStage.setFullScreenExitHint("");
+            primaryStage.show();
+        });
+
+        loading.textProperty().bind(task.messageProperty());
+        new Thread(task).start();
     }
 
     public static void setMenu(Page p) {
