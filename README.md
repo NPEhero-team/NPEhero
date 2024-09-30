@@ -35,10 +35,10 @@ Prerequisites:
 
 Ensure that all the following packages are installed and the correct version
 
-- java version >= 22
+- java >= 22
 - jmod >= 22
-- jlink version >= 22
-- jpackage version >= 22
+- jlink >= 22
+- jpackage >= 22
 
 note: check the version of these with `<package> --version`
 
