@@ -18,6 +18,14 @@ import net.sowgro.npehero.Driver;
  */
 public class Levels {
 
+    public interface MessageUpdaterLambda {
+        void updateMessage(String message);
+    }
+
+    public interface ProgressUpdaterLambda {
+        void updateProgress(double workDone, double progress);
+    }
+
     public static final ObservableList<Level> list = FXCollections.observableArrayList();
     public static final HashMap<String, Exception> problems = new HashMap<>();
 
@@ -31,18 +39,26 @@ public class Levels {
      * @throws IOException If there is a problem reading in the levels.
      */
     public static void readData() throws IOException {
+        readData(_ -> {}, (_, _) -> {});
+    }
+    public static void readData(MessageUpdaterLambda mu, ProgressUpdaterLambda pu) throws IOException {
         list.clear();
         File[] fileList = dir.listFiles();
         if (fileList == null) {
             throw new FileNotFoundException();
         }
+        int i = 0;
+        int max = fileList.length;
         for (File file: fileList) {
             try {
                 Level level = new Level(file);
                 list.add(level);
+                i++;
+                mu.updateMessage("Loaded " + i + " Levels");
             } catch (Exception e) {
                 problems.put("Failed to load load level in folder '" + file.getName() + "'", e);
             }
+            pu.updateProgress(i, max);
         }
         list.sort(Comparator.naturalOrder());
     }

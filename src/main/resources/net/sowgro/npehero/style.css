@@ -203,7 +203,7 @@ Slider:focused .thumb{
 
 .t0 {
     -fx-font-size: 100;
-    -fx-fill: black;
+    /*-fx-fill: black;*/
 }
 
 .t0e {
@@ -273,5 +273,12 @@ CheckBox:selected > .box {
 
 .red:hover Label {
     -fx-underline: true;
+}
+
+.progress-bar {
+    -fx-background-color: transparent;
+    -fx-fill: white;
+    -fx-padding: 0;
+    -fx-accent: white
 }
 

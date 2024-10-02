@@ -2,20 +2,13 @@ package net.sowgro.npehero;
 
 import javafx.animation.*;
 import javafx.application.Application;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -24,7 +17,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
+import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -64,13 +57,45 @@ public class Driver extends Application
      */
     @Override
     public void start(Stage initStage) {
-        Label npehero = new Label("NPEHero");
-        Label loading = new Label("Please Wait...           ");
-        VBox splashBox = new VBox(npehero, loading);
+        // from main menu
+        Text npehero = new Text();
+        npehero.setFill(Color.WHITE);
+        npehero.setBoundsType(TextBoundsType.VISUAL);
+        npehero.setText("NPE INC");
+        npehero.getStyleClass().add("t0");
+
+        Text lessthan = new Text("<");
+        lessthan.setBoundsType(TextBoundsType.VISUAL);
+        lessthan.getStyleClass().add("t0e");
+
+        Text greaterthan = new Text(">");
+        greaterthan.setBoundsType(TextBoundsType.VISUAL);
+        greaterthan.getStyleClass().add("t0e");
+        HBox title = new HBox(lessthan, npehero, greaterthan);
+        title.setSpacing(20);
+        title.setAlignment(Pos.CENTER);
+        // end from main menu
+
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.prefWidthProperty().bind(title.widthProperty());
+        progressBar.setMaxHeight(12);
+//        progressBar
+
+//        Label npehero = new Label("NPEHero");
+        Label loading = new Label("Loading NPEHero...");
+        VBox splashBox = new VBox(title, loading, progressBar);
         splashBox.setPadding(new Insets(30));
+        splashBox.getStyleClass().add("box");
+        splashBox.setAlignment(Pos.CENTER);
+        splashBox.setSpacing(10);
+//        Rectangle background = new Rectangle();
+//        background.setStrokeWidth(4);
         Scene splashScene = new Scene(splashBox);
+        splashBox.setBackground(null);
+        splashScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        splashScene.setFill(Color.TRANSPARENT);
         initStage.setScene(splashScene);
-        initStage.initStyle(StageStyle.UNDECORATED);
+        initStage.initStyle(StageStyle.TRANSPARENT);
         initStage.show();
 
         Stack<String> errors = new Stack<>();
@@ -108,7 +133,7 @@ public class Driver extends Application
                 System.out.println("Loading levels...");
                 this.updateMessage("Loading levels...");
                 try {
-                    Levels.readData();
+                    Levels.readData(this::updateMessage, this::updateProgress);
                     System.out.println("Loaded " + Levels.list.size() + " levels (" + Levels.getValidList().size() + " valid)");
                 } catch (IOException e) {
                     errors.push("Failed to load levels\n");
@@ -118,56 +143,64 @@ public class Driver extends Application
         };
 
         task.setOnSucceeded(_ -> {
-            initStage.close();
+            loading.textProperty().unbind();
+            loading.setText("Launching...");
 
-            Page last = new MainMenu();
-            while (!errors.empty()) {
-                last = new ErrorDisplay(errors.pop(), last);
-            }
-            Driver.setMenu(last);
+            scheduleDelayedTask(Duration.seconds(0.1), () -> {
+                initStage.close();
+                Page last = new MainMenu();
+                while (!errors.empty()) {
+                    last = new ErrorDisplay(errors.pop(), last);
+                }
+                Driver.setMenu(last);
 
-            primaryStage = new Stage();
+                primaryStage = new Stage();
 
-            primaryPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                primaryPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-            StackPane root = new StackPane(backgroundImage2, backgroundImage, primaryPane);
-            Scene primaryScene = new Scene(root, 800,600);
+                StackPane root = new StackPane(backgroundImage2, backgroundImage, primaryPane);
+                Scene primaryScene = new Scene(root, 800,600);
 
-            primaryPane.scaleXProperty().bind(Settings.guiScale);
-            primaryPane.scaleYProperty().bind(Settings.guiScale);
-            primaryPane.minHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
-            primaryPane.minWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
-            primaryPane.maxHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
-            primaryPane.maxWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
+                primaryPane.scaleXProperty().bind(Settings.guiScale);
+                primaryPane.scaleYProperty().bind(Settings.guiScale);
+                primaryPane.minHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
+                primaryPane.minWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
+                primaryPane.maxHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
+                primaryPane.maxWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
 
 //        Cant figure out how to center this
-            backgroundImage.fitHeightProperty().bind(primaryScene.heightProperty());
-            backgroundImage2.fitHeightProperty().bind(primaryScene.heightProperty());
-            backgroundImage.setPreserveRatio(true);
-            backgroundImage2.setPreserveRatio(true);
+                backgroundImage.fitHeightProperty().bind(primaryScene.heightProperty());
+                backgroundImage2.fitHeightProperty().bind(primaryScene.heightProperty());
+                backgroundImage.setPreserveRatio(true);
+                backgroundImage2.setPreserveRatio(true);
 
-            primaryScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+                primaryScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 
-            primaryStage.setScene(primaryScene);
-            primaryStage.setTitle("NPE Hero");
+                primaryStage.setScene(primaryScene);
+                primaryStage.setTitle("NPE Hero");
 
-            primaryPane.getStyleClass().remove("scroll-pane");
+                primaryPane.getStyleClass().remove("scroll-pane");
 
-            setMenuBackground();
+                setMenuBackground();
 
-            Sound.playSong(Sound.MENU_SONG);
+                Sound.playSong(Sound.MENU_SONG);
 
-            primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> { //full screen stuff
-                if (KeyCode.F11.equals(event.getCode())) {
-                    primaryStage.setFullScreen(!primaryStage.isFullScreen());
-                }
+                primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> { //full screen stuff
+                    if (KeyCode.F11.equals(event.getCode())) {
+                        primaryStage.setFullScreen(!primaryStage.isFullScreen());
+                    }
+                });
+                primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+                primaryStage.setFullScreenExitHint("");
+                primaryStage.show();
+                scheduleDelayedTask(Duration.millis(1), () -> {
+                    primaryStage.setFullScreen(true);
+                });
             });
-            primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-            primaryStage.setFullScreenExitHint("");
-            primaryStage.show();
         });
 
-        loading.textProperty().bind(task.messageProperty());
+//        loading.textProperty().bind(task.messageProperty());
+        progressBar.progressProperty().bind(task.progressProperty());
         new Thread(task).start();
     }
 
@@ -233,5 +266,12 @@ public class Driver extends Application
 
     public static URL getResource(String fileName) {
         return Driver.class.getResource(fileName);
+    }
+
+    public void scheduleDelayedTask(Duration d, Runnable r) {
+        PauseTransition pt = new PauseTransition();
+        pt.setDuration(d);
+        pt.setOnFinished(_ -> r.run());
+        pt.play();
     }
 }
