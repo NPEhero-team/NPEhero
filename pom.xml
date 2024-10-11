@@ -97,7 +97,7 @@
                     <jlinkZipName>NPEHero</jlinkZipName>
                     <jlinkImageName>app</jlinkImageName>
                     <noManPages>true</noManPages>
-                    <stripDebug>true</stripDebug>
+<!--                    <stripDebug>true</stripDebug>-->
                     <noHeaderFiles>true</noHeaderFiles>
                     <options>-Dprism.forceGPU=true</options>
                     <compress>0</compress>
@@ -148,7 +148,7 @@
                         </goals>
                         <phase>package</phase>
                         <configuration>
-                            <name>npehero_installer</name>
+                            <name>NPEHero</name>
 
                             <linuxShortcut>true</linuxShortcut>
                             <linuxMenuGroup>Game</linuxMenuGroup>

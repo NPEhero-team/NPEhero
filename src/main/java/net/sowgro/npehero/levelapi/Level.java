@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Level implements Comparable<Level>{
@@ -131,6 +132,9 @@ public class Level implements Comparable<Level>{
         }
         @SuppressWarnings("unchecked")
         Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
+        if (data == null) {
+            data = new HashMap<>();
+        }
         data.put("title", title);
         data.put("artist", artist);
         data.put("desc", desc);

@@ -86,14 +86,14 @@ public class ErrorDisplay extends Page {
             stackTrace.setManaged(true);
         });
 
-        HBox buttonBox = new HBox(exit, showStack);
+        HBox buttonBox = new HBox(exit, showStack, printStack);
         buttonBox.setSpacing(10);
 
-        VBox main = new VBox(title, exView);
+        VBox main = new VBox(title, exView, stackTrace);
         main.getStyleClass().add("box");
 
         VBox centerBox = new VBox();
-        centerBox.getChildren().addAll(main, buttonBox, stackTrace);
+        centerBox.getChildren().addAll(main, buttonBox);
         centerBox.setSpacing(10);
         centerBox.setAlignment(Pos.CENTER);
 
