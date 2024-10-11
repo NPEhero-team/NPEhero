@@ -35,7 +35,7 @@ import java.util.Stack;
 public class Driver extends Application
 {
     public static final Image MENU_BACKGROUND = new Image(Driver.class.getResource("mountains.png").toExternalForm());
-    public static final File BASE_DIR = new File(".npehero");
+    public static final File BASE_DIR = new File(getAppDataPath() + "/.npehero");
 
     public static Stage primaryStage;
     public static ScrollPane primaryPane = new ScrollPane();
@@ -273,5 +273,17 @@ public class Driver extends Application
         pt.setDuration(d);
         pt.setOnFinished(_ -> r.run());
         pt.play();
+    }
+
+    public static String getAppDataPath() {
+         String OS = System.getProperty("os.name", "unknown").toLowerCase();
+         if (OS.contains("mac")) {
+             return System.getProperty("user.home") + "/Library/Application Support";
+         } else if (OS.contains("nux")) {
+             return System.getProperty("user.home");
+         } else if (OS.contains("win")) {
+             return System.getenv("AppData");
+         }
+         return "";
     }
 }
