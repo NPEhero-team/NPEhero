@@ -222,7 +222,7 @@ public class NotesEditor2 extends Page {
                 // TODO
             }
             Sound.playSfx(Sound.BACKWARD);
-            Driver.setMenu(new DiffEditor(diff, prev.prev));
+            Driver.setMenu(prev);
         });
 
         HBox buttons = new HBox(save, exit);

@@ -30,7 +30,7 @@ public class ValidIndicator extends Region {
         SVGPath diffLabelIcon = new SVGPath();
         diffLabelIcon.setContent(pathFromSvg(Driver.getResource("error.svg")));
         this.setShape(diffLabelIcon);
-        this.setBackground(Background.fill(Color.web("#a70000")));
+        this.setBackground(Background.fill(Color.RED));
         Tooltip.install(this, diffLabelTooltip);
     }
 
