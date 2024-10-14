@@ -2,9 +2,9 @@ package net.sowgro.npehero.editor;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -22,10 +22,9 @@ import java.util.Collections;
 
 public class DiffList extends Page
 {
-    private final Label error;
-    private final HBox errorBox;
-    private HBox content = new HBox();
-    private Level level;
+    private final Button error;
+    private final HBox content = new HBox();
+    private final Level level;
 
     public DiffList(Level level, Page prev)
     {
@@ -60,19 +59,16 @@ public class DiffList extends Page
 
         diffs.setPrefWidth(400);
 
-        error = new Label();
-        errorBox = new HBox(error);
-        errorBox.setSpacing(10);
-        errorBox.setPadding(new Insets(10));
-        errorBox.getStyleClass().addAll("box", "red");
-        errorBox.setOnMouseClicked(_ -> {
+        error = new Button();
+        error.getStyleClass().add("red");
+        error.setOnAction(_ -> {
             // TODO
             Driver.setMenu(new ErrorList(level.difficulties.problems, this));
         });
         refresh();
 
         Button edit = new Button("Edit");
-        edit.setOnAction(e -> {
+        edit.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
             Driver.setMenu(new DiffEditor(diffs.getSelectionModel().getSelectedItem(), this));
         });
@@ -80,7 +76,7 @@ public class DiffList extends Page
         edit.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
 
         Button remove = new Button("Delete");
-        remove.setOnAction(e -> {
+        remove.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
             try {
                 level.difficulties.remove(diffs.getSelectionModel().getSelectedItem());
@@ -92,7 +88,7 @@ public class DiffList extends Page
         remove.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
 
         Button refresh = new Button("Refresh");
-        refresh.setOnAction(e -> {
+        refresh.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
             try {
                 level.difficulties.read();
@@ -146,15 +142,19 @@ public class DiffList extends Page
         buttons.getChildren().addAll(create, edit, remove, moveUp, moveDown, refresh);
         buttons.setSpacing(10);
 
+        BorderPane bp = new BorderPane();
+        bp.setTop(buttons);
+        bp.setBottom(error);
+
         HBox main = new HBox();
-        main.getChildren().addAll(new VBox(diffs, errorBox),buttons);
+        main.getChildren().addAll(diffs, bp);
         main.setSpacing(10);
         main.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.67));
         diffs.prefHeightProperty().bind(main.heightProperty());
 
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> {
+        exit.setOnAction(_ -> {
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
         });
@@ -192,11 +192,11 @@ public class DiffList extends Page
     public void refresh() {
         error.setText("Failed to load " + level.difficulties.problems.size() + " difficulty(s)");
         if (level.difficulties.problems.isEmpty()) {
-            errorBox.setVisible(false);
-            errorBox.setManaged(false);
+            error.setVisible(false);
+            error.setManaged(false);
         } else {
-            errorBox.setVisible(true);
-            errorBox.setManaged(true);
+            error.setVisible(true);
+            error.setManaged(true);
         }
     }
 }

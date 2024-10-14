@@ -1,15 +1,11 @@
 package net.sowgro.npehero.editor;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import net.sowgro.npehero.Driver;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import net.sowgro.npehero.gui.MainMenu;
 import net.sowgro.npehero.levelapi.Level;
 import net.sowgro.npehero.levelapi.Levels;
@@ -24,10 +20,9 @@ import java.nio.file.FileAlreadyExistsException;
 
 public class LevelList extends Page
 {
-    private HBox content = new HBox();
+    private final HBox content = new HBox();
 
-    private final Label error;
-    private final HBox errorBox;
+    private final Button error;
 
     public LevelList()
     {
@@ -72,17 +67,13 @@ public class LevelList extends Page
         levels.setPrefWidth(600);
         levels.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
 
-        error = new Label();
-        errorBox = new HBox(error);
-        errorBox.setSpacing(10);
-        errorBox.setPadding(new Insets(10));
-        errorBox.getStyleClass().addAll("box", "red");
-        errorBox.setOnMouseClicked(_ -> {
+        error = new Button();
+        error.getStyleClass().add("red");
+        error.setOnAction(_ -> {
             // TODO
             Driver.setMenu(new ErrorList(Levels.problems, this));
         });
         refresh();
-
 
         Button edit = new Button("Edit");
         edit.setOnAction(_ -> {
@@ -93,7 +84,7 @@ public class LevelList extends Page
         edit.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
 
         Button remove = new Button("Delete");
-        remove.setOnAction(e -> {
+        remove.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
             try {
                 Levels.remove(levels.getSelectionModel().getSelectedItem());
@@ -105,7 +96,7 @@ public class LevelList extends Page
         remove.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
 
         Button refresh = new Button("Refresh");
-        refresh.setOnAction(e -> {
+        refresh.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
             try {
                 Levels.readData();
@@ -131,10 +122,12 @@ public class LevelList extends Page
         buttons.getChildren().addAll(create, edit, remove, refresh, viewFolder);
         buttons.setSpacing(10);
 
-
+        BorderPane bp = new BorderPane();
+        bp.setTop(buttons);
+        bp.setBottom(error);
 
         HBox main = new HBox();
-        main.getChildren().addAll(new VBox(levels, errorBox),buttons);
+        main.getChildren().addAll(levels, bp);
         main.setSpacing(10);
 
         Button exit = new Button();
@@ -175,13 +168,13 @@ public class LevelList extends Page
     }
 
     public void refresh() {
-        error.setText("Failed to load " + Levels.problems.size() + " level(s)");
+        error.setText(Levels.problems.size() + " Failed");
         if (Levels.problems.isEmpty()) {
-            errorBox.setVisible(false);
-            errorBox.setManaged(false);
+            error.setVisible(false);
+            error.setManaged(false);
         } else {
-            errorBox.setVisible(true);
-            errorBox.setManaged(true);
+            error.setVisible(true);
+            error.setManaged(true);
         }
     }
 }

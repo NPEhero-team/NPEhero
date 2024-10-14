@@ -267,12 +267,8 @@ CheckBox:selected > .box {
     /* -fx-border-width: 20; */
 }
 
-.red Label {
+.red {
     -fx-text-fill: red;
-}
-
-.red:hover Label {
-    -fx-underline: true;
 }
 
 .progress-bar {
