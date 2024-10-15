@@ -5,19 +5,17 @@ Goals:
 - [x] New integrated level editor
 - [X] Custom keybindings
 - [X] Accept mp3 song files
-- [ ] UI improvements
-- [ ] Code cleanup
+- [ ] UI improvements (- 2)
+- [ ] Code cleanup (- 3)
 - [X] Installer / Linux package
 
 Todo - needs design:
 - Improve errorList and error handling
-- tweak game end screen
 - Improve aesthetic of songplayer
 - overhaul noteseditor2
-- improve songplayer and noteseditor2 resizing
+- improve resizing (songplayer and noteseditor2)
 
 Todo - bugs:
--
 - fix reliance on local font
 - Properly center background image
 - fix or remove noteseditor1

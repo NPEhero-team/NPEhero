@@ -64,7 +64,7 @@ public enum Control {
         @SuppressWarnings("unchecked")
         Map<String, Object> data = jsonParser.fromJson(new FileReader(file), Map.class);
         if (data == null) {
-            data = new HashMap<>();
+            return;
         }
         for (Control control : Control.values()) {
             if (data.containsKey(control.toString())) {

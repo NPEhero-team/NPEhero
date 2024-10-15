@@ -1,5 +1,7 @@
 package net.sowgro.npehero.gui;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gameplay.ScoreController;
 import net.sowgro.npehero.main.ErrorDisplay;
@@ -22,47 +25,52 @@ import java.io.IOException;
 
 public class GameOver extends Page
 {
+    private final Label yourScore;
     HBox content = new HBox();
+    ScoreController score2;
 
     public GameOver(Level level, Difficulty diff, Page prev, ScoreController score2)
     {
-        Text topText = new Text();
-        topText.setText("Level Complete");
+        this.score2 = score2;
+
+        Label topText = new Label();
+        topText.setText("LEVEL COMPLETE");
         topText.getStyleClass().add("t11");
 
-        Text levelName = new Text();
+        Label levelName = new Label();
         levelName.setText(level.title);
         levelName.getStyleClass().add("t2");
 
-        Text levelArtist = new Text();
+        Label levelArtist = new Label();
         levelArtist.setText(level.artist+" - "+diff.title);
         levelArtist.getStyleClass().add("t3");
 
         VBox levelDetailsBox = new VBox();
         levelDetailsBox.getChildren().addAll(levelName,levelArtist);
         levelDetailsBox.getStyleClass().add("box");
-        levelDetailsBox.setPadding(new Insets(5));
+        levelDetailsBox.setPadding(new Insets(10));
 
 
-        Text scoreLabel = new Text();
-        scoreLabel.setText("Final score");
-        scoreLabel.getStyleClass().add("t3");
-        Label maxScoreLabel = new Label("Max possible score");
+        var scoreLabel = new BorderPane();
+        scoreLabel.setLeft(new Label("Final Score"));
+        scoreLabel.setRight(new Label("Max Score"));
+
         ScoreController maxScoreController = new ScoreController();
         for (int i = 0; i < diff.notes.list.size(); i++) {
             maxScoreController.perfect();
         }
-        Label maxScore = new Label(maxScoreController.score.get() + "");
 
-        Text score = new Text();
-        score.setText(score2.score.get()+"");
-        score.getStyleClass().add("t2");
+        var score = new BorderPane(new Label("/"));
+        yourScore = new Label("0");
+        score.setLeft(yourScore);
+        score.setRight( new Label(maxScoreController.score.get() + ""));
+//        score.getStyleClass().add("t2");
         score.setStyle("-fx-font-size: 30;");
 
         VBox scoreBox = new VBox();
         scoreBox.getStyleClass().add("box");
-        scoreBox.getChildren().addAll(scoreLabel,score, maxScoreLabel, maxScore);
-        scoreBox.setPadding(new Insets(5));
+        scoreBox.getChildren().addAll(scoreLabel,score);
+        scoreBox.setPadding(new Insets(10));
 
 
         Text nameLabel = new Text();
@@ -92,20 +100,20 @@ public class GameOver extends Page
         VBox nameBox = new VBox();
         nameBox.getChildren().addAll(nameLabel,b);
         nameBox.getStyleClass().add("box");
-        nameBox.setSpacing(5);
-        nameBox.setPadding(new Insets(5));
+        nameBox.setSpacing(10);
+        nameBox.setPadding(new Insets(10));
 
 
         Button exit = new Button();
         exit.setText("Back");
-        exit.setOnAction(e -> {
+        exit.setOnAction(_ -> {
             Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
         });
 
         Button replay = new Button();
         replay.setText("Replay");
-        replay.setOnAction(e -> {
+        replay.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
             Driver.setMenu(new LevelSurround(diff, prev));
         });
@@ -118,10 +126,27 @@ public class GameOver extends Page
         centerBox.getChildren().addAll(topText,levelDetailsBox,scoreBox,nameBox,buttonBox);
         centerBox.setSpacing(10);
         centerBox.setAlignment(Pos.CENTER);
-        centerBox.setMaxWidth(300);
+        centerBox.setPrefWidth(450);
+        centerBox.setMaxWidth(450);
 
         content.getChildren().add(centerBox);
         content.setAlignment(Pos.CENTER);
+    }
+
+    @Override
+    public void onView() {
+        // score count up animation
+        Timeline tl = new Timeline();
+        int stepSize = score2.score.get() / 20;
+        for (int i = 1; i <= 20; i++) {
+            int i1 = i;
+            tl.getKeyFrames().add(new KeyFrame(
+                    Duration.seconds(i / 20.0 + 0.5),
+                    _ -> yourScore.setText(i1 * stepSize + "")
+            ));
+        }
+        tl.play();
+
     }
 
     @Override

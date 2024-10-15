@@ -42,7 +42,7 @@ public class DiffEditor extends Page
             Sound.playSfx(Sound.FORWARD);
             diff.leaderboard.entries.clear();
             try {
-                diff.leaderboard.save();
+                diff.leaderboard.write();
             } catch (IOException e) {
                 Driver.setMenu(new ErrorDisplay("Failed to clear the leaderboard:\n"+e, this));
             }

@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +19,10 @@ public class Leaderboard {
 
     public final ObservableList<LeaderboardEntry> entries = FXCollections.observableArrayList();
     private final Gson json = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-    private final File file;
+    private final File jsonFile;
 
     public Leaderboard(File file) throws IOException{
-        this.file = file;
+        this.jsonFile = file;
         read();
     }
 
@@ -33,17 +34,22 @@ public class Leaderboard {
      */
     public void add(String name, int score) throws IOException {
         entries.add(new LeaderboardEntry(name, score, LocalDate.now().toString()));
-        save();
+        write();
     }
 
     /**
      * Writes leaderboard to json file
      * @throws IOException If there are problems writing to the file.
      */
-    public void save() throws IOException {
-        file.createNewFile();
+    public void write() throws IOException {
+        if (!jsonFile.exists() && !jsonFile.createNewFile()) {
+            throw new IOException("Could not create file " + jsonFile.getAbsolutePath());
+        }
         @SuppressWarnings("unchecked")
-        List<Map<String, Object>> data = json.fromJson(new FileReader(file), List.class);
+        List<Map<String, Object>> data = json.fromJson(new FileReader(jsonFile), List.class);
+        if (data == null) {
+            data = new ArrayList<>();
+        }
         for (LeaderboardEntry cur : entries) {
             Map<String, Object> obj = new HashMap<>();
             obj.put("name", cur.name);
@@ -51,7 +57,7 @@ public class Leaderboard {
             obj.put("date", cur.date);
             data.add(obj);
         }
-        FileWriter fileWriter = new FileWriter(file);
+        FileWriter fileWriter = new FileWriter(jsonFile);
         json.toJson(data, fileWriter);
         fileWriter.close();
     }
@@ -61,11 +67,11 @@ public class Leaderboard {
      * @throws IOException If there are problems reading the file
      */
     public void read() throws IOException {
-        if (!file.exists()) {
+        if (!jsonFile.exists()) {
             return;
         }
         @SuppressWarnings("unchecked")
-        List<Map<String, Object>> data = json.fromJson(new FileReader(file), List.class);
+        List<Map<String, Object>> data = json.fromJson(new FileReader(jsonFile), List.class);
         if (data == null) {
             return;
         }

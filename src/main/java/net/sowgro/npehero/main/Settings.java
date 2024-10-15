@@ -30,7 +30,7 @@ public class Settings
 		@SuppressWarnings("unchecked")
 		Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
 		if (data == null) {
-			data = new HashMap<>();
+			return;
 		}
         effectsVol.set((Double) data.getOrDefault("effectsVol", 1.0));
 		musicVol.set((Double) data.getOrDefault("musicVol", 1.0));
