@@ -78,7 +78,7 @@ public class GameOver extends Page
         nameLabel.getStyleClass().add("t3");
 
         TextField name = new TextField();
-        name.setText("name");
+        name.setPromptText("name");
 
         Button save = new Button();
         save.setText("Add");
