@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -14,7 +15,7 @@ import java.io.StringWriter;
 
 public class ErrorDisplay extends Page {
 
-    private HBox content = new HBox();
+    private final HBox content = new HBox();
 
     /**
      * Error display with a message and Back button
@@ -51,7 +52,6 @@ public class ErrorDisplay extends Page {
      */
     public ErrorDisplay(String message, Exception e, Page prev) {
         Label title = new Label(message);
-        title.setPadding(new Insets(10));
         title.setWrapText(true);
 
         Label exView = new Label(e.toString());
@@ -63,7 +63,7 @@ public class ErrorDisplay extends Page {
         String sStackTrace = sw.toString(); // stack trace as a string
 
         Label stackTrace = new Label(sStackTrace);
-        stackTrace.getStyleClass().add("red");
+        stackTrace.getStyleClass().addAll("red", "box");
         stackTrace.setVisible(false);
         stackTrace.setManaged(false);
 
@@ -80,17 +80,17 @@ public class ErrorDisplay extends Page {
             e.printStackTrace();
         });
 
-        Button showStack = new Button("Show Stack Trace");
-        showStack.setOnAction(_ -> {
-            stackTrace.setVisible(true);
-            stackTrace.setManaged(true);
-        });
+        ToggleButton showStack = new ToggleButton("Show Stack Trace");
+        stackTrace.managedProperty().bind(showStack.selectedProperty());
+        stackTrace.visibleProperty().bind(showStack.selectedProperty());
 
         HBox buttonBox = new HBox(exit, showStack, printStack);
         buttonBox.setSpacing(10);
 
         VBox main = new VBox(title, exView, stackTrace);
         main.getStyleClass().add("box");
+        main.setPadding(new Insets(10));
+        main.setSpacing(10);
 
         VBox centerBox = new VBox();
         centerBox.getChildren().addAll(main, buttonBox);

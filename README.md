@@ -11,14 +11,16 @@ Goals:
 
 Todo - needs design:
 - Improve errorList and error handling
-- tweak game end
-- make noteseditor2 resizeable
+- tweak game end screen
+- Improve aesthetic of songplayer
+- overhaul noteseditor2
+- improve songplayer and noteseditor2 resizing
 
 Todo - bugs:
-- fix noteseditor1
+-
 - fix reliance on local font
-- Fix notesEditor note preview being too small with no notes
 - Properly center background image
+- fix or remove noteseditor1
 
 # Building
 ### Run the app

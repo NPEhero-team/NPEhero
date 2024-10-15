@@ -13,6 +13,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class ValidIndicator extends Region {
+
+
+    private final Tooltip diffLabelTooltip = new Tooltip();
+
     public ValidIndicator() {
         this.setScaleX(0.7);
         this.setScaleY(0.7);
@@ -22,15 +26,18 @@ public class ValidIndicator extends Region {
     public void setValid() {
         this.setShape(null);
         this.setBackground(Background.EMPTY);
+
+        Tooltip.uninstall(this, diffLabelTooltip);
     }
 
     public void setInvalid(String reason) {
-        Tooltip diffLabelTooltip = new Tooltip(reason);
-        diffLabelTooltip.setShowDelay(Duration.ZERO);
         SVGPath diffLabelIcon = new SVGPath();
         diffLabelIcon.setContent(pathFromSvg(Driver.getResource("error.svg")));
         this.setShape(diffLabelIcon);
         this.setBackground(Background.fill(Color.RED));
+
+        diffLabelTooltip.setText(reason);
+        diffLabelTooltip.setShowDelay(Duration.ZERO);
         Tooltip.install(this, diffLabelTooltip);
     }
 
