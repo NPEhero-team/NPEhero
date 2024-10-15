@@ -95,6 +95,9 @@ public class Level implements Comparable<Level>{
         }
         @SuppressWarnings("unchecked")
         Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
+        if (data == null) {
+            data = new HashMap<>();
+        }
         title = (String) data.getOrDefault("title", title);
         artist = (String) data.getOrDefault("artist", artist);
         desc = (String) data.getOrDefault("desc", desc);

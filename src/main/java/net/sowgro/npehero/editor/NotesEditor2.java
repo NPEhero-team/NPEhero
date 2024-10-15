@@ -221,7 +221,6 @@ public class NotesEditor2 extends Page {
                 e.printStackTrace();
                 // TODO
             }
-            Sound.playSfx(Sound.BACKWARD);
             Driver.setMenu(prev);
         });
 
@@ -423,8 +422,8 @@ public class NotesEditor2 extends Page {
         var sb = getScrollBar(scroll);
         if (sb != null) {
             sb.prefWidthProperty().bind(scaleBind.multiply(1 / 17.0));
-        } else {
-            System.out.println("No scrollbar :(");
+        } else { // TODO
+//            System.out.println("No scrollbar :(");
         }
         Sound.stopSong();
         m.play();
