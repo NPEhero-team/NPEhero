@@ -32,7 +32,6 @@ public class LevelEditor extends Page
         }
     }
 
-
     public LevelEditor(Level level, Page prev) {
         this.level = level;
 
@@ -67,21 +66,21 @@ public class LevelEditor extends Page
 
         Node songFile = createFileImportBox(
                 Level.SONG_FILE,
-                level.song,
+                () -> level.song,
                 "Audio Files (*.wav, *.mp3, *.aac)",
                 new String[]{"*.wav", "*.mp3", "*.aac"}
         );
 
         Node previewImage = createFileImportBox(
                 Level.PREVIEW_FILE,
-                level.preview,
+                () -> level.preview,
                 "Image Files (*.png, *.jpg, *.gif)",
                 new String[]{"*.png", "*.jpg", "*.gif"}
         );
 
         Node backgroundImage = createFileImportBox(
                 Level.BACKGROUND_FILE,
-                level.background,
+                () -> level.background,
                 "Image Files (*.png, *.jpg, *.gif)",
                 new String[]{"*.png", "*.jpg", "*.gif"}
         );
@@ -167,18 +166,7 @@ public class LevelEditor extends Page
 
     @Override
     public void onView() {
-        // validate
-        if (level.difficulties.getValidList().isEmpty()) {
-            diffsInvalid.setInvalid("This level contains no valid difficulties!");
-        } else {
-            diffsInvalid.setValid();
-        }
-
-        if (level.song == null) {
-            songValid.setInvalid("Missing song file!");
-        } else {
-            songValid.setValid();
-        }
+        update();
     }
 
     @Override
@@ -198,7 +186,25 @@ public class LevelEditor extends Page
         }
     }
 
-    private Node createFileImportBox(String filename, Object dest, String extDesc, String[] extensions) {
+    private void update() {
+        if (level.difficulties.getValidList().isEmpty()) {
+            diffsInvalid.setInvalid("This level contains no valid difficulties!");
+        } else {
+            diffsInvalid.setValid();
+        }
+
+        if (level.song == null) {
+            songValid.setInvalid("Missing song file!");
+        } else {
+            songValid.setValid();
+        }
+    }
+
+    interface Callback {
+        Object get();
+    }
+
+    private Node createFileImportBox(String filename, Callback destField, String extDesc, String[] extensions) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new ExtensionFilter(extDesc, extensions));
         Button importButton = new Button("Import");
@@ -214,7 +220,8 @@ public class LevelEditor extends Page
             } catch (IOException e) {
                 e.printStackTrace(); // TODO
             }
-            removeButton.setDisable(dest == null);
+            removeButton.setDisable(destField.get() == null);
+            update();
         });
         removeButton.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
@@ -223,9 +230,10 @@ public class LevelEditor extends Page
             } catch (IOException e) {
                 e.printStackTrace(); // TODO
             }
-            removeButton.setDisable(dest == null);
+            removeButton.setDisable(destField.get() == null);
+            update();
         });
-        removeButton.setDisable(dest == null);
+        removeButton.setDisable(destField.get() == null);
 
         var b1 = new HBox(importButton, removeButton);
         b1.setSpacing(10);

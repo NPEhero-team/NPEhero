@@ -25,28 +25,29 @@ public class DiffList extends Page
     private final Button error;
     private final HBox content = new HBox();
     private final Level level;
+    private final TableView<Difficulty> diffsTable;
 
     public DiffList(Level level, Page prev)
     {
         this.level = level;
         //sets up table view: requires special getters, setters and constructors to work
-        TableView<Difficulty> diffs = new TableView<>();
+        diffsTable = new TableView<>();
 
         TableColumn<Difficulty,String> titleCol = new TableColumn<>("Name");
         TableColumn<Difficulty,String> validCol = new TableColumn<>("Valid?");
 
-        titleCol.prefWidthProperty().bind(diffs.widthProperty().multiply(0.5));
-        validCol.prefWidthProperty().bind(diffs.widthProperty().multiply(0.4));
+        titleCol.prefWidthProperty().bind(diffsTable.widthProperty().multiply(0.5));
+        validCol.prefWidthProperty().bind(diffsTable.widthProperty().multiply(0.4));
 
-        diffs.getColumns().add(titleCol);
-        diffs.getColumns().add(validCol);
+        diffsTable.getColumns().add(titleCol);
+        diffsTable.getColumns().add(validCol);
 
         titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
         validCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().isValid() ? "Yes" : "No"));
 
-        diffs.setItems(level.difficulties.list);
+        diffsTable.setItems(level.difficulties.list);
 
-        diffs.setRowFactory( _ -> {
+        diffsTable.setRowFactory(_ -> {
             TableRow<Difficulty> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
@@ -57,35 +58,36 @@ public class DiffList extends Page
             return row ;
         });
 
-        diffs.setPrefWidth(400);
+        diffsTable.setPrefWidth(400);
 
         error = new Button();
         error.getStyleClass().add("red");
         error.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             // TODO
             Driver.setMenu(new ErrorList(level.difficulties.problems, this));
         });
-        refresh();
+        update();
 
         Button edit = new Button("Edit");
         edit.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
-            Driver.setMenu(new DiffEditor(diffs.getSelectionModel().getSelectedItem(), this));
+            Driver.setMenu(new DiffEditor(diffsTable.getSelectionModel().getSelectedItem(), this));
         });
         edit.setDisable(true);
-        edit.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
+        edit.disableProperty().bind(diffsTable.getSelectionModel().selectedItemProperty().isNull());
 
         Button remove = new Button("Delete");
         remove.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
             try {
-                level.difficulties.remove(diffs.getSelectionModel().getSelectedItem());
+                level.difficulties.remove(diffsTable.getSelectionModel().getSelectedItem());
             } catch (IOException ex) {
                 Driver.setMenu(new ErrorDisplay("Failed to remove difficulty", ex, this));
             }
         });
         remove.setDisable(true);
-        remove.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
+        remove.disableProperty().bind(diffsTable.getSelectionModel().selectedItemProperty().isNull());
 
         Button refresh = new Button("Refresh");
         refresh.setOnAction(_ -> {
@@ -95,18 +97,16 @@ public class DiffList extends Page
             } catch (IOException ex) {
                 // TODO
             }
-//            diffs.setItems(level.difficulties.list.sorted());
-            diffs.refresh();
-            refresh();
+            update();
         });
 
-        ToggleButton create = new ToggleButton("Create");
+        Button create = new Button("Create");
 
         Button moveUp = new Button("Move Up");
-        moveUp.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
+        moveUp.disableProperty().bind(diffsTable.getSelectionModel().selectedItemProperty().isNull());
         moveUp.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
-            Difficulty diff = diffs.getSelectionModel().selectedItemProperty().get();
+            Difficulty diff = diffsTable.getSelectionModel().selectedItemProperty().get();
             ObservableList<Difficulty> diffList = level.difficulties.list;
             int oldIndex = diffList.indexOf(diff);
             if (oldIndex <= 0) {
@@ -121,10 +121,10 @@ public class DiffList extends Page
         });
 
         Button moveDown = new Button("Move Down");
-        moveDown.disableProperty().bind(diffs.getSelectionModel().selectedItemProperty().isNull());
+        moveDown.disableProperty().bind(diffsTable.getSelectionModel().selectedItemProperty().isNull());
         moveDown.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
-            Difficulty diff = diffs.getSelectionModel().selectedItemProperty().get();
+            Difficulty diff = diffsTable.getSelectionModel().selectedItemProperty().get();
             ObservableList<Difficulty> diffList = level.difficulties.list;
             int oldIndex = diffList.indexOf(diff);
             if (oldIndex >= diffList.size()-1) {
@@ -147,10 +147,10 @@ public class DiffList extends Page
         bp.setBottom(error);
 
         HBox main = new HBox();
-        main.getChildren().addAll(diffs, bp);
+        main.getChildren().addAll(diffsTable, bp);
         main.setSpacing(10);
         main.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.67));
-        diffs.prefHeightProperty().bind(main.heightProperty());
+        diffsTable.prefHeightProperty().bind(main.heightProperty());
 
         Button exit = new Button();
         exit.setText("Back");
@@ -189,7 +189,13 @@ public class DiffList extends Page
         return content;
     }
 
-    public void refresh() {
+    @Override
+    public void onView() {
+        update();
+    }
+
+    public void update() {
+        diffsTable.refresh();
         error.setText("Failed to load " + level.difficulties.problems.size() + " difficulty(s)");
         if (level.difficulties.problems.isEmpty()) {
             error.setVisible(false);

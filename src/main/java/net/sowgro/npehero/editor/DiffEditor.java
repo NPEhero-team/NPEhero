@@ -160,9 +160,7 @@ public class DiffEditor extends Page
 
     @Override
     public void onView() {
-        if (diff.notes.list.isEmpty()) {
-            validNotes.setInvalid("This difficulty does not contain any notes!");
-        }
+        update();
     }
 
     @Override
@@ -172,6 +170,14 @@ public class DiffEditor extends Page
             diff.writeMetadata();
         } catch (IOException e) {
             e.printStackTrace(); //TODO
+        }
+    }
+
+    private void update() {
+        if (diff.notes.list.isEmpty()) {
+            validNotes.setInvalid("This difficulty does not contain any notes!");
+        } else {
+            validNotes.setValid();
         }
     }
 }

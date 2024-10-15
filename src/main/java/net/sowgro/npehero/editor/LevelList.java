@@ -23,23 +23,24 @@ public class LevelList extends Page
     private final HBox content = new HBox();
 
     private final Button error;
+    private final TableView<Level> levelsTable;
 
     public LevelList()
     {
         //sets up table view: requires special getters, setters and constructors to work
-        TableView<Level> levels = new TableView<>();
+        levelsTable = new TableView<>();
 
         TableColumn<Level,String> titleCol = new TableColumn<>("Title");
         TableColumn<Level,String> artistCol = new TableColumn<>("Artist");
         TableColumn<Level,String> validCol = new TableColumn<>("Valid?");
 
-        titleCol.prefWidthProperty().bind(levels.widthProperty().multiply(0.4));
-        artistCol.prefWidthProperty().bind(levels.widthProperty().multiply(0.4));
-        validCol.prefWidthProperty().bind(levels.widthProperty().multiply(0.15));
+        titleCol.prefWidthProperty().bind(levelsTable.widthProperty().multiply(0.4));
+        artistCol.prefWidthProperty().bind(levelsTable.widthProperty().multiply(0.4));
+        validCol.prefWidthProperty().bind(levelsTable.widthProperty().multiply(0.15));
 
-        levels.getColumns().add(titleCol);
-        levels.getColumns().add(artistCol);
-        levels.getColumns().add(validCol);
+        levelsTable.getColumns().add(titleCol);
+        levelsTable.getColumns().add(artistCol);
+        levelsTable.getColumns().add(validCol);
 
         titleCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().title));
         artistCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().artist));
@@ -52,9 +53,9 @@ public class LevelList extends Page
             }
         });
 
-        levels.setItems(Levels.list);
+        levelsTable.setItems(Levels.list);
 
-        levels.setRowFactory( _ -> {
+        levelsTable.setRowFactory(_ -> {
             TableRow<Level> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
@@ -64,36 +65,37 @@ public class LevelList extends Page
             });
             return row ;
         });
-        levels.setPrefWidth(600);
-        levels.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
+        levelsTable.setPrefWidth(600);
+        levelsTable.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
 
         error = new Button();
         error.getStyleClass().add("red");
         error.setOnAction(_ -> {
+            Sound.playSfx(Sound.FORWARD);
             // TODO
             Driver.setMenu(new ErrorList(Levels.problems, this));
         });
-        refresh();
+        update();
 
         Button edit = new Button("Edit");
         edit.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
-            Driver.setMenu(new LevelEditor(levels.getSelectionModel().getSelectedItem(), this));
+            Driver.setMenu(new LevelEditor(levelsTable.getSelectionModel().getSelectedItem(), this));
         });
         edit.setDisable(true);
-        edit.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
+        edit.disableProperty().bind(levelsTable.getSelectionModel().selectedItemProperty().isNull());
 
         Button remove = new Button("Delete");
         remove.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
             try {
-                Levels.remove(levels.getSelectionModel().getSelectedItem());
+                Levels.remove(levelsTable.getSelectionModel().getSelectedItem());
             } catch (IOException ex) {
                 Driver.setMenu(new ErrorDisplay("Failed to remove this level", ex, this));
             }
         });
         remove.setDisable(true);
-        remove.disableProperty().bind(levels.getSelectionModel().selectedItemProperty().isNull());
+        remove.disableProperty().bind(levelsTable.getSelectionModel().selectedItemProperty().isNull());
 
         Button refresh = new Button("Refresh");
         refresh.setOnAction(_ -> {
@@ -103,7 +105,7 @@ public class LevelList extends Page
             } catch (IOException ex) {
                 Driver.setMenu(new ErrorDisplay("Failed to load levels: Level folder is missing", ex, this));
             }
-            levels.setItems(Levels.list);
+            update();
         });
 
         Button create = new Button("Create");
@@ -127,7 +129,7 @@ public class LevelList extends Page
         bp.setBottom(error);
 
         HBox main = new HBox();
-        main.getChildren().addAll(levels, bp);
+        main.getChildren().addAll(levelsTable, bp);
         main.setSpacing(10);
 
         Button exit = new Button();
@@ -167,7 +169,13 @@ public class LevelList extends Page
         return content;
     }
 
-    public void refresh() {
+    @Override
+    public void onView() {
+        update();
+    }
+
+    public void update() {
+        levelsTable.refresh();
         error.setText(Levels.problems.size() + " Failed");
         if (Levels.problems.isEmpty()) {
             error.setVisible(false);
