@@ -45,7 +45,7 @@ public enum Control {
     };
 
     private static final File file = new File(Driver.BASE_DIR, "controls.json");
-    private static final Gson json = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+    private static final Gson jsonParser = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
 
     public static void writeToFile() throws IOException {
         Map<String, Object> data = new HashMap<>();
@@ -53,13 +53,19 @@ public enum Control {
             data.put(control.toString(), control.getKey().toString());
         }
         FileWriter fileWriter = new FileWriter(file);
-        json.toJson(data, fileWriter);
+        jsonParser.toJson(data, fileWriter);
         fileWriter.close();
     }
 
     public static void readFromFile() throws Exception {
+        if (!file.exists()) {
+            return;
+        }
         @SuppressWarnings("unchecked")
-        Map<String, Object> data = json.fromJson(new FileReader(file), Map.class);
+        Map<String, Object> data = jsonParser.fromJson(new FileReader(file), Map.class);
+        if (data == null) {
+            data = new HashMap<>();
+        }
         for (Control control : Control.values()) {
             if (data.containsKey(control.toString())) {
                 control.setKey(KeyCode.valueOf((String) data.getOrDefault(control.toString(), null)));

@@ -66,7 +66,7 @@ public class DiffEditor extends Page
                 Driver.setMenu(new LevelSurround(diff, this));
             }
             else {
-                Driver.setMenu(new ErrorDisplay("This Level is not valid!\nCheck that all required fields\nare populated.", this));
+                Driver.setMenu(new ErrorDisplay("This Level is not valid!\nCheck that all required fields are populated.", this));
             }
         });
 

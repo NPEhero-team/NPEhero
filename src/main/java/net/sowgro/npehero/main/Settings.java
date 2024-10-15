@@ -29,6 +29,9 @@ public class Settings
 	public static void read() throws Exception {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> data = jsonParser.fromJson(new FileReader(jsonFile), Map.class);
+		if (data == null) {
+			data = new HashMap<>();
+		}
         effectsVol.set((Double) data.getOrDefault("effectsVol", 1.0));
 		musicVol.set((Double) data.getOrDefault("musicVol", 1.0));
 		enableMenuMusic.set((Boolean) data.getOrDefault("enableMenuMusic", true));
