@@ -273,7 +273,7 @@ public class Driver extends Application
         return Driver.class.getResource(fileName);
     }
 
-    public void scheduleDelayedTask(Duration d, Runnable r) {
+    public static void scheduleDelayedTask(Duration d, Runnable r) {
         PauseTransition pt = new PauseTransition();
         pt.setDuration(d);
         pt.setOnFinished(_ -> r.run());

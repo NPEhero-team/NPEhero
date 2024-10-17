@@ -20,7 +20,6 @@ public class LeaderboardView extends Page
 
     public LeaderboardView(Difficulty diff, Page prev)
     {
-        //sets up table view: requires java bean getters, setters and constructors to work
         TableView<LeaderboardEntry> scores = new TableView<>();
 
         TableColumn<LeaderboardEntry, String> nameCol = new TableColumn<>("Name");
@@ -43,8 +42,9 @@ public class LeaderboardView extends Page
 
         scores.getStyleClass().add("unselectable");
 
-        scores.prefWidthProperty().bind(content.prefWidthProperty().multiply(0.30));
-        scores.prefHeightProperty().bind(content.prefHeightProperty().multiply(0.75));
+        scores.maxWidthProperty().bind(content.widthProperty().multiply(0.95));
+        scores.setPrefWidth(600);
+        scores.prefHeightProperty().bind(content.heightProperty().multiply(0.75));
 
         scoreCol.setSortType(SortType.ASCENDING);
         scores.getSortOrder().add(scoreCol);
