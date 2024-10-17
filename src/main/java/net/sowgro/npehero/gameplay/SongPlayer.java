@@ -27,14 +27,28 @@ import javafx.util.*;
 
 public class SongPlayer extends HBox {
 
+    /**
+     * The delay in seconds before anything starts to happen after the user presses play.
+     * after this delay the notes will start to fall, then once one this delay + FALL_TIME has passed the song will start
+     */
+    private final double START_DELAY = 1;
+
+    /**
+     * The time in seconds it will take the notes to fall from 1 noteheight above the top of the screen the target
+     */
+    private final double FALL_TIME = 1.105;
+
+    /**
+     * An extra delay before the notes start to fall after START_DELAY.
+     * This does not affect when the song starts (allowing for syncing to be adjusted)
+     */
+    private final double NOTE_DELAY = 0.2;
+
     static class Lane {
         Target target; //Initializes the button, each parameter is a placeholder that is changed later
         ArrayList<Block> blocks = new ArrayList<>(); //Array list containing all the notes currently on the field for that lane
         Pane pane = new Pane();
     }
-
-    private final int FALL_TIME = 1;  // delay for notes falling down the screen (seconds)
-    private final double START_DELAY = 1;  // seconds
 
     private final Level level;
     private final Media song;
@@ -69,17 +83,17 @@ public class SongPlayer extends HBox {
         timeline = new Timeline();
         for (Note note : notes.list) {
             // schedule each note to send at its time
-            KeyFrame kf = new KeyFrame(Duration.seconds(note.getTime() + START_DELAY), _ -> sendNote(note));
+            KeyFrame kf = new KeyFrame(Duration.seconds(START_DELAY + NOTE_DELAY + note.getTime()), _ -> sendNote(note));
             timeline.getKeyFrames().add(kf);
         }
         // schedule the song to start after the delay
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(FALL_TIME + START_DELAY), _ -> {
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(START_DELAY + FALL_TIME), _ -> {
             if (!done) {
                 Sound.playSong(song);
             }
         }));
         // schedule the game over screen to show at the end
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(songLength + FALL_TIME + START_DELAY), _ -> {
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(START_DELAY + FALL_TIME + NOTE_DELAY + songLength), _ -> {
             Driver.setMenu(new GameOver(level, diff, prev, scoreCounter));
             cancel();
         }));
@@ -135,7 +149,7 @@ public class SongPlayer extends HBox {
 
         lane.blocks.add(block);
 
-        TranslateTransition anim = new TranslateTransition(Duration.seconds(FALL_TIME + 0.105));
+        TranslateTransition anim = new TranslateTransition(Duration.seconds(FALL_TIME/* + 0.105*/));
         anim.setInterpolator(Interpolator.LINEAR);
         anim.byYProperty().bind(lane.pane.heightProperty().add(block.getHeight()).add(75));
         anim.setNode(block);

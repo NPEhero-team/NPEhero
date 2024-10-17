@@ -35,7 +35,7 @@ import java.util.Stack;
 public class Driver extends Application
 {
     public static final Image MENU_BACKGROUND = new Image(Driver.class.getResource("mountains.png").toExternalForm());
-    public static final File BASE_DIR = new File(getAppDataPath() + "/.npehero");
+    public static File BASE_DIR;
 
     public static Stage primaryStage;
     public static ScrollPane primaryPane = new ScrollPane();
@@ -48,6 +48,11 @@ public class Driver extends Application
      * starts javafx
      */
     public static void main(String[] args) {
+        if (args.length >= 1 && args[0].equals("-localBaseDir")) {
+             BASE_DIR = new File(".npehero");
+        } else {
+            BASE_DIR = new File(getAppDataPath() + "/.npehero");
+        }
         launch(args);
     }
 

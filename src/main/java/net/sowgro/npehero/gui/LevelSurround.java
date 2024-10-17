@@ -105,11 +105,11 @@ public class LevelSurround extends Page
         AnchorPane.setBottomAnchor(comboTextBox, 0.0);
         comboBox.setPadding(new Insets(10));
 
-        game.setMinHeight(1080);
-        game.setMinWidth(1080 * 0.55);
-        game.setMaxHeight(1080);
-        game.setMaxWidth(1080 * 0.55);
-        var scale = content.prefHeightProperty().divide(1080);
+        game.setMinHeight(720);
+        game.setMinWidth(720 * 0.55);
+        game.setMaxHeight(720);
+        game.setMaxWidth(720 * 0.55);
+        var scale = content.prefHeightProperty().divide(720);
         game.scaleXProperty().bind(scale);
         game.scaleYProperty().bind(scale);
         game.getStyleClass().add("box");
