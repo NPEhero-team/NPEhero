@@ -43,6 +43,12 @@ public class Levels {
     }
     public static void readData(MessageUpdaterLambda mu, ProgressUpdaterLambda pu) throws IOException {
         list.clear();
+        if (!dir.exists() && !dir.mkdir()) {
+            throw new IOException(); // TODO
+        }
+        if (!dir.isDirectory()) {
+            throw new IOException(); // TODO
+        }
         File[] fileList = dir.listFiles();
         if (fileList == null) {
             throw new FileNotFoundException();

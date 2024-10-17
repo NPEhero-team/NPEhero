@@ -74,7 +74,7 @@ public class NotesEditor2 extends Page {
         Label playbackLabel     = new Label("Playback");
         ToggleButton play       = new ToggleButton("Play");
         Button reset            = new Button("Reset");
-        ToggleButton scrollLock = new ToggleButton("Scroll Lock");
+        ToggleButton scrollLock = new ToggleButton("Autoscroll");
         Button setEnd         = new Button("End Here");
         actionBox.getChildren().addAll(playbackLabel, play, reset, scrollLock, setEnd);
 
@@ -329,9 +329,9 @@ public class NotesEditor2 extends Page {
             else {
                 scroll.vvalueProperty().unbind();
             }
-
-
         });
+        scrollLock.setSelected(true);
+        scroll.vvalueProperty().bind(playhead.translateYProperty().subtract(scroll.heightProperty().divide(2)).divide(scrollContent.heightProperty().subtract(scroll.heightProperty())));
 
         reset.setOnAction(_ -> {
             Sound.playSfx(Sound.FORWARD);
