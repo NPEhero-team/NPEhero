@@ -1,6 +1,7 @@
 package net.sowgro.npehero.gameplay;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -74,7 +75,11 @@ public class SongPlayer extends HBox {
         // create targets
         for (int i = 0; i < lanes.length; i++) {
             lanes[i] = new Lane();
-            var tmp = new Target(level.colors[i], Control.lanes[i].targetString());
+            var tmp = new Target(
+                    Settings.forceDefaultColors
+                            ? Settings.defaultColors[i]
+                            : Objects.requireNonNullElse(level.colors[i], Settings.defaultColors[i]),
+                    Control.lanes[i].targetString());
             bindTarget(tmp);
             lanes[i].target = tmp;
         }

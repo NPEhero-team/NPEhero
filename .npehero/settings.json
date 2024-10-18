@@ -2,5 +2,5 @@
   "guiScale": 1.0,
   "effectsVol": 1.0,
   "musicVol": 1.0,
-  "enableMenuMusic": true
+  "enableMenuMusic": false
 }

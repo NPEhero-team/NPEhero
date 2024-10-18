@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Level implements Comparable<Level>{
 
@@ -25,7 +26,7 @@ public class Level implements Comparable<Level>{
     public String title = "Unnamed";
     public String artist = "Unknown";
     public String desc;
-    public Color[] colors = {Color.RED,Color.BLUE,Color.GREEN,Color.PURPLE,Color.YELLOW};
+    public Color[] colors = {null, null, null, null, null};
     public Image preview;
     public Image background;
     public Media song;
@@ -101,11 +102,11 @@ public class Level implements Comparable<Level>{
         title = (String) data.getOrDefault("title", title);
         artist = (String) data.getOrDefault("artist", artist);
         desc = (String) data.getOrDefault("desc", desc);
-        colors[0] = Color.web((String) data.getOrDefault("color1", colors[0].toString()));
-        colors[1] = Color.web((String) data.getOrDefault("color2", colors[1].toString()));
-        colors[2] = Color.web((String) data.getOrDefault("color3", colors[2].toString()));
-        colors[3] = Color.web((String) data.getOrDefault("color4", colors[3].toString()));
-        colors[4] = Color.web((String) data.getOrDefault("color5", colors[4].toString()));
+        colors[0] = colorGetOrDefault(data, "color1", colors[0]);
+        colors[1] = colorGetOrDefault(data, "color2", colors[1]);
+        colors[2] = colorGetOrDefault(data, "color3", colors[2]);
+        colors[3] = colorGetOrDefault(data, "color4", colors[3]);
+        colors[4] = colorGetOrDefault(data, "color5", colors[4]);
     }
 
     /**
@@ -141,11 +142,11 @@ public class Level implements Comparable<Level>{
         data.put("title", title);
         data.put("artist", artist);
         data.put("desc", desc);
-        data.put("color1",colors[0].toString());
-        data.put("color2",colors[1].toString());
-        data.put("color3",colors[2].toString());
-        data.put("color4",colors[3].toString());
-        data.put("color5",colors[4].toString());
+        data.put("color1",Objects.toString(colors[0]));
+        data.put("color2",Objects.toString(colors[1]));
+        data.put("color3",Objects.toString(colors[2]));
+        data.put("color4",Objects.toString(colors[3]));
+        data.put("color5",Objects.toString(colors[4]));
         FileWriter fileWriter = new FileWriter(jsonFile);
         jsonParser.toJson(data, fileWriter);
         fileWriter.close();
@@ -194,5 +195,13 @@ public class Level implements Comparable<Level>{
      */
     public String getFileExtension(File file) {
         return file.getName().substring(file.getName().lastIndexOf('.') + 1);
+    }
+
+    public static Color colorGetOrDefault(Map<String, Object> source, String key, Color defaultValue) {
+        try {
+            return Color.web((String) source.getOrDefault(key, defaultValue));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

@@ -132,6 +132,7 @@ public class DiffEditor extends Page
         main.getChildren().addAll(optionsScroll);
         main.setSpacing(10);
         main.maxWidthProperty().bind(content.widthProperty().multiply(0.95));
+        main.maxHeightProperty().bind(content.heightProperty().multiply(0.75));
 
         Button exit = new Button();
         exit.setText("Back");

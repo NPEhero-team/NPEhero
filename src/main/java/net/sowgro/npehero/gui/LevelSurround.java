@@ -3,6 +3,7 @@ package net.sowgro.npehero.gui;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import net.sowgro.npehero.Driver;
 import net.sowgro.npehero.gameplay.SongPlayer;
 import javafx.geometry.Insets;
@@ -12,6 +13,7 @@ import javafx.scene.text.Text;
 import net.sowgro.npehero.levelapi.Difficulty;
 import net.sowgro.npehero.gameplay.ScoreController;
 import net.sowgro.npehero.main.Page;
+import net.sowgro.npehero.main.Settings;
 import net.sowgro.npehero.main.Sound;
 
 public class LevelSurround extends Page
@@ -112,7 +114,12 @@ public class LevelSurround extends Page
         var scale = content.prefHeightProperty().divide(720);
         game.scaleXProperty().bind(scale);
         game.scaleYProperty().bind(scale);
-        game.getStyleClass().add("box");
+//        game.getStyleClass().add("box");
+//        game.setEffect(new BoxBlur());
+//        game.setBackground(Color.WHITE);
+        BackgroundFill bgf = new BackgroundFill(Color.rgb(0, 0, 0, Settings.gameOpacity), null, null);
+        game.setBackground(new Background(bgf));
+
 
         BorderPane gameHolder = new BorderPane(game);
         gameHolder.maxHeightProperty().bind(content.prefHeightProperty());

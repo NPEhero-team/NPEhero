@@ -6,7 +6,7 @@
 
     <groupId>net.sowgro.npehero</groupId>
     <artifactId>NPEHero</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0.3</version>
     <name>NPE Hero</name>
 
     <properties>
@@ -121,7 +121,7 @@
 
                 <configuration>
                     <name>NPE Hero</name>
-                    <appVersion>2.0.1</appVersion>
+                    <appVersion>${project.version}</appVersion>
                     <vendor>net.sowgro</vendor>
                     <runtimeImage>target/app</runtimeImage>
                     <module>net.sowgro.npehero/net.sowgro.npehero.Driver</module>

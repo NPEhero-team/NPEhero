@@ -1,12 +1,14 @@
 package net.sowgro.npehero.editor;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import net.sowgro.npehero.Driver;
@@ -25,6 +27,7 @@ public class LevelEditor extends Page
     private final Level level;
 
     private final HBox content = new HBox();
+    private final CheckBox useCustomColors;
 
     record OptionEntry(String label, Node action, ValidIndicator vi) {
         OptionEntry(String label, Node action) {
@@ -47,14 +50,17 @@ public class LevelEditor extends Page
 
         descEntry = new TextField(level.desc);
 
-        colorsPickers = new ColorPicker[] {
-                new ColorPicker(level.colors[0]),
-                new ColorPicker(level.colors[1]),
-                new ColorPicker(level.colors[2]),
-                new ColorPicker(level.colors[3]),
-                new ColorPicker(level.colors[4])
-        };
-        for (ColorPicker cp : colorsPickers) {
+        useCustomColors = new CheckBox("Use Custom Colors");
+        useCustomColors.setSelected(!hasNull(level.colors));
+
+        colorsPickers = new ColorPicker[5];
+        for (int i = 0; i < colorsPickers.length; i++) {
+            var cp = new ColorPicker(Objects.requireNonNullElse(
+                    level.colors[i],
+                    Settings.defaultColors[i]
+            ));
+            colorsPickers[i] = cp;
+            cp.disableProperty().bind(useCustomColors.selectedProperty().not());
             cp.getStyleClass().add("button");
             cp.setMinHeight(60);
             cp.setMinWidth(60);
@@ -63,6 +69,9 @@ public class LevelEditor extends Page
         HBox colorPickerBox = new HBox();
         colorPickerBox.getChildren().addAll(colorsPickers);
         colorPickerBox.setSpacing(10);
+
+        VBox blockColors = new VBox(useCustomColors, colorPickerBox);
+        blockColors.setSpacing(10);
 
         Node songFile = createFileImportBox(
                 Level.SONG_FILE,
@@ -103,7 +112,7 @@ public class LevelEditor extends Page
                         new OptionEntry("Song File", songFile, songValid),
                         new OptionEntry("Preview Image", previewImage),
                         new OptionEntry("Background Image", backgroundImage),
-                        new OptionEntry("Block Colors", colorPickerBox),
+                        new OptionEntry("Block Colors", blockColors),
                 }
         };
         HBox options = new HBox();
@@ -111,6 +120,7 @@ public class LevelEditor extends Page
             VBox colBox = new VBox();
             colBox.setSpacing(10);
             colBox.setPrefWidth(400);
+
             for (OptionEntry option : col) {
                 Label label = new Label(option.label);
                 HBox labelBox = new HBox(label);
@@ -174,11 +184,13 @@ public class LevelEditor extends Page
         level.title = titleEntry.getText();
         level.artist = artistEntry.getText();
         level.desc = descEntry.getText();
-        level.colors[0] = colorsPickers[0].getValue();
-        level.colors[1] = colorsPickers[1].getValue();
-        level.colors[2] = colorsPickers[2].getValue();
-        level.colors[3] = colorsPickers[3].getValue();
-        level.colors[4] = colorsPickers[4].getValue();
+        for (int i = 0; i < colorsPickers.length; i++) {
+            if (useCustomColors.isSelected()) {
+                level.colors[i] = colorsPickers[i].getValue();
+            } else {
+                level.colors[i] = null;
+            }
+        }
         try {
             level.writeMetadata();
         } catch (IOException e) {
@@ -238,5 +250,12 @@ public class LevelEditor extends Page
         var b1 = new HBox(importButton, removeButton);
         b1.setSpacing(10);
         return b1;
+    }
+
+    boolean hasNull(Color[] arr) {
+        for (Color color : arr) {
+            if (color == null) return true;
+        }
+        return false;
     }
 }

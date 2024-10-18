@@ -30,21 +30,23 @@ import net.sowgro.npehero.main.*;
 import net.sowgro.npehero.main.Control;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NotesEditor2 extends Page {
     private final DoubleBinding scaleBind;
-    Difficulty diff;
-    ScrollPane scroll = new ScrollPane();
-    Pane[] lanes;
-    MediaPlayer m;
-    Polygon playhead;
-    ListProperty<Block> selectedNotes = new SimpleListProperty<>(FXCollections.observableArrayList());
-    ListProperty<Note> noteList;
-    DiffEditor prev;
-    DoubleProperty newEndTime = new SimpleDoubleProperty(0);
-    CheckBox selectMultiple;
+    private final Difficulty diff;
+    private final ScrollPane scroll = new ScrollPane();
+    private final Pane[] lanes;
+    private final MediaPlayer m;
+    private final Polygon playhead;
+    private final ListProperty<Block> selectedNotes = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final ListProperty<Note> noteList;
+    private final DiffEditor prev;
+    private final DoubleProperty newEndTime = new SimpleDoubleProperty(0);
+    private final CheckBox selectMultiple;
+    private final Color[] colors = new Color[5];
 
     private final HBox content = new HBox();
 
@@ -54,6 +56,11 @@ public class NotesEditor2 extends Page {
         m = new MediaPlayer(diff.level.song);
         m.volumeProperty().bind(Settings.musicVol);
         this.prev = prev;
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = Settings.forceDefaultColors
+                    ? Settings.defaultColors[i]
+                    : Objects.requireNonNullElse(diff.level.colors[i], Settings.defaultColors[i]);
+        }
 
         // Buttons
         VBox actionBox = new VBox();
@@ -438,7 +445,7 @@ public class NotesEditor2 extends Page {
     }
 
     private Block drawBlock(Note n) {
-        Color color = diff.level.colors[n.lane];
+        Color color = colors[n.lane];
         Block b = new Block(color, false, n);
 //        var sizeBind = scroll.widthProperty().divide(8);
 //        b.heightProperty().bind(sizeBind);
@@ -516,11 +523,11 @@ public class NotesEditor2 extends Page {
     private Pane addHelp() {
         Label l1 = new Label("Use the following keys");
         HBox hb = new HBox(
-                createTarget(diff.level.colors[0], Control.LANE0),
-                createTarget(diff.level.colors[1], Control.LANE1),
-                createTarget(diff.level.colors[2], Control.LANE2),
-                createTarget(diff.level.colors[3], Control.LANE3),
-                createTarget(diff.level.colors[4], Control.LANE4)
+                createTarget(colors[0], Control.LANE0),
+                createTarget(colors[1], Control.LANE1),
+                createTarget(colors[2], Control.LANE2),
+                createTarget(colors[3], Control.LANE3),
+                createTarget(colors[4], Control.LANE4)
         );
         hb.setSpacing(10);
         hb.setAlignment(Pos.CENTER_LEFT);

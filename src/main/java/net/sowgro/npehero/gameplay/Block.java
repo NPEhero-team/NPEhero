@@ -34,7 +34,7 @@ public class Block extends Rectangle
 
     public void enableDropShadow() {
         DropShadow dropShadow = new DropShadow();
-        dropShadow.setRadius(200.0);
+        dropShadow.setRadius(100.0);
         dropShadow.setColor(color);
         dropShadow.setBlurType(BlurType.GAUSSIAN);
         super.setEffect(dropShadow);
