@@ -27,11 +27,11 @@ public class GameOver extends Page
 {
     private final Label yourScore;
     HBox content = new HBox();
-    ScoreController score2;
+    ScoreController scoreController;
 
-    public GameOver(Level level, Difficulty diff, Page prev, ScoreController score2)
+    public GameOver(Level level, Difficulty diff, Page prev, ScoreController scoreController)
     {
-        this.score2 = score2;
+        this.scoreController = scoreController;
 
         Label topText = new Label();
         topText.setText("LEVEL COMPLETE");
@@ -87,7 +87,7 @@ public class GameOver extends Page
             save.setDisable(true);
             name.setDisable(true);
             try {
-                diff.leaderboard.add(name.getText(), score2.score.get());
+                diff.leaderboard.add(name.getText(), scoreController.score.get());
             } catch (IOException e) {
                 Driver.setMenu(new ErrorDisplay("Failed to save score to leaderboard", e, this));
             }
@@ -137,16 +137,18 @@ public class GameOver extends Page
     public void onView() {
         // score count up animation
         Timeline tl = new Timeline();
-        int stepSize = score2.score.get() / 20;
-        for (int i = 1; i <= 20; i++) {
-            int i1 = i;
+        int stepCount = 20;
+        int stepSize = scoreController.score.get() / stepCount;
+        double stepDuration = 1.0 / stepCount;
+        for (int i = 1; i <= stepCount; i++) {
+            int i2 = i;
             tl.getKeyFrames().add(new KeyFrame(
-                    Duration.seconds(i / 20.0 + 0.5),
-                    _ -> yourScore.setText(i1 * stepSize + "")
+                    Duration.seconds(i * stepDuration + 0.5),
+                    _ -> yourScore.setText(i2 * stepSize + "")
             ));
         }
         tl.play();
-
+        tl.setOnFinished(_ -> yourScore.setText(scoreController.score.get() + ""));
     }
 
     @Override
