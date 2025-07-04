@@ -62,7 +62,7 @@ public class Levels {
                 i++;
                 mu.updateMessage("Loaded " + i + " Levels");
             } catch (Exception e) {
-                problems.put("Failed to load load level in folder '" + file.getName() + "'", e);
+                problems.put("Failed to load load level at '" + file.getAbsolutePath() + "'", e);
             }
             pu.updateProgress(i, max);
         }

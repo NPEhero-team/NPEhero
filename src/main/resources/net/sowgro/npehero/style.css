@@ -272,9 +272,14 @@ CheckBox:selected > .box {
 }
 
 .progress-bar {
-    -fx-background-color: transparent;
-    -fx-fill: white;
+    -fx-background-color: black;
     -fx-padding: 0;
-    -fx-accent: white
+    -fx-accent: white;
+    /*-fx-accent: #d45500;*/
+}
+
+.progress-bar .bar {
+    -fx-background-insets: 0;
+    -fx-padding: 0.20em;
 }
 

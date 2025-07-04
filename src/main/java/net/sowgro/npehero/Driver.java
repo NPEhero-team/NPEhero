@@ -3,8 +3,11 @@ package net.sowgro.npehero;
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -16,6 +19,9 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
@@ -29,6 +35,7 @@ import net.sowgro.npehero.gui.MainMenu;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Random;
 import java.util.Stack;
 
 
@@ -66,7 +73,7 @@ public class Driver extends Application
         Text npehero = new Text();
         npehero.setFill(Color.WHITE);
         npehero.setBoundsType(TextBoundsType.VISUAL);
-        npehero.setText("NPE INC");
+        npehero.setText("NPE HERO");
         npehero.getStyleClass().add("t0");
 
         Text lessthan = new Text("<");
@@ -80,27 +87,47 @@ public class Driver extends Application
         title.setSpacing(20);
         title.setAlignment(Pos.CENTER);
         // end from main menu
+        double scale = 0.5;
+        title.setScaleX(scale);
+        title.setScaleY(scale);
 
         ProgressBar progressBar = new ProgressBar();
-        progressBar.prefWidthProperty().bind(title.widthProperty());
-        progressBar.setMaxHeight(12);
-//        progressBar
+        progressBar.setMaxHeight(5);
 
-//        Label npehero = new Label("NPEHero");
         Label loading = new Label("Loading NPEHero...");
-        VBox splashBox = new VBox(title, loading, progressBar);
-        splashBox.setPadding(new Insets(30));
-        splashBox.getStyleClass().add("box");
-        splashBox.setAlignment(Pos.CENTER);
-        splashBox.setSpacing(10);
-//        Rectangle background = new Rectangle();
-//        background.setStrokeWidth(4);
-        Scene splashScene = new Scene(splashBox);
-        splashBox.setBackground(null);
+        loading.setTextFill(Color.WHITE);
+
+        Label version = new Label("2.0.3");
+
+        var titleBox = new HBox(new Group(title), version);
+        titleBox.setAlignment(Pos.BOTTOM_LEFT);
+        titleBox.setSpacing(10);
+
+        var textBox = new VBox(titleBox, loading);
+        textBox.setAlignment(Pos.BOTTOM_LEFT);
+        Stop[] stops = {new Stop(0, Color.BLACK), new Stop(1, Color.TRANSPARENT)};
+        textBox.setBackground(Background.fill(new LinearGradient(0, 1, 0, 0, true, CycleMethod.NO_CYCLE, stops)));
+        textBox.setPadding(new Insets(10, 10, 10, 10));
+        textBox.setSpacing(10);
+
+        var splashBox = new BorderPane();
+        splashBox.setCenter(textBox);
+        splashBox.setBottom(progressBar);
+        progressBar.setPrefWidth(600);
+        int r = new Random().nextInt(1, 5);
+        BackgroundImage image = new BackgroundImage(
+                new Image(getClass().getResource("img/"+r+".png").toExternalForm()),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(2.0, BackgroundSize.AUTO, true, true, false, false)
+        );
+        splashBox.setBackground(new Background(image));
+
+        Scene splashScene = new Scene(splashBox, 600, 400);
         splashScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-        splashScene.setFill(Color.TRANSPARENT);
+
         initStage.setScene(splashScene);
-        initStage.initStyle(StageStyle.TRANSPARENT);
+        initStage.initStyle(StageStyle.UNDECORATED);
         initStage.show();
 
         Stack<String> errors = new Stack<>();
@@ -147,7 +174,7 @@ public class Driver extends Application
             }
         };
 
-        task.setOnSucceeded(_ -> {
+        EventHandler<WorkerStateEvent> npeHero = _ -> {
             loading.textProperty().unbind();
             loading.setText("Launching...");
 
@@ -164,14 +191,14 @@ public class Driver extends Application
                 primaryPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
                 StackPane root = new StackPane(backgroundImage2, backgroundImage, primaryPane);
-                Scene primaryScene = new Scene(root, 800,600);
+                Scene primaryScene = new Scene(root, 800, 600);
 
                 primaryPane.scaleXProperty().bind(Settings.guiScale);
                 primaryPane.scaleYProperty().bind(Settings.guiScale);
                 primaryPane.minHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
-                primaryPane.minWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
+                primaryPane.minWidthProperty().bind(root.widthProperty().divide(Settings.guiScale));
                 primaryPane.maxHeightProperty().bind(root.heightProperty().divide(Settings.guiScale));
-                primaryPane.maxWidthProperty() .bind(root.widthProperty() .divide(Settings.guiScale));
+                primaryPane.maxWidthProperty().bind(root.widthProperty().divide(Settings.guiScale));
 
 //        Cant figure out how to center this
                 backgroundImage.fitHeightProperty().bind(primaryScene.heightProperty());
@@ -202,9 +229,10 @@ public class Driver extends Application
                     primaryStage.setFullScreen(true);
                 });
             });
-        });
+        };
+        task.setOnSucceeded(npeHero);
 
-//        loading.textProperty().bind(task.messageProperty());
+        loading.textProperty().bind(task.messageProperty());
         progressBar.progressProperty().bind(task.progressProperty());
         new Thread(task).start();
     }
